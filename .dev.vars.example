@@ -1,0 +1,16 @@
+# Supabase
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_ANON_KEY=your-anon-key
+SUPABASE_SERVICE_KEY=your-service-role-key
+
+# Resend (이메일 발송)
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxx
+
+# PDF.co (PDF 생성 - 나중에 연동)
+PDFCO_API_KEY=your-pdfco-api-key
+
+# Frontend URL
+FRONTEND_URL=http://localhost:3000
+
+# JWT Secret (Supabase 사용 시 불필요하지만 백업용)
+JWT_SECRET=your-super-secret-jwt-key-change-this

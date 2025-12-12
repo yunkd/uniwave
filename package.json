@@ -1,0 +1,33 @@
+{
+  "name": "uniwave-pro",
+  "version": "1.0.0",
+  "description": "대학 실습 관리 플랫폼 - Uniwave Pro",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "dev:sandbox": "wrangler pages dev dist --ip 0.0.0.0 --port 3000",
+    "build": "vite build",
+    "preview": "wrangler pages dev dist",
+    "deploy": "npm run build && wrangler pages deploy dist --project-name uniwave-pro",
+    "cf-typegen": "wrangler types --env-interface CloudflareBindings",
+    "clean-port": "fuser -k 3000/tcp 2>/dev/null || true",
+    "test": "echo \"No tests yet\" && exit 0"
+  },
+  "keywords": [
+    "internship",
+    "education",
+    "saas",
+    "university"
+  ],
+  "author": "윤경대",
+  "license": "MIT",
+  "dependencies": {
+    "@cloudflare/workers-types": "^4.20251212.0",
+    "@hono/vite-cloudflare-pages": "^0.4.3",
+    "@supabase/supabase-js": "^2.87.1",
+    "hono": "^4.10.8",
+    "typescript": "^5.9.3",
+    "vite": "^7.2.7",
+    "wrangler": "^4.54.0"
+  }
+}
