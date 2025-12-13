@@ -148,26 +148,12 @@
           <!-- 액션 버튼 -->
           <div class="flex gap-2">
             <button
-              @click="viewInstitutionDetail(matching.institutionId)"
-              class="px-4 py-2 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors flex items-center gap-2"
-            >
-              <InformationCircleIcon class="w-4 h-4" />
-              <span>기관 정보</span>
-            </button>
-            <button
               v-if="matching.status === 'PENDING'"
               @click="cancelMatching(matching.id)"
               class="px-4 py-2 border border-red-300 text-red-700 rounded-lg hover:bg-red-50 transition-colors flex items-center gap-2"
             >
               <XCircleIcon class="w-4 h-4" />
               <span>신청 취소</span>
-            </button>
-            <button
-              v-if="matching.status === 'APPROVED'"
-              class="px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition-colors flex items-center gap-2"
-            >
-              <CheckCircleIcon class="w-4 h-4" />
-              <span>실습 시작</span>
             </button>
           </div>
         </div>

@@ -256,8 +256,12 @@ const menuItems = computed(() => {
       },
       {
         label: '모집공고 관리',
-        path: '/institution/recruitments',
-        icon: BellAlertIcon
+        key: 'recruitments',
+        icon: BellAlertIcon,
+        children: [
+          { label: '모집공고 목록', path: '/institution/recruitments', icon: BellAlertIcon },
+          { label: '학생 지원서', path: '/institution/recruitments/applications', icon: DocumentTextIcon }
+        ]
       },
       {
         label: '실습생 관리',
