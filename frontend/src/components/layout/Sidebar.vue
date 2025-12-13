@@ -205,6 +205,11 @@ const menuItems = computed(() => {
         ]
       },
       {
+        label: '내 서류',
+        path: '/student/documents',
+        icon: DocumentDuplicateIcon
+      },
+      {
         label: '공지사항',
         path: '/student/notices',
         icon: BellAlertIcon
