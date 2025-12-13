@@ -118,7 +118,9 @@ import {
   ClockIcon,
   MagnifyingGlassIcon,
   ClipboardDocumentListIcon,
-  BuildingOfficeIcon
+  BuildingOfficeIcon,
+  ArchiveBoxIcon,
+  TruckIcon
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
@@ -208,6 +210,15 @@ const menuItems = computed(() => {
         label: '내 서류',
         path: '/student/documents',
         icon: DocumentDuplicateIcon
+      },
+      {
+        label: '제본 신청',
+        key: 'binding',
+        icon: ArchiveBoxIcon,
+        children: [
+          { label: '제본 신청하기', path: '/student/binding', icon: ArchiveBoxIcon },
+          { label: '신청 내역', path: '/student/binding/history', icon: TruckIcon }
+        ]
       },
       {
         label: '공지사항',

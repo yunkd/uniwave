@@ -57,9 +57,34 @@ const router = createRouter({
           component: () => import('@/views/student/InstitutionStatus.vue')
         },
         {
+          path: 'journal/write',
+          name: 'StudentJournalWrite',
+          component: () => import('@/views/student/journal/Write.vue')
+        },
+        {
+          path: 'journal/list',
+          name: 'StudentJournalList',
+          component: () => import('@/views/student/journal/List.vue')
+        },
+        {
+          path: 'journal/:id',
+          name: 'StudentJournalDetail',
+          component: () => import('@/views/student/journal/Detail.vue')
+        },
+        {
           path: 'documents',
           name: 'StudentDocuments',
           component: () => import('@/views/student/documents/List.vue')
+        },
+        {
+          path: 'binding',
+          name: 'StudentBinding',
+          component: () => import('@/views/student/binding/Create.vue')
+        },
+        {
+          path: 'binding/history',
+          name: 'StudentBindingHistory',
+          component: () => import('@/views/student/binding/History.vue')
         },
         {
           path: 'notices',
