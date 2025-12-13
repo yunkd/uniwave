@@ -6,25 +6,15 @@
         <h1 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">실습 일지</h1>
         <p class="text-xs sm:text-sm text-gray-600">작성한 실습 일지를 확인하고 관리하세요</p>
       </div>
-      <div class="flex flex-col sm:flex-row gap-2">
-        <Button
-          variant="secondary"
-          @click="downloadAllJournals"
-          :disabled="totalCount === 0"
-          class="text-xs sm:text-sm"
-        >
-          <ArrowDownTrayIcon class="w-4 h-4 sm:w-5 sm:h-5 mr-1.5" />
-          전체 다운로드
-        </Button>
-        <Button
-          variant="primary"
-          @click="router.push('/student/journal/write')"
-          class="text-xs sm:text-sm"
-        >
-          <PlusIcon class="w-4 h-4 sm:w-5 sm:h-5 mr-1.5" />
-          일지 작성
-        </Button>
-      </div>
+      <Button
+        variant="secondary"
+        @click="downloadAllJournals"
+        :disabled="totalCount === 0"
+        class="text-xs sm:text-sm"
+      >
+        <ArrowDownTrayIcon class="w-4 h-4 sm:w-5 sm:h-5 mr-1.5" />
+        전체 다운로드
+      </Button>
     </div>
 
     <!-- 통계 카드 -->
@@ -85,15 +75,7 @@
       <!-- 빈 상태 -->
       <div v-if="filteredJournals.length === 0" class="p-6 sm:p-8 lg:p-12 text-center">
         <DocumentTextIcon class="w-12 h-12 sm:w-16 sm:h-16 text-gray-300 mx-auto mb-3 sm:mb-4" />
-        <p class="text-sm sm:text-base text-gray-600 mb-4">작성된 실습 일지가 없습니다</p>
-        <Button
-          variant="primary"
-          @click="router.push('/student/journal/write')"
-          class="text-xs sm:text-sm"
-        >
-          <PlusIcon class="w-4 h-4 mr-1.5" />
-          첫 일지 작성하기
-        </Button>
+        <p class="text-sm sm:text-base text-gray-600">작성된 실습 일지가 없습니다</p>
       </div>
 
       <!-- 데스크톱 테이블 -->
