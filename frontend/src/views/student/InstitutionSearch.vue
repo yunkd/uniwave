@@ -2,77 +2,16 @@
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- 페이지 헤더 -->
     <div class="mb-6 sm:mb-8">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
-        <div>
-          <h1 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">실습 기관 검색</h1>
-          <p class="text-sm sm:text-base text-gray-600">대학 협력 기관 정보를 조회하세요</p>
-        </div>
-        <Button @click="router.push('/student/matching/request')" variant="primary">
-          <CheckCircleIcon class="w-5 h-5 mr-2" />
-          매칭 신청하기
-        </Button>
+      <div class="mb-4">
+        <h1 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">실습 기관 검색</h1>
+        <p class="text-sm sm:text-base text-gray-600">대학 협력 기관 정보를 조회하세요</p>
       </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-        <div class="p-3 bg-blue-50 border border-blue-200 rounded-lg">
-          <p class="text-xs text-blue-800">
-            💡 <strong>기관 정보 확인</strong><br>
-            협력 기관의 위치, 분야, 연락처 등을 미리 확인할 수 있습니다.
-          </p>
-        </div>
-        <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg">
-          <p class="text-xs text-amber-800">
-            ⚠️ <strong>매칭 신청 방법</strong><br>
-            기관과 사전 협의 후 발급받은 <strong>기관 코드</strong>로 매칭을 신청하세요.
-          </p>
-        </div>
+      <div class="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+        <p class="text-sm text-blue-800">
+          💡 협력 기관의 위치, 분야, 연락처 등을 검색하고 확인할 수 있습니다.
+        </p>
       </div>
     </div>
-
-    <!-- 현재 매칭 상태 -->
-    <Card v-if="matchingStatus" class="mb-6">
-      <div class="flex items-start gap-4">
-        <div class="flex-shrink-0 w-12 h-12 rounded-full flex items-center justify-center"
-          :class="getStatusBgColor(matchingStatus.status)"
-        >
-          <component :is="getStatusIcon(matchingStatus.status)" class="w-6 h-6" />
-        </div>
-        <div class="flex-1">
-          <h3 class="text-base sm:text-lg font-semibold mb-1" :class="getStatusTextColor(matchingStatus.status)">
-            {{ getStatusLabel(matchingStatus.status) }}
-          </h3>
-          <p class="text-sm text-gray-600 mb-3">
-            {{ getStatusDescription(matchingStatus.status) }}
-          </p>
-          
-          <div v-if="matchingStatus.institution" class="p-4 bg-gray-50 rounded-lg">
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              <div>
-                <p class="text-xs text-gray-600">기관명</p>
-                <p class="text-sm font-medium text-gray-900">{{ matchingStatus.institution.name }}</p>
-              </div>
-              <div>
-                <p class="text-xs text-gray-600">분야</p>
-                <p class="text-sm font-medium text-gray-900">{{ matchingStatus.institution.field }}</p>
-              </div>
-              <div>
-                <p class="text-xs text-gray-600">주소</p>
-                <p class="text-sm font-medium text-gray-900">{{ matchingStatus.institution.address }}</p>
-              </div>
-              <div>
-                <p class="text-xs text-gray-600">담당자</p>
-                <p class="text-sm font-medium text-gray-900">{{ matchingStatus.institution.contact }}</p>
-              </div>
-            </div>
-          </div>
-
-          <div v-if="matchingStatus.status === 'PENDING'" class="mt-4">
-            <Button variant="outline" size="sm" @click="cancelRequest">
-              매칭 요청 취소
-            </Button>
-          </div>
-        </div>
-      </div>
-    </Card>
 
     <!-- 검색 필터 -->
     <Card class="mb-6">
@@ -127,11 +66,11 @@
         </select>
       </div>
 
-      <!-- 세 번째 행: 분야 및 상태 필터 -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+      <!-- 세 번째 행: 분야 필터 -->
+      <div>
         <select
           v-model="filterField"
-          class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
+          class="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
         >
           <option value="">전체 분야</option>
           <option value="노인복지">노인복지</option>
@@ -140,15 +79,6 @@
           <option value="정신보건">정신보건</option>
           <option value="지역복지">지역복지</option>
           <option value="의료복지">의료복지</option>
-        </select>
-
-        <select
-          v-model="filterStatus"
-          class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
-        >
-          <option value="">전체 상태</option>
-          <option value="RECRUITING">모집중</option>
-          <option value="CLOSED">마감</option>
         </select>
       </div>
 
@@ -222,11 +152,7 @@ import {
   BuildingOfficeIcon,
   MapPinIcon,
   UserIcon,
-  PhoneIcon,
-  CheckCircleIcon,
-  ClockIcon,
-  XCircleIcon,
-  InformationCircleIcon
+  PhoneIcon
 } from '@heroicons/vue/24/outline'
 import { useRouter } from 'vue-router'
 
@@ -237,7 +163,6 @@ const filterField = ref('')
 const filterCity = ref('')
 const filterDistrict = ref('')
 const filterDong = ref('')
-const filterStatus = ref('')
 
 // 지역 데이터 (시/구/동)
 const regionData: Record<string, Record<string, string[]>> = {
@@ -253,9 +178,6 @@ const regionData: Record<string, Record<string, string[]>> = {
     '고양시': ['일산동구', '일산서구', '덕양구']
   }
 }
-
-// 임시: 현재 매칭 상태
-const matchingStatus = ref<any>(null)
 
 // 임시: 기관 목록 데이터
 const institutions = ref([
@@ -366,11 +288,6 @@ const filteredInstitutions = computed(() => {
     result = result.filter(i => i.field === filterField.value)
   }
 
-  // 상태 필터
-  if (filterStatus.value) {
-    result = result.filter(i => i.status === filterStatus.value)
-  }
-
   // 검색어 필터
   if (searchQuery.value) {
     const query = searchQuery.value.toLowerCase()
@@ -402,7 +319,6 @@ const resetFilters = () => {
   filterDistrict.value = ''
   filterDong.value = ''
   filterField.value = ''
-  filterStatus.value = ''
 }
 
 const handleSearch = () => {
@@ -412,70 +328,7 @@ const handleSearch = () => {
     city: filterCity.value,
     district: filterDistrict.value,
     dong: filterDong.value,
-    field: filterField.value,
-    status: filterStatus.value
+    field: filterField.value
   })
-}
-
-const viewDetail = (institution: any) => {
-  // TODO: 기관 상세 정보 모달 또는 페이지로 이동
-  alert(`${institution.name}\n\n주소: ${institution.address}\n분야: ${institution.field}\n담당자: ${institution.contactName}\n연락처: ${institution.contactPhone}\n\n💡 기관과 사전 협의 후 "매칭 신청하기"에서 기관 코드를 입력하여 신청하세요.`)
-}
-
-const copyContact = (institution: any) => {
-  navigator.clipboard.writeText(institution.contactPhone)
-  alert(`연락처가 복사되었습니다.\n${institution.contactPhone}`)
-}
-
-const cancelRequest = () => {
-  if (confirm('매칭 요청을 취소하시겠습니까?')) {
-    matchingStatus.value = null
-    alert('매칭 요청이 취소되었습니다.')
-  }
-}
-
-const getStatusBgColor = (status: string) => {
-  const colors: Record<string, string> = {
-    'PENDING': 'bg-yellow-100',
-    'APPROVED': 'bg-green-100',
-    'REJECTED': 'bg-red-100'
-  }
-  return colors[status] || 'bg-gray-100'
-}
-
-const getStatusTextColor = (status: string) => {
-  const colors: Record<string, string> = {
-    'PENDING': 'text-yellow-900',
-    'APPROVED': 'text-green-900',
-    'REJECTED': 'text-red-900'
-  }
-  return colors[status] || 'text-gray-900'
-}
-
-const getStatusIcon = (status: string) => {
-  const icons: Record<string, any> = {
-    'PENDING': ClockIcon,
-    'APPROVED': CheckCircleIcon,
-    'REJECTED': XCircleIcon
-  }
-  return icons[status] || ClockIcon
-}
-
-const getStatusLabel = (status: string) => {
-  const labels: Record<string, string> = {
-    'PENDING': '매칭 요청 대기 중',
-    'APPROVED': '매칭 승인 완료',
-    'REJECTED': '매칭 요청 반려'
-  }
-  return labels[status] || '알 수 없음'
-}
-
-const getStatusDescription = (status: string) => {
-  const descriptions: Record<string, string> = {
-    'PENDING': '대학 담당자가 검토 중입니다. 승인되면 기관에 초대 메일이 발송됩니다.',
-    'APPROVED': '기관 매칭이 완료되었습니다. 실습을 시작할 수 있습니다.',
-    'REJECTED': '매칭 요청이 반려되었습니다. 다른 기관을 선택해주세요.'
-  }
-  return descriptions[status] || ''
 }
 </script>
