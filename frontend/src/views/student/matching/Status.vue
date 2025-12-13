@@ -217,11 +217,11 @@ const filterStatus = ref('')
 // Mock 통계 데이터
 const stats = ref({
   pending: 1,
-  approved: 2,
+  approved: 1,
   rejected: 1
 })
 
-// Mock 매칭 데이터
+// Mock 매칭 데이터 (한 곳만 승인 가능)
 const matchings = ref([
   {
     id: 1,
@@ -245,18 +245,6 @@ const matchings = ref([
     requestedAt: '2025.02.01',
     status: 'PENDING',
     message: null
-  },
-  {
-    id: 3,
-    institutionId: 3,
-    institutionName: '꿈나무아동센터',
-    region: '서울',
-    field: '아동복지',
-    duration: '4주 (2025.04.01 ~ 2025.04.28)',
-    requestedAt: '2025.01.28',
-    approvedAt: '2025.02.05',
-    status: 'APPROVED',
-    message: '환영합니다! 실습 관련 문의사항은 언제든 연락주세요.'
   },
   {
     id: 4,
