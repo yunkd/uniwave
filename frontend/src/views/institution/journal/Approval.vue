@@ -1,0 +1,568 @@
+<template>
+  <div class="p-4 md:p-6">
+    <!-- 페이지 헤더 -->
+    <div class="mb-6">
+      <h1 class="text-2xl md:text-3xl font-bold text-gray-800 mb-2">일지 승인 관리</h1>
+      <p class="text-gray-600">실습생들이 작성한 실습 일지를 검토하고 승인하세요</p>
+    </div>
+
+    <!-- 통계 카드 -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+      <div class="bg-white rounded-lg shadow p-4 border-l-4 border-blue-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-600 mb-1">전체 일지</p>
+            <p class="text-2xl font-bold text-gray-800">{{ totalJournals }}</p>
+          </div>
+          <DocumentTextIcon class="w-10 h-10 text-blue-500 opacity-20" />
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow p-4 border-l-4 border-yellow-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-600 mb-1">승인 대기</p>
+            <p class="text-2xl font-bold text-yellow-600">{{ pendingJournals }}</p>
+          </div>
+          <ClockIcon class="w-10 h-10 text-yellow-500 opacity-20" />
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow p-4 border-l-4 border-green-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-600 mb-1">승인 완료</p>
+            <p class="text-2xl font-bold text-green-600">{{ approvedJournals }}</p>
+          </div>
+          <CheckCircleIcon class="w-10 h-10 text-green-500 opacity-20" />
+        </div>
+      </div>
+      
+      <div class="bg-white rounded-lg shadow p-4 border-l-4 border-red-500">
+        <div class="flex items-center justify-between">
+          <div>
+            <p class="text-sm text-gray-600 mb-1">반려</p>
+            <p class="text-2xl font-bold text-red-600">{{ rejectedJournals }}</p>
+          </div>
+          <XCircleIcon class="w-10 h-10 text-red-500 opacity-20" />
+        </div>
+      </div>
+    </div>
+
+    <!-- 필터 및 검색 -->
+    <div class="bg-white rounded-lg shadow p-4 mb-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <!-- 상태 필터 -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">상태</label>
+          <select 
+            v-model="filters.status" 
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="">전체</option>
+            <option value="PENDING">승인 대기</option>
+            <option value="APPROVED">승인 완료</option>
+            <option value="REJECTED">반려</option>
+          </select>
+        </div>
+
+        <!-- 실습생 검색 -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">실습생</label>
+          <input
+            v-model="filters.studentName"
+            type="text"
+            placeholder="이름 검색"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+
+        <!-- 날짜 범위 -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">시작일</label>
+          <input
+            v-model="filters.startDate"
+            type="date"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">종료일</label>
+          <input
+            v-model="filters.endDate"
+            type="date"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          />
+        </div>
+      </div>
+
+      <!-- 필터 버튼 -->
+      <div class="flex gap-2 mt-4">
+        <button
+          @click="applyFilters"
+          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+        >
+          <MagnifyingGlassIcon class="w-4 h-4 inline mr-1" />
+          검색
+        </button>
+        <button
+          @click="resetFilters"
+          class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+        >
+          초기화
+        </button>
+      </div>
+    </div>
+
+    <!-- 일지 목록 -->
+    <div class="bg-white rounded-lg shadow overflow-hidden">
+      <!-- 데스크톱 테이블 -->
+      <div class="hidden md:block overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                실습생
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                작성일
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                실습 내용
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                상태
+              </th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                작업
+              </th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            <tr v-for="journal in filteredJournals" :key="journal.id" class="hover:bg-gray-50">
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="flex items-center">
+                  <div>
+                    <div class="text-sm font-medium text-gray-900">{{ journal.studentName }}</div>
+                    <div class="text-sm text-gray-500">{{ journal.studentId }}</div>
+                  </div>
+                </div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                {{ formatDate(journal.date) }}
+              </td>
+              <td class="px-6 py-4">
+                <div class="text-sm text-gray-900 line-clamp-2">{{ journal.content }}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <span :class="getStatusClass(journal.status)" class="px-2 py-1 text-xs font-semibold rounded-full">
+                  {{ getStatusLabel(journal.status) }}
+                </span>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm">
+                <button
+                  v-if="journal.status === 'PENDING'"
+                  @click="openApprovalModal(journal)"
+                  class="text-blue-600 hover:text-blue-800 font-medium mr-3"
+                >
+                  검토
+                </button>
+                <button
+                  @click="viewJournal(journal)"
+                  class="text-gray-600 hover:text-gray-800"
+                >
+                  상세보기
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+
+        <!-- 빈 상태 -->
+        <div v-if="filteredJournals.length === 0" class="text-center py-12">
+          <DocumentTextIcon class="mx-auto h-12 w-12 text-gray-400" />
+          <h3 class="mt-2 text-sm font-medium text-gray-900">일지가 없습니다</h3>
+          <p class="mt-1 text-sm text-gray-500">조건에 맞는 일지가 없습니다.</p>
+        </div>
+      </div>
+
+      <!-- 모바일 카드 -->
+      <div class="md:hidden">
+        <div v-for="journal in filteredJournals" :key="journal.id" class="border-b border-gray-200 p-4">
+          <div class="flex justify-between items-start mb-2">
+            <div>
+              <div class="font-medium text-gray-900">{{ journal.studentName }}</div>
+              <div class="text-sm text-gray-500">{{ journal.studentId }}</div>
+            </div>
+            <span :class="getStatusClass(journal.status)" class="px-2 py-1 text-xs font-semibold rounded-full">
+              {{ getStatusLabel(journal.status) }}
+            </span>
+          </div>
+          <div class="text-sm text-gray-600 mb-2">{{ formatDate(journal.date) }}</div>
+          <div class="text-sm text-gray-700 mb-3 line-clamp-2">{{ journal.content }}</div>
+          <div class="flex gap-2">
+            <button
+              v-if="journal.status === 'PENDING'"
+              @click="openApprovalModal(journal)"
+              class="flex-1 px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700"
+              style="min-height: 44px;"
+            >
+              검토
+            </button>
+            <button
+              @click="viewJournal(journal)"
+              class="flex-1 px-3 py-2 bg-gray-200 text-gray-700 text-sm rounded-lg hover:bg-gray-300"
+              style="min-height: 44px;"
+            >
+              상세보기
+            </button>
+          </div>
+        </div>
+
+        <!-- 빈 상태 -->
+        <div v-if="filteredJournals.length === 0" class="text-center py-12">
+          <DocumentTextIcon class="mx-auto h-12 w-12 text-gray-400" />
+          <h3 class="mt-2 text-sm font-medium text-gray-900">일지가 없습니다</h3>
+          <p class="mt-1 text-sm text-gray-500">조건에 맞는 일지가 없습니다.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 승인/반려 모달 -->
+    <div v-if="showApprovalModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="p-6">
+          <h3 class="text-xl font-bold text-gray-900 mb-4">일지 검토</h3>
+          
+          <!-- 일지 정보 -->
+          <div class="bg-gray-50 rounded-lg p-4 mb-4">
+            <div class="grid grid-cols-2 gap-4 mb-3">
+              <div>
+                <span class="text-sm text-gray-600">실습생</span>
+                <p class="font-medium">{{ selectedJournal?.studentName }}</p>
+              </div>
+              <div>
+                <span class="text-sm text-gray-600">작성일</span>
+                <p class="font-medium">{{ formatDate(selectedJournal?.date) }}</p>
+              </div>
+            </div>
+            <div>
+              <span class="text-sm text-gray-600">실습 내용</span>
+              <p class="mt-1 text-gray-800">{{ selectedJournal?.content }}</p>
+            </div>
+          </div>
+
+          <!-- 피드백 입력 -->
+          <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">피드백</label>
+            <textarea
+              v-model="approvalFeedback"
+              rows="4"
+              placeholder="피드백을 입력하세요 (선택사항)"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            ></textarea>
+          </div>
+
+          <!-- 버튼 -->
+          <div class="flex gap-3">
+            <button
+              @click="approveJournal"
+              class="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 transition"
+              style="min-height: 44px;"
+            >
+              <CheckCircleIcon class="w-5 h-5 inline mr-1" />
+              승인
+            </button>
+            <button
+              @click="rejectJournal"
+              class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition"
+              style="min-height: 44px;"
+            >
+              <XCircleIcon class="w-5 h-5 inline mr-1" />
+              반려
+            </button>
+            <button
+              @click="closeApprovalModal"
+              class="flex-1 px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+              style="min-height: 44px;"
+            >
+              취소
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 상세보기 모달 -->
+    <div v-if="showDetailModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center p-4 z-50">
+      <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+        <div class="p-6">
+          <div class="flex justify-between items-start mb-4">
+            <h3 class="text-xl font-bold text-gray-900">일지 상세보기</h3>
+            <button @click="closeDetailModal" class="text-gray-400 hover:text-gray-600">
+              <XMarkIcon class="w-6 h-6" />
+            </button>
+          </div>
+          
+          <!-- 일지 정보 -->
+          <div class="space-y-4">
+            <div class="grid grid-cols-2 gap-4">
+              <div>
+                <span class="text-sm text-gray-600">실습생</span>
+                <p class="font-medium">{{ selectedJournal?.studentName }}</p>
+              </div>
+              <div>
+                <span class="text-sm text-gray-600">학번</span>
+                <p class="font-medium">{{ selectedJournal?.studentId }}</p>
+              </div>
+              <div>
+                <span class="text-sm text-gray-600">작성일</span>
+                <p class="font-medium">{{ formatDate(selectedJournal?.date) }}</p>
+              </div>
+              <div>
+                <span class="text-sm text-gray-600">상태</span>
+                <span :class="getStatusClass(selectedJournal?.status || '')" class="px-2 py-1 text-xs font-semibold rounded-full">
+                  {{ getStatusLabel(selectedJournal?.status || '') }}
+                </span>
+              </div>
+            </div>
+
+            <div>
+              <span class="text-sm text-gray-600">실습 내용</span>
+              <div class="mt-1 p-4 bg-gray-50 rounded-lg">
+                <p class="text-gray-800 whitespace-pre-wrap">{{ selectedJournal?.content }}</p>
+              </div>
+            </div>
+
+            <div v-if="selectedJournal?.feedback">
+              <span class="text-sm text-gray-600">피드백</span>
+              <div class="mt-1 p-4 bg-blue-50 rounded-lg">
+                <p class="text-gray-800">{{ selectedJournal.feedback }}</p>
+              </div>
+            </div>
+          </div>
+
+          <div class="mt-6 flex justify-end">
+            <button
+              @click="closeDetailModal"
+              class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
+              style="min-height: 44px;"
+            >
+              닫기
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+import {
+  DocumentTextIcon,
+  ClockIcon,
+  CheckCircleIcon,
+  XCircleIcon,
+  MagnifyingGlassIcon,
+  XMarkIcon
+} from '@heroicons/vue/24/outline'
+
+// 타입 정의
+interface Journal {
+  id: number
+  studentName: string
+  studentId: string
+  date: string
+  content: string
+  status: 'PENDING' | 'APPROVED' | 'REJECTED'
+  feedback?: string
+}
+
+// 상태
+const filters = ref({
+  status: '',
+  studentName: '',
+  startDate: '',
+  endDate: ''
+})
+
+const showApprovalModal = ref(false)
+const showDetailModal = ref(false)
+const selectedJournal = ref<Journal | null>(null)
+const approvalFeedback = ref('')
+
+// Mock 데이터 (추후 API로 대체)
+const journals = ref<Journal[]>([
+  {
+    id: 1,
+    studentName: '김민준',
+    studentId: '2021001',
+    date: '2024-01-15',
+    content: '오늘은 환자 차트 작성 방법을 배웠습니다. 선배 사회복지사님께서 상세하게 설명해주셔서 많은 도움이 되었습니다.',
+    status: 'PENDING'
+  },
+  {
+    id: 2,
+    studentName: '이서연',
+    studentId: '2021002',
+    date: '2024-01-15',
+    content: '가족 상담 세션에 참관했습니다. 상담 기법과 공감 표현 방법을 직접 볼 수 있어서 유익했습니다.',
+    status: 'PENDING'
+  },
+  {
+    id: 3,
+    studentName: '박지우',
+    studentId: '2021003',
+    date: '2024-01-14',
+    content: '복지 프로그램 기획 회의에 참석했습니다. 클라이언트 니즈 파악의 중요성을 깨달았습니다.',
+    status: 'APPROVED',
+    feedback: '잘 작성하셨습니다. 계속 열심히 하세요!'
+  },
+  {
+    id: 4,
+    studentName: '최서준',
+    studentId: '2021004',
+    date: '2024-01-14',
+    content: '오늘 실습 내용입니다.',
+    status: 'REJECTED',
+    feedback: '실습 내용이 너무 간략합니다. 구체적인 활동과 느낀 점을 추가해주세요.'
+  }
+])
+
+// 통계 계산
+const totalJournals = computed(() => journals.value.length)
+const pendingJournals = computed(() => journals.value.filter(j => j.status === 'PENDING').length)
+const approvedJournals = computed(() => journals.value.filter(j => j.status === 'APPROVED').length)
+const rejectedJournals = computed(() => journals.value.filter(j => j.status === 'REJECTED').length)
+
+// 필터링된 일지
+const filteredJournals = computed(() => {
+  return journals.value.filter(journal => {
+    if (filters.value.status && journal.status !== filters.value.status) return false
+    if (filters.value.studentName && !journal.studentName.includes(filters.value.studentName)) return false
+    if (filters.value.startDate && journal.date < filters.value.startDate) return false
+    if (filters.value.endDate && journal.date > filters.value.endDate) return false
+    return true
+  })
+})
+
+// 함수들
+const formatDate = (date: string | undefined) => {
+  if (!date) return ''
+  return new Date(date).toLocaleDateString('ko-KR', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  })
+}
+
+const getStatusLabel = (status: string) => {
+  const labels: Record<string, string> = {
+    PENDING: '승인 대기',
+    APPROVED: '승인 완료',
+    REJECTED: '반려'
+  }
+  return labels[status] || status
+}
+
+const getStatusClass = (status: string) => {
+  const classes: Record<string, string> = {
+    PENDING: 'bg-yellow-100 text-yellow-800',
+    APPROVED: 'bg-green-100 text-green-800',
+    REJECTED: 'bg-red-100 text-red-800'
+  }
+  return classes[status] || ''
+}
+
+const applyFilters = () => {
+  // 필터가 자동으로 computed에서 적용됨
+  console.log('필터 적용됨')
+}
+
+const resetFilters = () => {
+  filters.value = {
+    status: '',
+    studentName: '',
+    startDate: '',
+    endDate: ''
+  }
+}
+
+const openApprovalModal = (journal: Journal) => {
+  selectedJournal.value = journal
+  approvalFeedback.value = ''
+  showApprovalModal.value = true
+}
+
+const closeApprovalModal = () => {
+  showApprovalModal.value = false
+  selectedJournal.value = null
+  approvalFeedback.value = ''
+}
+
+const approveJournal = () => {
+  if (selectedJournal.value) {
+    const journal = journals.value.find(j => j.id === selectedJournal.value!.id)
+    if (journal) {
+      journal.status = 'APPROVED'
+      journal.feedback = approvalFeedback.value
+    }
+    alert('일지가 승인되었습니다.')
+    closeApprovalModal()
+  }
+}
+
+const rejectJournal = () => {
+  if (!approvalFeedback.value.trim()) {
+    alert('반려 사유를 입력해주세요.')
+    return
+  }
+  
+  if (selectedJournal.value) {
+    const journal = journals.value.find(j => j.id === selectedJournal.value!.id)
+    if (journal) {
+      journal.status = 'REJECTED'
+      journal.feedback = approvalFeedback.value
+    }
+    alert('일지가 반려되었습니다.')
+    closeApprovalModal()
+  }
+}
+
+const viewJournal = (journal: Journal) => {
+  selectedJournal.value = journal
+  showDetailModal.value = true
+}
+
+const closeDetailModal = () => {
+  showDetailModal.value = false
+  selectedJournal.value = null
+}
+</script>
+
+<style scoped>
+/* iOS 자동 줌 방지 */
+input[type="text"],
+input[type="date"],
+select,
+textarea {
+  font-size: 16px;
+}
+
+/* 터치 영역 최소 44px */
+button,
+a {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* 라인 클램프 */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+</style>
