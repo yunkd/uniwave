@@ -226,7 +226,7 @@
             <!-- 지원 버튼 -->
             <button
               v-if="recruitment.status === 'RECRUITING' || recruitment.status === 'CLOSING_SOON'"
-              @click="applyToRecruitment"
+              @click="showApplicationModal = true"
               :disabled="recruitment.applicants >= recruitment.positions"
               class="w-full py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
             >
@@ -242,7 +242,7 @@
 
             <!-- 안내 문구 -->
             <p class="text-xs text-gray-500 text-center mt-4">
-              지원 후 기관에서 연락을 드립니다
+              이력서를 첨부하여 지원하세요
             </p>
           </div>
 
@@ -285,12 +285,166 @@
         </div>
       </div>
     </div>
+
+    <!-- 지원 모달 -->
+    <Modal
+      :show="showApplicationModal"
+      @close="closeApplicationModal"
+      title="모집공고 지원하기"
+      size="lg"
+    >
+      <div class="space-y-6">
+        <!-- 공고 정보 요약 -->
+        <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
+          <h4 class="font-semibold text-gray-900 mb-2">지원 공고</h4>
+          <p class="text-sm text-gray-700 font-medium">{{ recruitment.institutionName }}</p>
+          <p class="text-sm text-gray-600">{{ recruitment.title }}</p>
+        </div>
+
+        <!-- 지원자 정보 -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-900 mb-2">
+            지원자 정보
+          </label>
+          <div class="space-y-3">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">이름</label>
+              <input
+                v-model="applicationForm.name"
+                type="text"
+                placeholder="홍길동"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">연락처</label>
+              <input
+                v-model="applicationForm.phone"
+                type="tel"
+                placeholder="010-1234-5678"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1">이메일</label>
+              <input
+                v-model="applicationForm.email"
+                type="email"
+                placeholder="example@email.com"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              />
+            </div>
+          </div>
+        </div>
+
+        <!-- 이력서 업로드 -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-900 mb-2">
+            이력서 첨부 <span class="text-red-500">*</span>
+          </label>
+          <div
+            @click="triggerFileUpload"
+            @dragover.prevent="isDragging = true"
+            @dragleave.prevent="isDragging = false"
+            @drop.prevent="handleFileDrop"
+            :class="[
+              'border-2 border-dashed rounded-lg p-6 text-center cursor-pointer transition-colors',
+              isDragging ? 'border-primary-500 bg-primary-50' : 'border-gray-300 hover:border-primary-400 hover:bg-gray-50'
+            ]"
+          >
+            <input
+              ref="fileInput"
+              type="file"
+              accept=".pdf,.doc,.docx,.hwp"
+              @change="handleFileSelect"
+              class="hidden"
+            />
+            
+            <div v-if="!applicationForm.resume" class="space-y-2">
+              <DocumentArrowUpIcon class="w-12 h-12 text-gray-400 mx-auto" />
+              <p class="text-sm font-medium text-gray-700">
+                클릭하거나 파일을 드래그하여 업로드
+              </p>
+              <p class="text-xs text-gray-500">
+                PDF, DOC, DOCX, HWP 형식 (최대 10MB)
+              </p>
+            </div>
+
+            <div v-else class="space-y-2">
+              <div class="flex items-center justify-center gap-2">
+                <DocumentCheckIcon class="w-8 h-8 text-green-600" />
+              </div>
+              <p class="text-sm font-medium text-gray-900">{{ applicationForm.resume.name }}</p>
+              <p class="text-xs text-gray-500">{{ formatFileSize(applicationForm.resume.size) }}</p>
+              <button
+                @click.stop="removeFile"
+                class="text-sm text-red-600 hover:text-red-700 font-medium"
+              >
+                파일 삭제
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- 자기소개 (선택) -->
+        <div>
+          <label class="block text-sm font-semibold text-gray-900 mb-2">
+            자기소개 (선택사항)
+          </label>
+          <textarea
+            v-model="applicationForm.introduction"
+            rows="4"
+            placeholder="간단한 자기소개나 지원 동기를 작성해주세요"
+            class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+          ></textarea>
+        </div>
+
+        <!-- 개인정보 동의 -->
+        <div class="bg-blue-50 rounded-lg p-4 border border-blue-200">
+          <label class="flex items-start gap-3 cursor-pointer">
+            <input
+              v-model="applicationForm.agreedToPrivacy"
+              type="checkbox"
+              class="mt-1 w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+            />
+            <div class="text-sm">
+              <span class="font-medium text-gray-900">개인정보 수집 및 이용 동의</span>
+              <span class="text-red-500">*</span>
+              <p class="text-gray-600 mt-1">
+                지원 처리를 위해 제공하신 개인정보(이름, 연락처, 이메일, 이력서)는 채용 목적으로만 사용되며, 
+                지원 종료 후 즉시 파기됩니다.
+              </p>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <!-- 모달 버튼 -->
+      <template #footer>
+        <div class="flex gap-3">
+          <button
+            @click="closeApplicationModal"
+            class="flex-1 px-4 py-2.5 border border-gray-300 text-gray-700 font-medium rounded-lg hover:bg-gray-50 transition-colors"
+          >
+            취소
+          </button>
+          <button
+            @click="submitApplication"
+            :disabled="!isFormValid"
+            class="flex-1 px-4 py-2.5 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 transition-colors disabled:bg-gray-300 disabled:cursor-not-allowed"
+          >
+            지원 제출
+          </button>
+        </div>
+      </template>
+    </Modal>
   </div>
 </template>
 
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
+import Modal from '@/components/common/Modal.vue'
 import {
   ArrowLeftIcon,
   BuildingOfficeIcon,
@@ -306,7 +460,9 @@ import {
   GlobeAltIcon,
   ShareIcon,
   BookmarkIcon,
-  InformationCircleIcon
+  InformationCircleIcon,
+  DocumentArrowUpIcon,
+  DocumentCheckIcon
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
@@ -382,11 +538,137 @@ const getDaysLeftClass = (daysLeft: number | null) => {
   return 'text-gray-900'
 }
 
-// 지원하기
-const applyToRecruitment = () => {
-  // TODO: 실제 지원 로직 구현
-  alert('지원이 완료되었습니다!\n기관에서 곧 연락드릴 예정입니다.')
-  router.push({ name: 'StudentRecruitments' })
+// 지원 모달 상태
+const showApplicationModal = ref(false)
+const isDragging = ref(false)
+const fileInput = ref<HTMLInputElement | null>(null)
+
+// 지원 폼
+const applicationForm = ref({
+  name: '',
+  phone: '',
+  email: '',
+  resume: null as File | null,
+  introduction: '',
+  agreedToPrivacy: false
+})
+
+// 폼 유효성 검사
+const isFormValid = computed(() => {
+  return (
+    applicationForm.value.name.trim() !== '' &&
+    applicationForm.value.phone.trim() !== '' &&
+    applicationForm.value.email.trim() !== '' &&
+    applicationForm.value.resume !== null &&
+    applicationForm.value.agreedToPrivacy
+  )
+})
+
+// 파일 업로드 트리거
+const triggerFileUpload = () => {
+  fileInput.value?.click()
+}
+
+// 파일 선택
+const handleFileSelect = (event: Event) => {
+  const target = event.target as HTMLInputElement
+  if (target.files && target.files[0]) {
+    const file = target.files[0]
+    validateAndSetFile(file)
+  }
+}
+
+// 파일 드롭
+const handleFileDrop = (event: DragEvent) => {
+  isDragging.value = false
+  const files = event.dataTransfer?.files
+  if (files && files[0]) {
+    validateAndSetFile(files[0])
+  }
+}
+
+// 파일 검증 및 설정
+const validateAndSetFile = (file: File) => {
+  // 파일 크기 검증 (10MB)
+  if (file.size > 10 * 1024 * 1024) {
+    alert('파일 크기는 10MB를 초과할 수 없습니다.')
+    return
+  }
+
+  // 파일 형식 검증
+  const fileExtension = file.name.split('.').pop()?.toLowerCase()
+  const allowedExtensions = ['pdf', 'doc', 'docx', 'hwp']
+  
+  if (!allowedExtensions.includes(fileExtension || '')) {
+    alert('PDF, DOC, DOCX, HWP 형식의 파일만 업로드 가능합니다.')
+    return
+  }
+
+  applicationForm.value.resume = file
+}
+
+// 파일 삭제
+const removeFile = () => {
+  applicationForm.value.resume = null
+  if (fileInput.value) {
+    fileInput.value.value = ''
+  }
+}
+
+// 파일 크기 포맷
+const formatFileSize = (bytes: number) => {
+  if (bytes === 0) return '0 Bytes'
+  const k = 1024
+  const sizes = ['Bytes', 'KB', 'MB', 'GB']
+  const i = Math.floor(Math.log(bytes) / Math.log(k))
+  return Math.round(bytes / Math.pow(k, i) * 100) / 100 + ' ' + sizes[i]
+}
+
+// 모달 닫기
+const closeApplicationModal = () => {
+  showApplicationModal.value = false
+  // 폼 초기화
+  applicationForm.value = {
+    name: '',
+    phone: '',
+    email: '',
+    resume: null,
+    introduction: '',
+    agreedToPrivacy: false
+  }
+  isDragging.value = false
+}
+
+// 지원 제출
+const submitApplication = async () => {
+  if (!isFormValid.value) {
+    alert('필수 항목을 모두 입력해주세요.')
+    return
+  }
+
+  // TODO: 실제 API 호출로 교체
+  // FormData 생성
+  const formData = new FormData()
+  formData.append('recruitmentId', recruitment.value.id.toString())
+  formData.append('name', applicationForm.value.name)
+  formData.append('phone', applicationForm.value.phone)
+  formData.append('email', applicationForm.value.email)
+  if (applicationForm.value.resume) {
+    formData.append('resume', applicationForm.value.resume)
+  }
+  if (applicationForm.value.introduction) {
+    formData.append('introduction', applicationForm.value.introduction)
+  }
+
+  try {
+    // 임시: 성공 알림
+    alert('지원이 완료되었습니다!\n\n이력서가 기관에 전달되었으며,\n기관에서 검토 후 연락드릴 예정입니다.')
+    closeApplicationModal()
+    router.push({ name: 'StudentRecruitments' })
+  } catch (error) {
+    alert('지원 제출 중 오류가 발생했습니다.')
+    console.error(error)
+  }
 }
 
 // 공유하기
