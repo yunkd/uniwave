@@ -35,6 +35,16 @@ const router = createRouter({
           path: 'dashboard',
           name: 'StudentDashboard',
           component: () => import('@/views/student/Dashboard.vue')
+        },
+        {
+          path: 'attendance/check',
+          name: 'StudentAttendanceCheck',
+          component: () => import('@/views/student/attendance/Check.vue')
+        },
+        {
+          path: 'attendance/history',
+          name: 'StudentAttendanceHistory',
+          component: () => import('@/views/student/attendance/History.vue')
         }
       ]
     },
