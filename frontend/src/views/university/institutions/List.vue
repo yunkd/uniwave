@@ -126,6 +126,14 @@
         <table class="w-full">
           <thead class="bg-gray-50 border-b border-gray-200">
             <tr>
+              <th class="px-6 py-3 text-left w-12">
+                <input
+                  type="checkbox"
+                  :checked="selectedInstitutions.length === filteredInstitutions.length && filteredInstitutions.length > 0"
+                  @change="toggleSelectAll"
+                  class="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                />
+              </th>
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 기관 정보
               </th>
@@ -155,6 +163,14 @@
               :key="institution.id"
               class="hover:bg-gray-50 transition-colors"
             >
+              <td class="px-6 py-4">
+                <input
+                  type="checkbox"
+                  :checked="selectedInstitutions.includes(institution.id)"
+                  @change="toggleInstitution(institution.id)"
+                  class="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                />
+              </td>
               <td class="px-6 py-4">
                 <div>
                   <p class="text-sm font-medium text-gray-900">{{ institution.name }}</p>
@@ -211,10 +227,16 @@
           v-for="institution in filteredInstitutions"
           :key="institution.id"
           class="p-4 hover:bg-gray-50 transition-colors"
-          @click="handleViewDetail(institution)"
         >
           <div class="flex items-start justify-between mb-3">
-            <div class="flex-1 min-w-0">
+            <div class="flex items-start gap-3 flex-1">
+              <input
+                type="checkbox"
+                :checked="selectedInstitutions.includes(institution.id)"
+                @change="toggleInstitution(institution.id)"
+                class="w-4 h-4 mt-1 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+              />
+              <div class="flex-1 min-w-0" @click="handleViewDetail(institution)">
               <div class="flex items-center gap-2 mb-1">
                 <span class="px-2 py-1 text-xs font-medium bg-blue-100 text-blue-800 rounded">
                   {{ institution.type }}
@@ -228,12 +250,13 @@
                   {{ institution.status === 'ACTIVE' ? '활성' : '비활성' }}
                 </span>
               </div>
-              <p class="text-sm font-medium text-gray-900">{{ institution.name }}</p>
-              <p class="text-xs text-gray-500 mt-1">{{ institution.address }}</p>
+                <p class="text-sm font-medium text-gray-900">{{ institution.name }}</p>
+                <p class="text-xs text-gray-500 mt-1">{{ institution.address }}</p>
+              </div>
             </div>
           </div>
 
-          <div class="grid grid-cols-2 gap-3">
+          <div class="grid grid-cols-2 gap-3" @click="handleViewDetail(institution)">
             <div>
               <p class="text-xs text-gray-500 mb-1">담당자</p>
               <p class="text-sm font-medium text-gray-900">{{ institution.managerName }}</p>
@@ -256,6 +279,62 @@
       </div>
     </Card>
 
+    <!-- 알림 발송 모달 -->
+    <div
+      v-if="showNotificationModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4"
+      @click.self="showNotificationModal = false"
+    >
+      <Card class="w-full max-w-md p-6">
+        <div class="flex items-center justify-between mb-4">
+          <h3 class="text-lg font-bold text-gray-900">선택한 기관에 알림 보내기</h3>
+          <button
+            @click="showNotificationModal = false"
+            class="text-gray-400 hover:text-gray-500"
+          >
+            <XMarkIcon class="w-5 h-5" />
+          </button>
+        </div>
+        
+        <div class="mb-4">
+          <p class="text-sm text-gray-600 mb-1">
+            <span class="font-medium text-primary-600">{{ selectedInstitutions.length }}개 기관</span>이 알림을 받습니다
+          </p>
+        </div>
+
+        <div class="mb-4">
+          <label class="block text-sm font-medium text-gray-700 mb-2">
+            알림 메시지
+          </label>
+          <textarea
+            v-model="notificationMessage"
+            rows="4"
+            placeholder="알림 메시지를 입력하세요..."
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-sm"
+          ></textarea>
+          <p class="text-xs text-gray-500 mt-1">
+            * 알림은 이메일과 SMS로 발송됩니다
+          </p>
+        </div>
+
+        <div class="flex gap-2">
+          <Button
+            variant="outline"
+            class="flex-1"
+            @click="showNotificationModal = false"
+          >
+            취소
+          </Button>
+          <Button
+            variant="primary"
+            class="flex-1"
+            @click="sendNotification"
+          >
+            발송
+          </Button>
+        </div>
+      </Card>
+    </div>
 
   </div>
 </template>
@@ -270,7 +349,10 @@ import {
   MagnifyingGlassIcon,
   PlusIcon,
   StarIcon,
-  ChevronRightIcon
+  ChevronRightIcon,
+  CheckCircleIcon,
+  BellAlertIcon,
+  XMarkIcon
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
@@ -279,6 +361,11 @@ const router = useRouter()
 const selectedType = ref('ALL')
 const selectedStatus = ref('ALL')
 const searchQuery = ref('')
+
+// 다중 선택 상태
+const selectedInstitutions = ref<string[]>([])
+const showNotificationModal = ref(false)
+const notificationMessage = ref('')
 
 
 
@@ -349,6 +436,51 @@ const filteredInstitutions = computed(() => {
     return matchesType && matchesStatus && matchesSearch
   })
 })
+
+// 전체 선택/해제
+const toggleSelectAll = () => {
+  if (selectedInstitutions.value.length === filteredInstitutions.value.length) {
+    selectedInstitutions.value = []
+  } else {
+    selectedInstitutions.value = filteredInstitutions.value.map(i => i.id)
+  }
+}
+
+// 개별 선택/해제
+const toggleInstitution = (institutionId: string) => {
+  const index = selectedInstitutions.value.indexOf(institutionId)
+  if (index > -1) {
+    selectedInstitutions.value.splice(index, 1)
+  } else {
+    selectedInstitutions.value.push(institutionId)
+  }
+}
+
+// 선택 해제
+const clearSelection = () => {
+  selectedInstitutions.value = []
+}
+
+// 알림 보내기
+const sendNotification = () => {
+  if (!notificationMessage.value.trim()) {
+    alert('알림 메시지를 입력해주세요.')
+    return
+  }
+  
+  console.log('알림 보내기:', {
+    institutionIds: selectedInstitutions.value,
+    message: notificationMessage.value
+  })
+  
+  // TODO: API 호출로 알림 전송
+  alert(`${selectedInstitutions.value.length}개 기관에 알림이 발송되었습니다.`)
+  
+  // 모달 닫기 및 초기화
+  showNotificationModal.value = false
+  notificationMessage.value = ''
+  selectedInstitutions.value = []
+}
 
 // 상세 보기
 const handleViewDetail = (institution: any) => {

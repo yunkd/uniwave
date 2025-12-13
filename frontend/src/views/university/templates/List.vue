@@ -7,20 +7,20 @@
     </div>
 
     <!-- 양식 카테고리 -->
-    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
       <!-- 평가서 양식 -->
-      <Card class="p-4 sm:p-6 border-2 hover:border-blue-200 transition-colors">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
-            <ClipboardDocumentCheckIcon class="w-6 h-6 text-blue-600" />
+      <Card class="p-4 sm:p-6 border-2 hover:border-blue-200 transition-colors flex flex-col h-full">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
+            <ClipboardDocumentCheckIcon class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
           </div>
-          <div>
-            <h2 class="text-base sm:text-lg font-bold text-gray-900">평가서 양식</h2>
+          <div class="flex-1 min-w-0">
+            <h2 class="text-sm sm:text-base font-bold text-gray-900 whitespace-nowrap">평가서 양식</h2>
             <p class="text-xs text-gray-500">{{ templates.evaluation.count }}개</p>
           </div>
         </div>
-        <p class="text-xs sm:text-sm text-gray-600 mb-4">실습생 평가 양식</p>
-        <div class="space-y-2">
+        <p class="text-xs text-gray-600 mb-4 min-h-[2.5rem]">실습생 평가 양식</p>
+        <div class="space-y-2 mt-auto">
           <Button
             variant="outline"
             class="w-full text-xs sm:text-sm border-2"
@@ -41,18 +41,18 @@
       </Card>
 
       <!-- 확인서 양식 -->
-      <Card class="p-4 sm:p-6 border-2 hover:border-green-200 transition-colors">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
-            <DocumentCheckIcon class="w-6 h-6 text-green-600" />
+      <Card class="p-4 sm:p-6 border-2 hover:border-green-200 transition-colors flex flex-col h-full">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
+            <DocumentCheckIcon class="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
           </div>
-          <div>
-            <h2 class="text-base sm:text-lg font-bold text-gray-900">확인서 양식</h2>
+          <div class="flex-1 min-w-0">
+            <h2 class="text-sm sm:text-base font-bold text-gray-900 whitespace-nowrap">확인서 양식</h2>
             <p class="text-xs text-gray-500">{{ templates.certificate.count }}개</p>
           </div>
         </div>
-        <p class="text-xs sm:text-sm text-gray-600 mb-4">실습 확인서 양식</p>
-        <div class="space-y-2">
+        <p class="text-xs text-gray-600 mb-4 min-h-[2.5rem]">실습 확인서 양식</p>
+        <div class="space-y-2 mt-auto">
           <Button
             variant="outline"
             class="w-full text-xs sm:text-sm border-2"
@@ -73,18 +73,18 @@
       </Card>
 
       <!-- 일지 양식 -->
-      <Card class="p-4 sm:p-6 border-2 hover:border-purple-200 transition-colors">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
-            <BookOpenIcon class="w-6 h-6 text-purple-600" />
+      <Card class="p-4 sm:p-6 border-2 hover:border-purple-200 transition-colors flex flex-col h-full">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 bg-purple-100 rounded-lg flex items-center justify-center flex-shrink-0">
+            <BookOpenIcon class="w-5 h-5 sm:w-6 sm:h-6 text-purple-600" />
           </div>
-          <div>
-            <h2 class="text-base sm:text-lg font-bold text-gray-900">일지 양식</h2>
+          <div class="flex-1 min-w-0">
+            <h2 class="text-sm sm:text-base font-bold text-gray-900 whitespace-nowrap">일지 양식</h2>
             <p class="text-xs text-gray-500">{{ templates.journal.count }}개</p>
           </div>
         </div>
-        <p class="text-xs sm:text-sm text-gray-600 mb-4">매일 작성하는 실습 일지</p>
-        <div class="space-y-2">
+        <p class="text-xs text-gray-600 mb-4 min-h-[2.5rem]">매일 작성하는 실습 일지</p>
+        <div class="space-y-2 mt-auto">
           <Button
             variant="outline"
             class="w-full text-xs sm:text-sm border-2"
@@ -105,18 +105,18 @@
       </Card>
 
       <!-- 출석부 양식 (신규) -->
-      <Card class="p-4 sm:p-6 border-2 hover:border-orange-200 transition-colors">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-12 h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
-            <ClipboardDocumentCheckIcon class="w-6 h-6 text-orange-600" />
+      <Card class="p-4 sm:p-6 border-2 hover:border-orange-200 transition-colors flex flex-col h-full">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 bg-orange-100 rounded-lg flex items-center justify-center flex-shrink-0">
+            <ClipboardDocumentCheckIcon class="w-5 h-5 sm:w-6 sm:h-6 text-orange-600" />
           </div>
-          <div>
-            <h2 class="text-base sm:text-lg font-bold text-gray-900">출석부 양식</h2>
+          <div class="flex-1 min-w-0">
+            <h2 class="text-sm sm:text-base font-bold text-gray-900 whitespace-nowrap">출석부 양식</h2>
             <p class="text-xs text-gray-500">{{ templates.attendance.count }}개</p>
           </div>
         </div>
-        <p class="text-xs sm:text-sm text-gray-600 mb-4">출석 기록 관리 양식</p>
-        <div class="space-y-2">
+        <p class="text-xs text-gray-600 mb-4 min-h-[2.5rem]">출석 기록 관리 양식</p>
+        <div class="space-y-2 mt-auto">
           <Button
             variant="outline"
             class="w-full text-xs sm:text-sm border-2"
@@ -137,18 +137,18 @@
       </Card>
 
       <!-- 최종보고서 양식 (신규) -->
-      <Card class="p-4 sm:p-6 border-2 hover:border-red-200 transition-colors">
-        <div class="flex items-center gap-3 mb-4">
-          <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
-            <DocumentTextIcon class="w-6 h-6 text-red-600" />
+      <Card class="p-4 sm:p-6 border-2 hover:border-red-200 transition-colors flex flex-col h-full">
+        <div class="flex items-center gap-3 mb-3">
+          <div class="w-10 h-10 sm:w-12 sm:h-12 bg-red-100 rounded-lg flex items-center justify-center flex-shrink-0">
+            <DocumentTextIcon class="w-5 h-5 sm:w-6 sm:h-6 text-red-600" />
           </div>
-          <div>
-            <h2 class="text-base sm:text-lg font-bold text-gray-900">최종보고서 양식</h2>
+          <div class="flex-1 min-w-0">
+            <h2 class="text-sm sm:text-base font-bold text-gray-900 whitespace-nowrap">최종보고서 양식</h2>
             <p class="text-xs text-gray-500">{{ templates.finalReport.count }}개</p>
           </div>
         </div>
-        <p class="text-xs sm:text-sm text-gray-600 mb-4">실습 최종 보고서</p>
-        <div class="space-y-2">
+        <p class="text-xs text-gray-600 mb-4 min-h-[2.5rem]">실습 최종 보고서</p>
+        <div class="space-y-2 mt-auto">
           <Button
             variant="outline"
             class="w-full text-xs sm:text-sm border-2"
