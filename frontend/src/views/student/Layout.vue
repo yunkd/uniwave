@@ -1,15 +1,10 @@
 <template>
   <div class="min-h-screen bg-gray-50 flex">
     <!-- 사이드바 -->
-    <Sidebar ref="sidebarRef" @collapsed-change="handleCollapsedChange" />
+    <Sidebar ref="sidebarRef" />
 
     <!-- 메인 컨텐츠 -->
-    <div 
-      :class="[
-        'flex-1 transition-all duration-300',
-        isCollapsed ? 'lg:ml-16' : 'lg:ml-64'
-      ]"
-    >
+    <div class="flex-1 lg:ml-64">
       <!-- 모바일 헤더 -->
       <header class="lg:hidden bg-white border-b border-gray-200 px-4 py-3 sticky top-0 z-30">
         <div class="flex items-center justify-between">
@@ -29,7 +24,7 @@
       </header>
 
       <!-- 페이지 컨텐츠 -->
-      <main class="min-h-screen p-4 sm:p-6 lg:p-8">
+      <main>
         <router-view />
       </main>
     </div>
@@ -43,15 +38,10 @@ import HeaderMenu from '@/components/layout/HeaderMenu.vue'
 import { Bars3Icon } from '@heroicons/vue/24/outline'
 
 const sidebarRef = ref()
-const isCollapsed = ref(false)
 
 const openMobileMenu = () => {
   if (sidebarRef.value) {
     sidebarRef.value.isMobileMenuOpen = true
   }
-}
-
-const handleCollapsedChange = (collapsed: boolean) => {
-  isCollapsed.value = collapsed
 }
 </script>

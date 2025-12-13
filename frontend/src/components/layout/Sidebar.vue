@@ -9,30 +9,19 @@
   <!-- 사이드바 -->
   <aside
     :class="[
-      'fixed top-0 left-0 h-full bg-white border-r border-gray-200 transition-all duration-300 z-50',
-      isCollapsed && !isMobileMenuOpen ? 'w-16' : 'w-64',
+      'fixed top-0 left-0 h-full w-64 bg-white border-r border-gray-200 transition-transform duration-300 z-50',
       'lg:translate-x-0',
       isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
     ]"
   >
     <!-- 로고 영역 -->
     <div class="h-16 flex items-center justify-between px-4 border-b border-gray-200">
-      <div v-if="!isCollapsed" class="flex items-center gap-2">
+      <div class="flex items-center gap-2">
         <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
           <AcademicCapIcon class="w-5 h-5 text-white" />
         </div>
         <span class="font-bold text-gray-900">Uniwave</span>
       </div>
-      <div v-else class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center mx-auto">
-        <AcademicCapIcon class="w-5 h-5 text-white" />
-      </div>
-      <button
-        v-if="!isCollapsed"
-        @click="toggleSidebar"
-        class="p-1.5 hover:bg-gray-100 rounded-lg transition-colors hidden lg:block"
-      >
-        <ChevronLeftIcon class="w-5 h-5 text-gray-600" />
-      </button>
     </div>
 
     <!-- 사용자 정보 -->
@@ -41,7 +30,7 @@
         <div class="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
           <UserCircleIcon class="w-6 h-6 text-primary-600" />
         </div>
-        <div v-if="!isCollapsed" class="flex-1 min-w-0">
+        <div class="flex-1 min-w-0">
           <p class="text-sm font-medium text-gray-900 truncate">
             {{ user?.name || '사용자' }}
           </p>
@@ -62,26 +51,12 @@
           :class="menuItemClass(item.path)"
         >
           <component :is="item.icon" class="w-5 h-5 flex-shrink-0" />
-          <span v-if="!isCollapsed" class="flex-1">{{ item.label }}</span>
+          <span class="flex-1">{{ item.label }}</span>
         </router-link>
 
         <!-- 그룹 메뉴 -->
         <div v-else>
-          <!-- 접힌 상태: 첫 번째 하위 메뉴로 이동 -->
-          <router-link
-            v-if="isCollapsed"
-            :to="item.children[0].path"
-            :class="[
-              'flex items-center justify-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors',
-              isActiveRoute(item.children[0].path) ? 'bg-primary-600 text-white' : 'text-gray-700 hover:bg-gray-50'
-            ]"
-          >
-            <component :is="item.icon" class="w-5 h-5 flex-shrink-0" />
-          </router-link>
-          
-          <!-- 펼친 상태: 그룹 토글 -->
           <button
-            v-else
             @click="toggleGroup(item.key)"
             :class="[
               'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors',
@@ -100,7 +75,7 @@
 
           <!-- 하위 메뉴 -->
           <div
-            v-if="!isCollapsed && expandedGroups.includes(item.key)"
+            v-if="expandedGroups.includes(item.key)"
             class="ml-4 mt-1 space-y-1"
           >
             <router-link
@@ -119,8 +94,6 @@
         </div>
       </div>
     </nav>
-
-
   </aside>
 </template>
 
@@ -140,9 +113,6 @@ import {
   UserCircleIcon,
   UserGroupIcon,
   ChartBarIcon,
-  ArrowRightOnRectangleIcon,
-  Bars3Icon,
-  ChevronLeftIcon,
   ChevronDownIcon,
   CheckCircleIcon,
   ClockIcon,
@@ -155,18 +125,10 @@ const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
 
-const emit = defineEmits(['collapsed-change'])
-
-const isCollapsed = ref(false)
 const isMobileMenuOpen = ref(false)
 const expandedGroups = ref<string[]>(['institution', 'attendance', 'journal'])
 
 const user = computed(() => authStore.user)
-
-const toggleSidebar = () => {
-  isCollapsed.value = !isCollapsed.value
-  emit('collapsed-change', isCollapsed.value)
-}
 
 const closeMobileMenu = () => {
   isMobileMenuOpen.value = false
@@ -232,11 +194,6 @@ const menuItems = computed(() => {
           { label: '일지 작성', path: '/student/journal/write', icon: DocumentTextIcon },
           { label: '일지 목록', path: '/student/journal/list', icon: DocumentDuplicateIcon }
         ]
-      },
-      {
-        label: '제본 신청',
-        path: '/student/binding',
-        icon: BookOpenIcon
       },
       {
         label: '공지사항',
@@ -329,8 +286,7 @@ const menuItemClass = (path: string) => {
     'flex items-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors',
     isActiveRoute(path)
       ? 'bg-primary-600 text-white'
-      : 'text-gray-700 hover:bg-gray-50',
-    isCollapsed.value ? 'justify-center' : ''
+      : 'text-gray-700 hover:bg-gray-50'
   ]
 }
 
