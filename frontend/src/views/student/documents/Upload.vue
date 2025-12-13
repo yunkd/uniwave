@@ -415,7 +415,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, reactive } from 'vue'
+import { ref, computed, reactive, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Button from '@/components/common/Button.vue'
 import Card from '@/components/common/Card.vue'
@@ -536,13 +536,52 @@ const validateAndUpload = (file: File, type: keyof typeof uploadedDocuments) => 
   // 업로드
   uploadedDocuments[type] = file
   console.log(`${type} 업로드 완료:`, file.name)
+  
+  // 업로드 상태 저장
+  saveUploadState()
 }
 
 // 서류 삭제
 const removeDocument = (type: keyof typeof uploadedDocuments) => {
   if (confirm('업로드한 파일을 삭제하시겠습니까?')) {
     uploadedDocuments[type] = null
+    saveUploadState()
   }
+}
+
+// 업로드 상태 저장 (localStorage)
+const saveUploadState = () => {
+  const uploadState = {
+    journal: uploadedDocuments.journal ? {
+      name: uploadedDocuments.journal.name,
+      size: uploadedDocuments.journal.size,
+      uploaded: true
+    } : null,
+    attendance: uploadedDocuments.attendance ? {
+      name: uploadedDocuments.attendance.name,
+      size: uploadedDocuments.attendance.size,
+      uploaded: true
+    } : null,
+    evaluation: uploadedDocuments.evaluation ? {
+      name: uploadedDocuments.evaluation.name,
+      size: uploadedDocuments.evaluation.size,
+      uploaded: true
+    } : null,
+    certificate: uploadedDocuments.certificate ? {
+      name: uploadedDocuments.certificate.name,
+      size: uploadedDocuments.certificate.size,
+      uploaded: true
+    } : null,
+    finalReport: uploadedDocuments.finalReport ? {
+      name: uploadedDocuments.finalReport.name,
+      size: uploadedDocuments.finalReport.size,
+      uploaded: true
+    } : null,
+    uploadedAt: new Date().toISOString()
+  }
+  
+  localStorage.setItem('uploaded_documents', JSON.stringify(uploadState))
+  console.log('업로드 상태 저장:', uploadState)
 }
 
 // 파일 크기 포맷
@@ -570,6 +609,27 @@ const goToBinding = () => {
     alert('모든 서류를 업로드해야 제본 신청이 가능합니다.')
     return
   }
+  
+  // 최종 업로드 상태 저장
+  saveUploadState()
+  
+  // 제본 신청 페이지로 이동
   router.push('/student/binding')
 }
+
+// 컴포넌트 마운트 시 기존 업로드 상태 불러오기 (선택사항)
+onMounted(() => {
+  // localStorage에서 이전 업로드 상태 확인
+  try {
+    const savedState = localStorage.getItem('uploaded_documents')
+    if (savedState) {
+      const uploadState = JSON.parse(savedState)
+      console.log('기존 업로드 상태 확인됨:', uploadState)
+      // Note: File 객체는 localStorage에 저장할 수 없으므로,
+      // 실제 백엔드 연동 시 서버에서 업로드 상태를 조회해야 함
+    }
+  } catch (error) {
+    console.error('업로드 상태 불러오기 실패:', error)
+  }
+})
 </script>

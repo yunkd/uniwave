@@ -219,7 +219,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import Button from '@/components/common/Button.vue'
 import Card from '@/components/common/Card.vue'
@@ -237,14 +237,43 @@ import {
 const router = useRouter()
 const isLoading = ref(false)
 
-// 임시 데이터: 서류 업로드 상태 (추후 API 연동)
-// 실제로는 /student/documents/upload 페이지에서 업로드한 파일 상태를 체크
+// 서류 업로드 상태 (localStorage에서 읽어옴)
 const documents = ref({
   journal: false,        // 실습일지 압축파일
   attendance: false,     // 출석부
   evaluation: false,     // 평가서
   certificate: false,    // 확인서
   finalReport: false     // 최종보고서
+})
+
+// 업로드된 파일 정보
+const uploadedFiles = ref<any>({})
+
+// localStorage에서 업로드 상태 불러오기
+const loadUploadState = () => {
+  try {
+    const savedState = localStorage.getItem('uploaded_documents')
+    if (savedState) {
+      const uploadState = JSON.parse(savedState)
+      uploadedFiles.value = uploadState
+      
+      // 각 서류의 업로드 여부 확인
+      documents.value.journal = !!uploadState.journal?.uploaded
+      documents.value.attendance = !!uploadState.attendance?.uploaded
+      documents.value.evaluation = !!uploadState.evaluation?.uploaded
+      documents.value.certificate = !!uploadState.certificate?.uploaded
+      documents.value.finalReport = !!uploadState.finalReport?.uploaded
+      
+      console.log('업로드 상태 불러오기 완료:', uploadState)
+    }
+  } catch (error) {
+    console.error('업로드 상태 불러오기 실패:', error)
+  }
+}
+
+// 컴포넌트 마운트 시 업로드 상태 불러오기
+onMounted(() => {
+  loadUploadState()
 })
 
 // 제본 신청 가능 여부: 5가지 서류 모두 업로드 완료
@@ -284,6 +313,9 @@ const handleSubmit = () => {
   isLoading.value = true
 
   setTimeout(() => {
+    // 제본 신청 완료 시 업로드 상태 초기화 (선택사항)
+    // localStorage.removeItem('uploaded_documents')
+    
     alert('제본 신청이 완료되었습니다!\n신청 내역에서 배송 상태를 확인할 수 있습니다.')
     isLoading.value = false
     router.push('/student/binding/history')
