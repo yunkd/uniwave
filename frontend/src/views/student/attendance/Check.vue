@@ -1,45 +1,80 @@
 <template>
-  <div class="max-w-4xl mx-auto">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- 페이지 헤더 -->
-    <div class="mb-8">
-      <h1 class="text-2xl font-bold text-gray-900 mb-2">출석 체크</h1>
-      <p class="text-gray-600">QR 코드를 스캔하여 출석을 완료하세요</p>
+    <div class="mb-6 sm:mb-8">
+      <h1 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">출석 체크</h1>
+      <p class="text-sm sm:text-base text-gray-600">출퇴근 시간을 입력하고 기관 승인을 요청하세요</p>
     </div>
 
-    <!-- QR 스캔 카드 -->
+    <!-- 출석 입력 폼 -->
     <Card class="mb-6">
-      <div class="text-center py-12">
-        <div class="w-64 h-64 mx-auto bg-gray-100 rounded-lg flex items-center justify-center mb-6">
-          <QrCodeIcon class="w-32 h-32 text-gray-400" />
+      <h3 class="text-lg font-semibold text-gray-900 mb-4">출석 정보 입력</h3>
+      <form @submit.prevent="handleSubmitAttendance" class="space-y-4">
+        <!-- 날짜 -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+            실습 날짜 <span class="text-red-500">*</span>
+          </label>
+          <input
+            v-model="form.date"
+            type="date"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            required
+          />
         </div>
-        <h3 class="text-lg font-semibold text-gray-900 mb-2">
-          QR 코드 스캔
-        </h3>
-        <p class="text-sm text-gray-600 mb-6">
-          기관에서 제공한 QR 코드를 스캔하세요
-        </p>
-        <Button variant="primary" size="lg" @click="handleScanQR">
-          <QrCodeIcon class="w-5 h-5 mr-2" />
-          QR 스캔하기
-        </Button>
-      </div>
-    </Card>
 
-    <!-- 수동 입력 -->
-    <Card class="mb-6">
-      <h3 class="text-lg font-semibold text-gray-900 mb-4">
-        출석 코드 수동 입력
-      </h3>
-      <form @submit.prevent="handleManualCheck" class="space-y-4">
-        <Input
-          v-model="attendanceCode"
-          label="출석 코드"
-          placeholder="6자리 출석 코드 입력"
-          :error="error"
-          maxlength="6"
-        />
-        <Button type="submit" variant="primary" :loading="isLoading" full-width>
-          출석 확인
+        <!-- 출근 시간 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">
+              출근 시간 <span class="text-red-500">*</span>
+            </label>
+            <input
+              v-model="form.checkIn"
+              type="time"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              required
+            />
+          </div>
+
+          <!-- 퇴근 시간 -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">
+              퇴근 시간 <span class="text-red-500">*</span>
+            </label>
+            <input
+              v-model="form.checkOut"
+              type="time"
+              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              required
+            />
+          </div>
+        </div>
+
+        <!-- 총 실습 시간 (자동 계산) -->
+        <div class="p-4 bg-gray-50 rounded-lg">
+          <div class="flex items-center justify-between">
+            <span class="text-sm font-medium text-gray-700">총 실습 시간</span>
+            <span class="text-lg font-bold text-primary-600">{{ calculatedHours }}시간</span>
+          </div>
+        </div>
+
+        <!-- 메모 (선택사항) -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+            메모 (선택사항)
+          </label>
+          <textarea
+            v-model="form.notes"
+            rows="3"
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+            placeholder="특이사항이 있다면 입력하세요"
+          ></textarea>
+        </div>
+
+        <!-- 제출 버튼 -->
+        <Button type="submit" variant="primary" :loading="isLoading" full-width size="lg">
+          출석 승인 요청
         </Button>
       </form>
     </Card>
@@ -48,54 +83,75 @@
     <Card>
       <div class="flex items-center justify-between mb-4">
         <h3 class="text-lg font-semibold text-gray-900">오늘의 출석</h3>
-        <span class="text-sm text-gray-500">{{ today }}</span>
+        <span class="text-xs sm:text-sm text-gray-500">{{ today }}</span>
       </div>
 
       <div v-if="todayAttendance" class="space-y-4">
-        <div class="flex items-center gap-4 p-4 bg-green-50 border border-green-200 rounded-lg">
-          <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
-            <CheckCircleIcon class="w-6 h-6 text-green-600" />
+        <!-- 승인 상태 -->
+        <div 
+          :class="[
+            'flex items-start gap-3 sm:gap-4 p-3 sm:p-4 border rounded-lg',
+            getStatusColor(todayAttendance.status)
+          ]"
+        >
+          <div class="flex-shrink-0 w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center"
+            :class="getStatusIconBg(todayAttendance.status)"
+          >
+            <component :is="getStatusIcon(todayAttendance.status)" class="w-5 h-5 sm:w-6 sm:h-6" />
           </div>
-          <div class="flex-1">
-            <p class="text-sm font-medium text-green-900">출석 완료</p>
-            <p class="text-sm text-green-700">{{ todayAttendance.checkInTime }}</p>
+          <div class="flex-1 min-w-0">
+            <p class="text-sm font-medium mb-1" :class="getStatusTextColor(todayAttendance.status)">
+              {{ getStatusLabel(todayAttendance.status) }}
+            </p>
+            <p class="text-xs sm:text-sm text-gray-600">
+              {{ todayAttendance.checkIn }} ~ {{ todayAttendance.checkOut }}
+              ({{ todayAttendance.hours }}시간)
+            </p>
+            <p v-if="todayAttendance.feedback" class="text-xs sm:text-sm text-gray-700 mt-2">
+              <span class="font-medium">피드백:</span> {{ todayAttendance.feedback }}
+            </p>
           </div>
         </div>
 
-        <div class="grid grid-cols-2 gap-4">
-          <div class="p-4 bg-gray-50 rounded-lg">
-            <p class="text-sm text-gray-600 mb-1">실습 기관</p>
-            <p class="text-base font-medium text-gray-900">{{ todayAttendance.institution }}</p>
+        <!-- 기관 정보 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
+          <div class="p-3 sm:p-4 bg-gray-50 rounded-lg">
+            <p class="text-xs sm:text-sm text-gray-600 mb-1">실습 기관</p>
+            <p class="text-sm sm:text-base font-medium text-gray-900 break-words">{{ todayAttendance.institution }}</p>
           </div>
-          <div class="p-4 bg-gray-50 rounded-lg">
-            <p class="text-sm text-gray-600 mb-1">실습 지도자</p>
-            <p class="text-base font-medium text-gray-900">{{ todayAttendance.supervisor }}</p>
+          <div class="p-3 sm:p-4 bg-gray-50 rounded-lg">
+            <p class="text-xs sm:text-sm text-gray-600 mb-1">실습 지도자</p>
+            <p class="text-sm sm:text-base font-medium text-gray-900 break-words">{{ todayAttendance.supervisor }}</p>
           </div>
         </div>
       </div>
 
-      <div v-else class="text-center py-8">
-        <ClockIcon class="w-12 h-12 text-gray-400 mx-auto mb-3" />
-        <p class="text-sm text-gray-600">아직 출석하지 않았습니다</p>
+      <div v-else class="text-center py-8 sm:py-12">
+        <ClockIcon class="w-10 h-10 sm:w-12 sm:h-12 text-gray-400 mx-auto mb-3" />
+        <p class="text-sm text-gray-600">아직 출석을 입력하지 않았습니다</p>
       </div>
     </Card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import Button from '@/components/common/Button.vue'
-import Input from '@/components/common/Input.vue'
 import Card from '@/components/common/Card.vue'
 import {
-  QrCodeIcon,
   CheckCircleIcon,
-  ClockIcon
+  ClockIcon,
+  XCircleIcon
 } from '@heroicons/vue/24/outline'
 
-const attendanceCode = ref('')
 const isLoading = ref(false)
-const error = ref('')
+
+const form = ref({
+  date: new Date().toISOString().split('T')[0],
+  checkIn: '',
+  checkOut: '',
+  notes: ''
+})
 
 // 오늘 날짜
 const today = new Date().toLocaleDateString('ko-KR', {
@@ -108,34 +164,92 @@ const today = new Date().toLocaleDateString('ko-KR', {
 // 임시 데이터
 const todayAttendance = ref<any>(null)
 
-const handleScanQR = () => {
-  alert('QR 스캔 기능은 백엔드 연동 후 구현됩니다')
-  // 임시: 출석 완료 처리
-  todayAttendance.value = {
-    checkInTime: '09:30',
-    institution: '사회복지법인 희망나눔',
-    supervisor: '김지도 사회복지사'
-  }
-}
+// 실습 시간 자동 계산
+const calculatedHours = computed(() => {
+  if (!form.value.checkIn || !form.value.checkOut) return 0
+  
+  const [inHour, inMin] = form.value.checkIn.split(':').map(Number)
+  const [outHour, outMin] = form.value.checkOut.split(':').map(Number)
+  
+  const inMinutes = inHour * 60 + inMin
+  const outMinutes = outHour * 60 + outMin
+  
+  const diffMinutes = outMinutes - inMinutes
+  return (diffMinutes / 60).toFixed(1)
+})
 
-const handleManualCheck = () => {
-  if (attendanceCode.value.length !== 6) {
-    error.value = '6자리 출석 코드를 입력하세요'
+const handleSubmitAttendance = () => {
+  if (!form.value.checkIn || !form.value.checkOut) {
+    alert('출근/퇴근 시간을 모두 입력하세요')
     return
   }
 
   isLoading.value = true
-  error.value = ''
 
-  // 임시: 1초 후 출석 완료
+  // 임시: 1초 후 승인 대기 상태로 전환
   setTimeout(() => {
     todayAttendance.value = {
-      checkInTime: new Date().toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' }),
+      checkIn: form.value.checkIn,
+      checkOut: form.value.checkOut,
+      hours: calculatedHours.value,
+      status: 'PENDING',
       institution: '사회복지법인 희망나눔',
-      supervisor: '김지도 사회복지사'
+      supervisor: '김지도 사회복지사',
+      feedback: null
     }
     isLoading.value = false
-    attendanceCode.value = ''
+    
+    // 폼 초기화
+    form.value.checkIn = ''
+    form.value.checkOut = ''
+    form.value.notes = ''
+    
+    alert('출석 승인 요청이 제출되었습니다. 기관 담당자의 승인을 기다려주세요.')
   }, 1000)
+}
+
+const getStatusColor = (status: string) => {
+  const colors: Record<string, string> = {
+    'PENDING': 'bg-yellow-50 border-yellow-200',
+    'APPROVED': 'bg-green-50 border-green-200',
+    'REJECTED': 'bg-red-50 border-red-200'
+  }
+  return colors[status] || 'bg-gray-50 border-gray-200'
+}
+
+const getStatusIconBg = (status: string) => {
+  const colors: Record<string, string> = {
+    'PENDING': 'bg-yellow-100',
+    'APPROVED': 'bg-green-100',
+    'REJECTED': 'bg-red-100'
+  }
+  return colors[status] || 'bg-gray-100'
+}
+
+const getStatusTextColor = (status: string) => {
+  const colors: Record<string, string> = {
+    'PENDING': 'text-yellow-900',
+    'APPROVED': 'text-green-900',
+    'REJECTED': 'text-red-900'
+  }
+  return colors[status] || 'text-gray-900'
+}
+
+const getStatusIcon = (status: string) => {
+  const icons: Record<string, any> = {
+    'PENDING': ClockIcon,
+    'APPROVED': CheckCircleIcon,
+    'REJECTED': XCircleIcon
+  }
+  return icons[status] || ClockIcon
+}
+
+const getStatusLabel = (status: string) => {
+  const labels: Record<string, string> = {
+    'PENDING': '승인 대기 중',
+    'APPROVED': '출석 승인 완료',
+    'REJECTED': '출석 반려'
+  }
+  return labels[status] || '알 수 없음'
 }
 </script>

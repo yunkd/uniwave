@@ -1,8 +1,18 @@
 <template>
+  <!-- 모바일 오버레이 -->
+  <div
+    v-if="isMobileMenuOpen"
+    @click="closeMobileMenu"
+    class="fixed inset-0 bg-black bg-opacity-50 z-40 lg:hidden"
+  ></div>
+
+  <!-- 사이드바 -->
   <aside
     :class="[
-      'fixed top-0 left-0 h-full bg-white border-r border-gray-200 transition-all duration-300 z-40',
-      isCollapsed ? 'w-16' : 'w-64'
+      'fixed top-0 left-0 h-full bg-white border-r border-gray-200 transition-all duration-300 z-50',
+      isCollapsed && !isMobileMenuOpen ? 'w-16' : 'w-64',
+      'lg:translate-x-0',
+      isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
     ]"
   >
     <!-- 로고 영역 -->
@@ -139,6 +149,7 @@ const route = useRoute()
 const authStore = useAuthStore()
 
 const isCollapsed = ref(false)
+const isMobileMenuOpen = ref(false)
 const expandedGroups = ref<string[]>(['attendance', 'journal'])
 
 const user = computed(() => authStore.user)
@@ -146,6 +157,15 @@ const user = computed(() => authStore.user)
 const toggleSidebar = () => {
   isCollapsed.value = !isCollapsed.value
 }
+
+const closeMobileMenu = () => {
+  isMobileMenuOpen.value = false
+}
+
+// 라우트 변경 시 모바일 메뉴 닫기
+router.afterEach(() => {
+  isMobileMenuOpen.value = false
+})
 
 const toggleGroup = (key: string) => {
   const index = expandedGroups.value.indexOf(key)
@@ -265,9 +285,9 @@ const menuItems = computed(() => {
         icon: UserGroupIcon
       },
       {
-        label: '제본 관리',
-        path: '/university/binding',
-        icon: BookOpenIcon
+        label: '양식 관리',
+        path: '/university/templates',
+        icon: DocumentDuplicateIcon
       },
       {
         label: '공지사항',
@@ -305,4 +325,9 @@ const handleLogout = () => {
     router.push('/login')
   }
 }
+
+// 외부에서 모바일 메뉴 제어 가능하도록
+defineExpose({
+  isMobileMenuOpen
+})
 </script>

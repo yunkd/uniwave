@@ -1,13 +1,13 @@
 <template>
-  <div class="page-container">
+  <div class="max-w-7xl mx-auto">
     <!-- 페이지 헤더 -->
-    <div class="mb-8">
-      <h1 class="text-2xl font-bold text-gray-900 mb-2">대시보드</h1>
-      <p class="text-gray-600">실습 현황을 한눈에 확인하세요</p>
+    <div class="mb-6 sm:mb-8">
+      <h1 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">대시보드</h1>
+      <p class="text-sm sm:text-base text-gray-600">실습 현황을 한눈에 확인하세요</p>
     </div>
 
     <!-- 통계 카드 -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
       <Card>
         <div class="flex items-center justify-between">
           <div>
