@@ -4,7 +4,7 @@
     <div class="mb-6">
       <button
         @click="goBack"
-        class="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors mb-4"
+        class="inline-flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors"
       >
         <ArrowLeftIcon class="w-5 h-5" />
         <span>목록으로</span>
@@ -34,7 +34,7 @@
           </div>
 
           <!-- 제목 -->
-          <h1 class="text-3xl font-bold text-gray-900 mb-4">
+          <h1 class="text-2xl md:text-3xl font-bold text-gray-900 mb-4">
             {{ recruitment.title }}
           </h1>
 
@@ -44,8 +44,8 @@
               <BuildingOfficeIcon class="w-8 h-8 text-primary-600" />
             </div>
             <div>
-              <h2 class="text-xl font-semibold text-gray-900">{{ recruitment.institutionName }}</h2>
-              <div class="flex items-center gap-2 mt-1">
+              <h2 class="text-lg md:text-xl font-semibold text-gray-900">{{ recruitment.institutionName }}</h2>
+              <div class="flex flex-wrap items-center gap-2 mt-1">
                 <span class="inline-flex items-center gap-1 px-2 py-0.5 bg-blue-50 text-blue-700 text-xs font-medium rounded">
                   <MapPinIcon class="w-3 h-3" />
                   {{ recruitment.region }}
@@ -246,26 +246,6 @@
             </p>
           </div>
 
-          <!-- 공유 & 저장 -->
-          <div class="bg-white rounded-lg shadow-sm border border-gray-200 p-4">
-            <div class="grid grid-cols-2 gap-3">
-              <button
-                @click="shareRecruitment"
-                class="flex items-center justify-center gap-2 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                <ShareIcon class="w-4 h-4" />
-                <span class="text-sm font-medium">공유</span>
-              </button>
-              <button
-                @click="bookmarkRecruitment"
-                class="flex items-center justify-center gap-2 py-2.5 border border-gray-300 text-gray-700 rounded-lg hover:bg-gray-50 transition-colors"
-              >
-                <BookmarkIcon class="w-4 h-4" />
-                <span class="text-sm font-medium">저장</span>
-              </button>
-            </div>
-          </div>
-
           <!-- 문의하기 -->
           <div class="bg-blue-50 rounded-lg border border-blue-200 p-4">
             <h4 class="font-semibold text-gray-900 mb-2 flex items-center gap-2">
@@ -290,10 +270,10 @@
     <Modal
       :show="showApplicationModal"
       @close="closeApplicationModal"
-      title="모집공고 지원하기"
-      size="lg"
     >
-      <div class="space-y-6">
+      <template #title>모집공고 지원하기</template>
+      <template #content>
+        <div class="space-y-6">
         <!-- 공고 정보 요약 -->
         <div class="bg-gray-50 rounded-lg p-4 border border-gray-200">
           <h4 class="font-semibold text-gray-900 mb-2">지원 공고</h4>
@@ -417,7 +397,8 @@
             </div>
           </label>
         </div>
-      </div>
+        </div>
+      </template>
 
       <!-- 모달 버튼 -->
       <template #footer>
@@ -458,8 +439,6 @@ import {
   PhoneIcon,
   EnvelopeIcon,
   GlobeAltIcon,
-  ShareIcon,
-  BookmarkIcon,
   InformationCircleIcon,
   DocumentArrowUpIcon,
   DocumentCheckIcon
@@ -669,23 +648,5 @@ const submitApplication = async () => {
     alert('지원 제출 중 오류가 발생했습니다.')
     console.error(error)
   }
-}
-
-// 공유하기
-const shareRecruitment = () => {
-  if (navigator.share) {
-    navigator.share({
-      title: recruitment.value.title,
-      text: `${recruitment.value.institutionName} - ${recruitment.value.title}`,
-      url: window.location.href
-    })
-  } else {
-    alert('링크가 복사되었습니다!')
-  }
-}
-
-// 북마크
-const bookmarkRecruitment = () => {
-  alert('공고가 저장되었습니다!')
 }
 </script>

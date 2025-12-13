@@ -9,7 +9,7 @@
       leave-to-class="opacity-0"
     >
       <div
-        v-if="true"
+        v-if="show"
         class="fixed inset-0 z-50 overflow-y-auto"
         @click.self="handleClose"
       >
@@ -65,6 +65,10 @@
 
 <script setup lang="ts">
 import { XMarkIcon } from '@heroicons/vue/24/outline'
+
+defineProps<{
+  show: boolean
+}>()
 
 const emit = defineEmits<{
   close: []
