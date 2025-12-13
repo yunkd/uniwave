@@ -120,19 +120,7 @@
       </div>
     </nav>
 
-    <!-- 하단 버튼 -->
-    <div class="p-4 border-t border-gray-200">
-      <button
-        @click="handleLogout"
-        :class="[
-          'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium text-red-600 hover:bg-red-50 rounded-lg transition-colors',
-          isCollapsed ? 'justify-center' : ''
-        ]"
-      >
-        <ArrowRightOnRectangleIcon class="w-5 h-5" />
-        <span v-if="!isCollapsed">로그아웃</span>
-      </button>
-    </div>
+
   </aside>
 </template>
 
@@ -348,13 +336,6 @@ const menuItemClass = (path: string) => {
 
 const isActiveRoute = (path: string) => {
   return route.path === path
-}
-
-const handleLogout = () => {
-  if (confirm('로그아웃 하시겠습니까?')) {
-    authStore.logout()
-    router.push('/login')
-  }
 }
 
 // 외부에서 모바일 메뉴 제어 가능하도록
