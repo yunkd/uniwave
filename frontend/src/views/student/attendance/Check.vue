@@ -11,7 +11,7 @@
       <h3 class="text-sm sm:text-base lg:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">출석 정보 입력</h3>
       <form @submit.prevent="handleSubmitAttendance" class="space-y-3 sm:space-y-4">
         <!-- 날짜 -->
-        <div>
+        <div class="relative">
           <label class="block text-sm font-medium text-gray-700 mb-1.5">
             실습 날짜 <span class="text-red-500">*</span>
           </label>
@@ -25,7 +25,7 @@
 
         <!-- 출근/퇴근 시간 -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-          <div>
+          <div class="relative">
             <label class="block text-sm font-medium text-gray-700 mb-1.5">
               출근 시간 <span class="text-red-500">*</span>
             </label>
@@ -37,7 +37,7 @@
             />
           </div>
 
-          <div>
+          <div class="relative">
             <label class="block text-sm font-medium text-gray-700 mb-1.5">
               퇴근 시간 <span class="text-red-500">*</span>
             </label>
@@ -47,6 +47,31 @@
               class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
               required
             />
+          </div>
+        </div>
+
+        <!-- 휴게시간 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+          <div class="relative">
+            <label class="block text-sm font-medium text-gray-700 mb-1.5">
+              휴게시간 (시간) <span class="text-gray-500">*</span>
+            </label>
+            <input
+              v-model.number="form.breakHours"
+              type="number"
+              min="0"
+              max="8"
+              step="0.5"
+              class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
+              placeholder="0.5"
+              required
+            />
+          </div>
+          <div class="flex items-end pb-2.5">
+            <p class="text-xs text-gray-500">
+              <span class="font-medium">※ 식사시간 미포함</span><br/>
+              휴게시간을 입력하면 실습시간에서 자동 차감됩니다
+            </p>
           </div>
         </div>
 
@@ -149,6 +174,7 @@ const form = ref({
   date: new Date().toISOString().split('T')[0],
   checkIn: '09:00',
   checkOut: '18:00',
+  breakHours: 1,
   notes: ''
 })
 
@@ -163,7 +189,7 @@ const today = new Date().toLocaleDateString('ko-KR', {
 // 임시 데이터
 const todayAttendance = ref<any>(null)
 
-// 실습 시간 자동 계산
+// 실습 시간 자동 계산 (휴게시간 차감)
 const calculatedHours = computed(() => {
   if (!form.value.checkIn || !form.value.checkOut) return 0
   
@@ -174,7 +200,11 @@ const calculatedHours = computed(() => {
   const outMinutes = outHour * 60 + outMin
   
   const diffMinutes = outMinutes - inMinutes
-  return (diffMinutes / 60).toFixed(1)
+  const totalHours = diffMinutes / 60
+  const breakHours = form.value.breakHours || 0
+  const actualHours = totalHours - breakHours
+  
+  return actualHours > 0 ? actualHours.toFixed(1) : '0.0'
 })
 
 const handleSubmitAttendance = () => {
@@ -201,6 +231,7 @@ const handleSubmitAttendance = () => {
     // 폼 초기화
     form.value.checkIn = '09:00'
     form.value.checkOut = '18:00'
+    form.value.breakHours = 1
     form.value.notes = ''
     
     alert('출석 승인 요청이 제출되었습니다. 기관 담당자의 승인을 기다려주세요.')
@@ -252,3 +283,29 @@ const getStatusLabel = (status: string) => {
   return labels[status] || '알 수 없음'
 }
 </script>
+
+<style scoped>
+/* 날짜/시간 선택기가 input 바로 아래에 표시되도록 설정 */
+input[type="date"]::-webkit-calendar-picker-indicator,
+input[type="time"]::-webkit-calendar-picker-indicator {
+  cursor: pointer;
+  padding: 8px;
+}
+
+/* Chrome/Safari/Edge에서 날짜/시간 선택기 위치 조정 */
+input[type="date"]::-webkit-datetime-edit,
+input[type="time"]::-webkit-datetime-edit {
+  padding: 0;
+}
+
+/* 휴게시간 입력 필드 스타일 */
+input[type="number"] {
+  -moz-appearance: textfield;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+</style>
