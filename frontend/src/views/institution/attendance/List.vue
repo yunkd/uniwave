@@ -156,7 +156,7 @@
                 <button
                   @click="handleStatusClick(attendance)"
                   :class="getStatusClass(attendance.status)"
-                  class="px-4 py-1.5 text-xs font-semibold rounded-full cursor-pointer hover:opacity-80 transition min-w-[80px]"
+                  class="inline-flex items-center justify-center px-3 py-1 text-xs font-semibold rounded-full cursor-pointer hover:opacity-80 transition w-[70px]"
                 >
                   {{ getStatusLabel(attendance.status) }}
                 </button>
