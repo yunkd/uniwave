@@ -184,10 +184,13 @@ const menuItems = computed(() => {
       {
         label: '기관 매칭',
         key: 'institution',
-        icon: UserGroupIcon,
+        icon: BuildingOfficeIcon,
         children: [
+          { label: '모집공고', path: '/student/recruitments', icon: BellAlertIcon },
           { label: '기관 검색', path: '/student/institution-search', icon: MagnifyingGlassIcon },
-          { label: '매칭 현황', path: '/student/institution-status', icon: ClipboardDocumentListIcon }
+          { label: '매칭 신청', path: '/student/matching/request', icon: CheckCircleIcon },
+          { label: '신규기관 등록 신청', path: '/student/institution/register', icon: DocumentTextIcon },
+          { label: '내 매칭 현황', path: '/student/matching/status', icon: ClipboardDocumentListIcon }
         ]
       },
       {

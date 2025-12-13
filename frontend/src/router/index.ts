@@ -46,6 +46,17 @@ const router = createRouter({
           name: 'StudentAttendanceHistory',
           component: () => import('@/views/student/attendance/History.vue')
         },
+        // 기관 매칭 관련 라우트
+        {
+          path: 'recruitments',
+          name: 'StudentRecruitments',
+          component: () => import('@/views/student/recruitments/List.vue')
+        },
+        {
+          path: 'recruitments/:id',
+          name: 'StudentRecruitmentDetail',
+          component: () => import('@/views/student/recruitments/Detail.vue')
+        },
         {
           path: 'institution-search',
           name: 'StudentInstitutionSearch',
@@ -57,9 +68,14 @@ const router = createRouter({
           component: () => import('@/views/student/matching/Request.vue')
         },
         {
-          path: 'institution-status',
-          name: 'StudentInstitutionStatus',
-          component: () => import('@/views/student/InstitutionStatus.vue')
+          path: 'institution/register',
+          name: 'StudentInstitutionRegister',
+          component: () => import('@/views/student/institutions/Register.vue')
+        },
+        {
+          path: 'matching/status',
+          name: 'StudentMatchingStatus',
+          component: () => import('@/views/student/matching/Status.vue')
         },
         {
           path: 'journal/write',
