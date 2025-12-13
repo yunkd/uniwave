@@ -3,28 +3,11 @@
     <!-- 헤더 -->
     <div class="mb-6 sm:mb-8">
       <h1 class="text-2xl sm:text-3xl font-bold text-gray-900 mb-2">공지사항</h1>
-      <p class="text-sm sm:text-base text-gray-600">대학에서 발송한 공지사항을 확인하세요</p>
+      <p class="text-sm sm:text-base text-gray-600">대학에서 기관 대상으로 발송한 공지사항을 확인하세요</p>
     </div>
 
     <!-- 필터 및 검색 -->
     <div class="mb-6 space-y-4">
-      <!-- 대상 필터 -->
-      <div class="flex flex-wrap gap-2">
-        <button
-          v-for="target in targets"
-          :key="target.value"
-          @click="selectedTarget = target.value"
-          :class="[
-            'px-4 py-2 rounded-lg text-sm font-medium transition-colors',
-            selectedTarget === target.value
-              ? 'bg-blue-600 text-white'
-              : 'bg-white text-gray-700 hover:bg-gray-50 border border-gray-200'
-          ]"
-        >
-          {{ target.label }}
-        </button>
-      </div>
-      
       <!-- 카테고리 필터 -->
       <div class="flex flex-wrap gap-2">
         <button
@@ -214,18 +197,10 @@ import { mockNotices, categoryConfig } from '@/data/mockNotices'
 const router = useRouter()
 
 // 상태
-const selectedTarget = ref<string>('ALL')
 const selectedCategory = ref<string>('ALL')
 const searchQuery = ref('')
 const currentPage = ref(1)
 const itemsPerPage = 10
-
-// 대상 옵션
-const targets = [
-  { label: '전체', value: 'ALL' },
-  { label: '기관 대상', value: 'INSTITUTION' },
-  { label: '전체 대상', value: 'ALL_TARGET' }
-]
 
 // 카테고리 옵션
 const categories = [
@@ -246,15 +221,12 @@ const pinnedNotices = computed(() => {
 
 // 일반 공지 (필터링)
 const filteredNotices = computed(() => {
-  let notices = mockNotices.filter(notice => !notice.is_deleted && !notice.is_pinned)
-
-  // 대상 필터 (기관은 INSTITUTION 또는 ALL 대상 공지만 보기)
-  if (selectedTarget.value === 'INSTITUTION') {
-    notices = notices.filter(notice => notice.target === 'INSTITUTION' || notice.target === 'ALL')
-  } else if (selectedTarget.value === 'ALL_TARGET') {
-    notices = notices.filter(notice => notice.target === 'ALL')
-  }
-  // 'ALL' 선택 시 모든 공지 표시
+  // 기관은 INSTITUTION 또는 ALL 대상 공지만 보기
+  let notices = mockNotices.filter(notice => 
+    !notice.is_deleted && 
+    !notice.is_pinned && 
+    (notice.target === 'INSTITUTION' || notice.target === 'ALL')
+  )
 
   // 카테고리 필터
   if (selectedCategory.value !== 'ALL') {

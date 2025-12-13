@@ -12,8 +12,7 @@
         <div class="flex items-center justify-between">
           <div class="flex-1 min-w-0">
             <p class="text-xs sm:text-sm text-gray-600 mb-1">전체 실습생</p>
-            <p class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">{{ stats.totalStudents }}</p>
-            <p class="text-xs text-gray-500 mt-0.5 sm:mt-1">명</p>
+            <p class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900">{{ stats.totalStudents }}<span class="text-sm sm:text-base lg:text-lg font-normal text-gray-600 ml-1">명</span></p>
           </div>
           <div class="w-10 h-10 sm:w-12 sm:h-12 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
             <UserGroupIcon class="w-5 h-5 sm:w-6 sm:h-6 text-primary-600" />
@@ -25,8 +24,7 @@
         <div class="flex items-center justify-between">
           <div class="flex-1 min-w-0">
             <p class="text-xs sm:text-sm text-yellow-600 mb-1">출석 승인 대기</p>
-            <p class="text-xl sm:text-2xl lg:text-3xl font-bold text-yellow-600">{{ stats.pendingAttendance }}</p>
-            <p class="text-xs text-gray-500 mt-0.5 sm:mt-1">건</p>
+            <p class="text-xl sm:text-2xl lg:text-3xl font-bold text-yellow-600">{{ stats.pendingAttendance }}<span class="text-sm sm:text-base lg:text-lg font-normal text-gray-600 ml-1">건</span></p>
           </div>
           <div class="w-10 h-10 sm:w-12 sm:h-12 bg-yellow-100 rounded-lg flex items-center justify-center flex-shrink-0">
             <ClockIcon class="w-5 h-5 sm:w-6 sm:h-6 text-yellow-600" />
@@ -38,8 +36,7 @@
         <div class="flex items-center justify-between">
           <div class="flex-1 min-w-0">
             <p class="text-xs sm:text-sm text-blue-600 mb-1">일지 승인 대기</p>
-            <p class="text-xl sm:text-2xl lg:text-3xl font-bold text-blue-600">{{ stats.pendingJournals }}</p>
-            <p class="text-xs text-gray-500 mt-0.5 sm:mt-1">건</p>
+            <p class="text-xl sm:text-2xl lg:text-3xl font-bold text-blue-600">{{ stats.pendingJournals }}<span class="text-sm sm:text-base lg:text-lg font-normal text-gray-600 ml-1">건</span></p>
           </div>
           <div class="w-10 h-10 sm:w-12 sm:h-12 bg-blue-100 rounded-lg flex items-center justify-center flex-shrink-0">
             <DocumentTextIcon class="w-5 h-5 sm:w-6 sm:h-6 text-blue-600" />
@@ -51,50 +48,13 @@
         <div class="flex items-center justify-between">
           <div class="flex-1 min-w-0">
             <p class="text-xs sm:text-sm text-green-600 mb-1">이번 달 승인</p>
-            <p class="text-xl sm:text-2xl lg:text-3xl font-bold text-green-600">{{ stats.monthlyApproved }}</p>
-            <p class="text-xs text-gray-500 mt-0.5 sm:mt-1">건</p>
+            <p class="text-xl sm:text-2xl lg:text-3xl font-bold text-green-600">{{ stats.monthlyApproved }}<span class="text-sm sm:text-base lg:text-lg font-normal text-gray-600 ml-1">건</span></p>
           </div>
           <div class="w-10 h-10 sm:w-12 sm:h-12 bg-green-100 rounded-lg flex items-center justify-center flex-shrink-0">
             <CheckCircleIcon class="w-5 h-5 sm:w-6 sm:h-6 text-green-600" />
           </div>
         </div>
       </Card>
-    </div>
-
-    <!-- 빠른 액션 버튼 -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
-      <Button
-        variant="outline"
-        @click="router.push('/institution/students')"
-        class="justify-center"
-      >
-        <UserGroupIcon class="w-5 h-5 mr-2" />
-        실습생 관리
-      </Button>
-      <Button
-        variant="outline"
-        @click="router.push('/institution/attendance')"
-        class="justify-center"
-      >
-        <ClipboardDocumentCheckIcon class="w-5 h-5 mr-2" />
-        출석 승인
-      </Button>
-      <Button
-        variant="outline"
-        @click="router.push('/institution/journal-approval')"
-        class="justify-center"
-      >
-        <DocumentTextIcon class="w-5 h-5 mr-2" />
-        일지 승인
-      </Button>
-      <Button
-        variant="outline"
-        @click="router.push('/institution/documents')"
-        class="justify-center"
-      >
-        <FolderIcon class="w-5 h-5 mr-2" />
-        서류 관리
-      </Button>
     </div>
 
     <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
