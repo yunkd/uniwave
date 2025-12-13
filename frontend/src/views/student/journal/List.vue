@@ -125,17 +125,18 @@
               <td class="px-6 py-4 whitespace-nowrap text-sm">
                 <div class="flex items-center gap-2">
                   <button
+                    v-if="journal.status === 'DRAFT' || journal.status === 'REJECTED'"
+                    @click="handleEdit(journal)"
+                    class="text-primary-600 hover:text-primary-900 font-medium"
+                  >
+                    수정
+                  </button>
+                  <button
+                    v-else
                     @click="handleView(journal)"
                     class="text-primary-600 hover:text-primary-900 font-medium"
                   >
                     보기
-                  </button>
-                  <button
-                    v-if="journal.status === 'DRAFT' || journal.status === 'REJECTED'"
-                    @click="handleEdit(journal)"
-                    class="text-gray-600 hover:text-gray-900 font-medium"
-                  >
-                    수정
                   </button>
                 </div>
               </td>
@@ -149,8 +150,9 @@
         <div
           v-for="journal in filteredJournals"
           :key="journal.id"
-          class="p-3 sm:p-4 hover:bg-gray-50 cursor-pointer"
-          @click="handleView(journal)"
+          class="p-3 sm:p-4 hover:bg-gray-50"
+          :class="journal.status === 'DRAFT' || journal.status === 'REJECTED' ? '' : 'cursor-pointer'"
+          @click="journal.status === 'DRAFT' || journal.status === 'REJECTED' ? null : handleView(journal)"
         >
           <div class="flex items-start justify-between mb-2">
             <span class="text-xs text-gray-500">{{ journal.date }}</span>
@@ -171,12 +173,12 @@
           <div class="flex items-center justify-end gap-2 text-xs">
             <button
               v-if="journal.status === 'DRAFT' || journal.status === 'REJECTED'"
-              @click.stop="handleEdit(journal)"
+              @click="handleEdit(journal)"
               class="text-primary-600 font-medium"
             >
               수정
             </button>
-            <ChevronRightIcon class="w-4 h-4 text-gray-400" />
+            <ChevronRightIcon v-else class="w-4 h-4 text-gray-400" />
           </div>
         </div>
       </div>
