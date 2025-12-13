@@ -222,7 +222,7 @@
     </Card>
 
     <!-- 도움말 -->
-    <Card class="mt-6 bg-gray-50">
+    <Card class="mt-6 bg-gray-50 mb-96">
       <h3 class="text-sm font-bold text-gray-900 mb-3">자주 묻는 질문</h3>
       <div class="space-y-3 text-sm text-gray-600">
         <div>
