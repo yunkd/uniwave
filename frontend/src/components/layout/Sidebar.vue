@@ -150,7 +150,7 @@ const authStore = useAuthStore()
 
 const isCollapsed = ref(false)
 const isMobileMenuOpen = ref(false)
-const expandedGroups = ref<string[]>(['attendance', 'journal'])
+const expandedGroups = ref<string[]>(['institution', 'attendance', 'journal'])
 
 const user = computed(() => authStore.user)
 
@@ -197,9 +197,13 @@ const menuItems = computed(() => {
         icon: HomeIcon
       },
       {
-        label: '기관 찾기',
-        path: '/student/institution-search',
-        icon: UserGroupIcon
+        label: '기관 매칭',
+        key: 'institution',
+        icon: UserGroupIcon,
+        children: [
+          { label: '기관 검색', path: '/student/institution-search', icon: MagnifyingGlassIcon },
+          { label: '매칭 현황', path: '/student/institution-status', icon: ClipboardDocumentListIcon }
+        ]
       },
       {
         label: '출석 관리',

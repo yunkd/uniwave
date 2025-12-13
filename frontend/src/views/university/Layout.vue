@@ -12,7 +12,14 @@
             <Bars3Icon class="w-6 h-6 text-gray-700" />
           </button>
           <h1 class="text-lg font-semibold text-gray-900">Uniwave Pro</h1>
-          <div class="w-10"></div>
+          <NotificationBell />
+        </div>
+      </header>
+
+      <!-- 데스크톱 헤더 (알림만) -->
+      <header class="hidden lg:block bg-white border-b border-gray-200 px-8 py-4 sticky top-0 z-30">
+        <div class="flex items-center justify-end">
+          <NotificationBell />
         </div>
       </header>
 
@@ -27,6 +34,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import Sidebar from '@/components/layout/Sidebar.vue'
+import NotificationBell from '@/components/layout/NotificationBell.vue'
 import { Bars3Icon } from '@heroicons/vue/24/outline'
 
 const sidebarRef = ref()
