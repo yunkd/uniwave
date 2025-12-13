@@ -8,7 +8,7 @@
       </div>
       <Button
         variant="primary"
-        @click="showAddModal = true"
+        @click="router.push('/university/institutions/register')"
         class="text-xs sm:text-sm"
       >
         <PlusIcon class="w-4 h-4 mr-1" />
@@ -85,7 +85,7 @@
         <p class="text-sm sm:text-base text-gray-600 mb-4">등록된 기관이 없습니다</p>
         <Button
           variant="primary"
-          @click="showAddModal = true"
+          @click="router.push('/university/institutions/register')"
           class="text-xs sm:text-sm"
         >
           첫 기관 등록하기
@@ -227,98 +227,7 @@
       </div>
     </Card>
 
-    <!-- 기관 등록 모달 -->
-    <Modal v-if="showAddModal" @close="showAddModal = false">
-      <template #title>기관 등록</template>
-      <template #content>
-        <div class="space-y-4">
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">기관명 *</label>
-            <input
-              v-model="newInstitution.name"
-              type="text"
-              placeholder="예: 서울사회복지관"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            />
-          </div>
 
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">기관 유형 *</label>
-            <select
-              v-model="newInstitution.type"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            >
-              <option value="">선택하세요</option>
-              <option value="사회복지관">사회복지관</option>
-              <option value="노인복지시설">노인복지시설</option>
-              <option value="아동복지시설">아동복지시설</option>
-              <option value="장애인복지시설">장애인복지시설</option>
-            </select>
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">주소 *</label>
-            <input
-              v-model="newInstitution.address"
-              type="text"
-              placeholder="기관 주소를 입력하세요"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            />
-          </div>
-
-          <div class="grid grid-cols-2 gap-3">
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">담당자명 *</label>
-              <input
-                v-model="newInstitution.managerName"
-                type="text"
-                placeholder="홍길동"
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              />
-            </div>
-            <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">연락처 *</label>
-              <input
-                v-model="newInstitution.managerPhone"
-                type="tel"
-                placeholder="010-0000-0000"
-                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              />
-            </div>
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">이메일</label>
-            <input
-              v-model="newInstitution.email"
-              type="email"
-              placeholder="institution@example.com"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            />
-          </div>
-
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-1">메모</label>
-            <textarea
-              v-model="newInstitution.memo"
-              rows="3"
-              placeholder="기관에 대한 메모를 입력하세요"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-            ></textarea>
-          </div>
-        </div>
-      </template>
-      <template #footer>
-        <div class="flex gap-2 justify-end">
-          <Button variant="outline" @click="showAddModal = false">
-            취소
-          </Button>
-          <Button variant="primary" @click="handleAddInstitution">
-            등록하기
-          </Button>
-        </div>
-      </template>
-    </Modal>
   </div>
 </template>
 
@@ -327,7 +236,6 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import Button from '@/components/common/Button.vue'
 import Card from '@/components/common/Card.vue'
-import Modal from '@/components/common/Modal.vue'
 import {
   BuildingOfficeIcon,
   MagnifyingGlassIcon,
@@ -343,19 +251,7 @@ const selectedType = ref('ALL')
 const selectedStatus = ref('ALL')
 const searchQuery = ref('')
 
-// 모달 상태
-const showAddModal = ref(false)
 
-// 신규 기관 데이터
-const newInstitution = ref({
-  name: '',
-  type: '',
-  address: '',
-  managerName: '',
-  managerPhone: '',
-  email: '',
-  memo: ''
-})
 
 // 통계 데이터 (Mock)
 const stats = ref({
@@ -424,22 +320,6 @@ const filteredInstitutions = computed(() => {
     return matchesType && matchesStatus && matchesSearch
   })
 })
-
-// 기관 추가
-const handleAddInstitution = () => {
-  console.log('기관 등록:', newInstitution.value)
-  // TODO: API 호출
-  showAddModal.value = false
-  newInstitution.value = {
-    name: '',
-    type: '',
-    address: '',
-    managerName: '',
-    managerPhone: '',
-    email: '',
-    memo: ''
-  }
-}
 
 // 상세 보기
 const handleViewDetail = (institution: any) => {
