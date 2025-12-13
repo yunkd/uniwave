@@ -32,6 +32,59 @@
             <p class="mt-1 text-xs text-gray-500">{{ form.title.length }} / 200자</p>
           </div>
 
+          <!-- 공지 대상 -->
+          <div class="mb-6">
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              공지 대상 <span class="text-red-500">*</span>
+            </label>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <label class="flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all"
+                :class="form.target === 'ALL' ? 'border-primary-500 bg-primary-50' : 'border-gray-300 hover:border-gray-400'">
+                <input
+                  v-model="form.target"
+                  type="radio"
+                  value="ALL"
+                  required
+                  class="w-5 h-5 text-primary-600 focus:ring-primary-500"
+                />
+                <div>
+                  <span class="text-sm font-medium text-gray-700">전체</span>
+                  <p class="text-xs text-gray-500">학생 + 기관</p>
+                </div>
+              </label>
+              
+              <label class="flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all"
+                :class="form.target === 'STUDENT' ? 'border-primary-500 bg-primary-50' : 'border-gray-300 hover:border-gray-400'">
+                <input
+                  v-model="form.target"
+                  type="radio"
+                  value="STUDENT"
+                  required
+                  class="w-5 h-5 text-primary-600 focus:ring-primary-500"
+                />
+                <div>
+                  <span class="text-sm font-medium text-gray-700">학생만</span>
+                  <p class="text-xs text-gray-500">학생 대상</p>
+                </div>
+              </label>
+              
+              <label class="flex items-center gap-3 p-4 border-2 rounded-lg cursor-pointer transition-all"
+                :class="form.target === 'INSTITUTION' ? 'border-primary-500 bg-primary-50' : 'border-gray-300 hover:border-gray-400'">
+                <input
+                  v-model="form.target"
+                  type="radio"
+                  value="INSTITUTION"
+                  required
+                  class="w-5 h-5 text-primary-600 focus:ring-primary-500"
+                />
+                <div>
+                  <span class="text-sm font-medium text-gray-700">기관만</span>
+                  <p class="text-xs text-gray-500">기관 대상</p>
+                </div>
+              </label>
+            </div>
+          </div>
+
           <!-- 카테고리 -->
           <div class="mb-6">
             <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -199,6 +252,9 @@
         </div>
         <div class="p-6">
           <div class="flex items-center gap-2 mb-4">
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+              {{ getTargetLabel(form.target) }}
+            </span>
             <span :class="['inline-flex items-center px-3 py-1 rounded-full text-sm font-medium', getCategoryColor(form.category)]">
               {{ getCategoryLabel(form.category) }}
             </span>
@@ -232,6 +288,7 @@ const router = useRouter()
 // 폼 상태
 const form = ref({
   title: '',
+  target: 'ALL' as 'ALL' | 'STUDENT' | 'INSTITUTION',
   category: '',
   is_pinned: false,
   content: '',
@@ -267,6 +324,16 @@ const removeFile = (index: number) => {
   form.value.attachments.splice(index, 1)
 }
 
+// 대상 정보
+const getTargetLabel = (target: string): string => {
+  const labels: Record<string, string> = {
+    ALL: '전체',
+    STUDENT: '학생',
+    INSTITUTION: '기관'
+  }
+  return labels[target] || target
+}
+
 // 카테고리 정보
 const getCategoryLabel = (category: string): string => {
   const labels: Record<string, string> = {
@@ -291,14 +358,16 @@ const saveAsDraft = () => {
 
 // 게시
 const handleSubmit = () => {
-  if (!form.value.title || !form.value.category || !form.value.content) {
+  if (!form.value.title || !form.value.target || !form.value.category || !form.value.content) {
     alert('필수 항목을 모두 입력해주세요')
     return
   }
   
   // 실제로는 API 호출
   console.log('게시할 내용:', form.value)
-  alert('공지사항이 게시되었습니다')
+  
+  const targetText = getTargetLabel(form.value.target)
+  alert(`공지사항이 ${targetText}에게 게시되었습니다`)
   localStorage.removeItem('notice_draft')
   router.push('/university/notices')
 }

@@ -100,13 +100,6 @@
       <!-- 필터 버튼 -->
       <div class="flex gap-2 mt-4">
         <button
-          @click="applyFilters"
-          class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
-        >
-          <MagnifyingGlassIcon class="w-4 h-4 inline mr-1" />
-          검색
-        </button>
-        <button
           @click="resetFilters"
           class="px-4 py-2 bg-gray-200 text-gray-700 rounded-lg hover:bg-gray-300 transition"
         >
@@ -365,7 +358,6 @@ import {
   ClockIcon,
   CheckCircleIcon,
   XCircleIcon,
-  MagnifyingGlassIcon,
   XMarkIcon
 } from '@heroicons/vue/24/outline'
 
@@ -474,11 +466,6 @@ const getStatusClass = (status: string) => {
     REJECTED: 'bg-red-100 text-red-800'
   }
   return classes[status] || ''
-}
-
-const applyFilters = () => {
-  // 필터가 자동으로 computed에서 적용됨
-  console.log('필터 적용됨')
 }
 
 const resetFilters = () => {
