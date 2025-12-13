@@ -17,10 +17,12 @@
           </label>
           <input
             v-model="form.date"
-            type="date"
+            type="text"
+            placeholder="YYYY-MM-DD"
             class="w-full px-3 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm sm:text-base"
             required
           />
+          <p class="text-xs text-gray-500 mt-1">예: 2024-12-13</p>
         </div>
 
         <!-- 출근/퇴근 시간 -->
@@ -31,10 +33,12 @@
             </label>
             <input
               v-model="form.checkIn"
-              type="time"
+              type="text"
+              placeholder="HH:MM"
               class="w-full px-3 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm sm:text-base"
               required
             />
+            <p class="text-xs text-gray-500 mt-1">예: 09:00</p>
           </div>
 
           <div class="relative">
@@ -43,10 +47,12 @@
             </label>
             <input
               v-model="form.checkOut"
-              type="time"
+              type="text"
+              placeholder="HH:MM"
               class="w-full px-3 py-2.5 sm:py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm sm:text-base"
               required
             />
+            <p class="text-xs text-gray-500 mt-1">예: 18:00</p>
           </div>
         </div>
 
@@ -285,32 +291,7 @@ const getStatusLabel = (status: string) => {
 </script>
 
 <style scoped>
-/* 날짜/시간 선택기 - 자연스러운 왼쪽 정렬, 드롭다운은 오른쪽 */
-input[type="date"],
-input[type="time"] {
-  position: relative;
-  text-align: left; /* 숫자들 왼쪽 정렬 */
-  padding-right: 2.5rem; /* 캘린더 아이콘 공간 확보 */
-}
-
-/* 캘린더/시계 아이콘을 오른쪽에 배치 */
-input[type="date"]::-webkit-calendar-picker-indicator,
-input[type="time"]::-webkit-calendar-picker-indicator {
-  cursor: pointer;
-  position: absolute;
-  right: 0.75rem;
-  width: 1.25rem;
-  height: 1.25rem;
-}
-
-/* Firefox용 */
-input[type="date"],
-input[type="time"] {
-  background-position: right 0.75rem center;
-  background-repeat: no-repeat;
-}
-
-/* 휴게시간 입력 필드 - 왼쪽 정렬 */
+/* 휴게시간 입력 필드 */
 input[type="number"] {
   -moz-appearance: textfield;
   text-align: left;
@@ -324,27 +305,19 @@ input[type="number"]::-webkit-outer-spin-button {
 
 /* 모바일 최적화 - iOS Safari */
 @media screen and (max-width: 640px) {
-  input[type="date"],
-  input[type="time"],
-  input[type="number"] {
+  input[type="text"],
+  input[type="number"],
+  textarea {
     font-size: 16px; /* iOS 자동 줌 방지 */
     -webkit-appearance: none;
     appearance: none;
-  }
-  
-  /* 모바일에서 입력 필드 터치 영역 확대 */
-  input[type="date"],
-  input[type="time"],
-  input[type="number"],
-  textarea {
     min-height: 44px; /* iOS 권장 최소 터치 타겟 */
   }
 }
 
 /* 모바일 가로 모드 최적화 */
 @media screen and (max-width: 640px) and (orientation: landscape) {
-  input[type="date"],
-  input[type="time"],
+  input[type="text"],
   input[type="number"] {
     padding-top: 0.5rem;
     padding-bottom: 0.5rem;
