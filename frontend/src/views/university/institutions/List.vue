@@ -46,33 +46,62 @@
 
     <!-- 필터 및 검색 -->
     <Card class="mb-4 sm:mb-6 p-3 sm:p-4">
-      <div class="flex flex-col sm:flex-row gap-3">
-        <select
-          v-model="selectedType"
-          class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-xs sm:text-sm"
-        >
-          <option value="ALL">전체 유형</option>
-          <option value="사회복지관">사회복지관</option>
-          <option value="노인복지시설">노인복지시설</option>
-          <option value="아동복지시설">아동복지시설</option>
-          <option value="장애인복지시설">장애인복지시설</option>
-        </select>
-        <select
-          v-model="selectedStatus"
-          class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-xs sm:text-sm"
-        >
-          <option value="ALL">전체 상태</option>
-          <option value="ACTIVE">활성</option>
-          <option value="INACTIVE">비활성</option>
-        </select>
-        <div class="flex-1 relative">
-          <MagnifyingGlassIcon class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="기관명 또는 담당자로 검색..."
-            class="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-xs sm:text-sm"
-          />
+      <div class="flex flex-col gap-3">
+        <div class="flex flex-col sm:flex-row gap-3">
+          <select
+            v-model="selectedType"
+            class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-xs sm:text-sm"
+          >
+            <option value="ALL">전체 유형</option>
+            <option value="사회복지관">사회복지관</option>
+            <option value="노인복지시설">노인복지시설</option>
+            <option value="아동복지시설">아동복지시설</option>
+            <option value="장애인복지시설">장애인복지시설</option>
+          </select>
+          <select
+            v-model="selectedStatus"
+            class="px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-xs sm:text-sm"
+          >
+            <option value="ALL">전체 상태</option>
+            <option value="ACTIVE">활성</option>
+            <option value="INACTIVE">비활성</option>
+          </select>
+          <div class="flex-1 relative">
+            <MagnifyingGlassIcon class="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
+            <input
+              v-model="searchQuery"
+              type="text"
+              placeholder="기관명 또는 담당자로 검색..."
+              class="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-xs sm:text-sm"
+            />
+          </div>
+        </div>
+        
+        <!-- 선택된 기관 액션 바 -->
+        <div v-if="selectedInstitutions.length > 0" class="flex items-center justify-between p-3 bg-primary-50 border border-primary-200 rounded-lg">
+          <div class="flex items-center gap-2">
+            <CheckCircleIcon class="w-5 h-5 text-primary-600" />
+            <span class="text-sm font-medium text-primary-900">{{ selectedInstitutions.length }}개 선택됨</span>
+          </div>
+          <div class="flex gap-2">
+            <Button
+              variant="outline"
+              size="sm"
+              @click="clearSelection"
+              class="text-xs"
+            >
+              선택 해제
+            </Button>
+            <Button
+              variant="primary"
+              size="sm"
+              @click="showNotificationModal = true"
+              class="text-xs"
+            >
+              <BellAlertIcon class="w-4 h-4 mr-1" />
+              알림 보내기
+            </Button>
+          </div>
         </div>
       </div>
     </Card>

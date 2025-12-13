@@ -19,7 +19,7 @@
             <p class="text-xs text-gray-500">{{ templates.evaluation.count }}개</p>
           </div>
         </div>
-        <p class="text-xs sm:text-sm text-gray-600 mb-4">기관에서 작성하는 실습생 평가서 양식</p>
+        <p class="text-xs sm:text-sm text-gray-600 mb-4">실습생 평가 양식</p>
         <div class="space-y-2">
           <Button
             variant="outline"
@@ -51,7 +51,7 @@
             <p class="text-xs text-gray-500">{{ templates.certificate.count }}개</p>
           </div>
         </div>
-        <p class="text-xs sm:text-sm text-gray-600 mb-4">기관에서 발급하는 실습 확인서 양식</p>
+        <p class="text-xs sm:text-sm text-gray-600 mb-4">실습 확인서 양식</p>
         <div class="space-y-2">
           <Button
             variant="outline"
@@ -83,7 +83,7 @@
             <p class="text-xs text-gray-500">{{ templates.journal.count }}개</p>
           </div>
         </div>
-        <p class="text-xs sm:text-sm text-gray-600 mb-4">학생이 작성하는 실습 일지 양식</p>
+        <p class="text-xs sm:text-sm text-gray-600 mb-4">매일 작성하는 실습 일지</p>
         <div class="space-y-2">
           <Button
             variant="outline"
@@ -115,7 +115,7 @@
             <p class="text-xs text-gray-500">{{ templates.attendance.count }}개</p>
           </div>
         </div>
-        <p class="text-xs sm:text-sm text-gray-600 mb-4">학생 출석 기록을 관리하는 출석부 양식</p>
+        <p class="text-xs sm:text-sm text-gray-600 mb-4">출석 기록 관리 양식</p>
         <div class="space-y-2">
           <Button
             variant="outline"
@@ -147,7 +147,7 @@
             <p class="text-xs text-gray-500">{{ templates.finalReport.count }}개</p>
           </div>
         </div>
-        <p class="text-xs sm:text-sm text-gray-600 mb-4">학생이 작성하는 실습 최종 보고서 양식</p>
+        <p class="text-xs sm:text-sm text-gray-600 mb-4">실습 최종 보고서</p>
         <div class="space-y-2">
           <Button
             variant="outline"
