@@ -216,12 +216,12 @@ const filterStatus = ref('')
 
 // Mock 통계 데이터
 const stats = ref({
-  pending: 1,
+  pending: 0,
   approved: 1,
-  rejected: 1
+  rejected: 0
 })
 
-// Mock 매칭 데이터 (한 곳만 승인 가능)
+// Mock 매칭 데이터 (한 곳만 승인 가능 - 승인되면 다른 신청 불가)
 const matchings = ref([
   {
     id: 1,
@@ -234,29 +234,6 @@ const matchings = ref([
     approvedAt: '2025.01.20',
     status: 'APPROVED',
     message: '매칭이 승인되었습니다. 실습 시작 전 오리엔테이션에 참석해주세요.'
-  },
-  {
-    id: 2,
-    institutionId: 2,
-    institutionName: '행복한우리요양원',
-    region: '경기',
-    field: '노인복지',
-    duration: '4주 (2025.03.15 ~ 2025.04.11)',
-    requestedAt: '2025.02.01',
-    status: 'PENDING',
-    message: null
-  },
-  {
-    id: 4,
-    institutionId: 4,
-    institutionName: '마음의정원 정신건강센터',
-    region: '서울',
-    field: '정신보건',
-    duration: '4주 (2025.02.15 ~ 2025.03.14)',
-    requestedAt: '2025.01.10',
-    rejectedAt: '2025.01.12',
-    status: 'REJECTED',
-    rejectionReason: '해당 기간 정원이 마감되었습니다. 다른 기간으로 재신청 부탁드립니다.'
   }
 ])
 

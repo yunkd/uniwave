@@ -303,8 +303,8 @@ const form = ref({
 const isSubmitting = ref(false)
 
 // 승인된 매칭 여부 확인 (Mock - 실제로는 API에서 가져옴)
-// true로 설정하면 신청 불가 상태 확인 가능
-const hasApprovedMatching = ref(false) 
+// 이미 승인된 매칭이 있으므로 추가 신청 불가
+const hasApprovedMatching = ref(true) 
 const approvedMatchingInstitution = ref('서울시립노인종합복지관') // Status.vue와 동일한 승인된 기관명
 
 // Mock 기관 데이터 (실제로는 API에서 가져옴)
