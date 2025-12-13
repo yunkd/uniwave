@@ -141,7 +141,10 @@ import {
   ChevronLeftIcon,
   ChevronDownIcon,
   CheckCircleIcon,
-  ClockIcon
+  ClockIcon,
+  MagnifyingGlassIcon,
+  ClipboardDocumentListIcon,
+  BuildingOfficeIcon
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
