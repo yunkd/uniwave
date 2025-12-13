@@ -15,7 +15,7 @@
     ]"
   >
     <!-- 로고 영역 -->
-    <div class="h-16 flex items-center justify-between px-4 border-b border-gray-200">
+    <div class="h-14 flex items-center justify-between px-4">
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
           <AcademicCapIcon class="w-5 h-5 text-white" />

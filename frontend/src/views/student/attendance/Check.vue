@@ -285,19 +285,21 @@ const getStatusLabel = (status: string) => {
 </script>
 
 <style scoped>
-/* 날짜/시간 input 텍스트 오른쪽 정렬 */
+/* 날짜/시간 선택기 위치 조정 */
 input[type="date"],
 input[type="time"] {
-  text-align: right;
-  direction: ltr;
+  position: relative;
 }
 
-/* 날짜/시간 선택기 아이콘 오른쪽 배치 */
+/* 캘린더 아이콘 크기 및 클릭 영역 확대 */
 input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
-  margin-left: auto;
-  margin-right: 8px;
+  position: absolute;
+  right: 12px;
+  width: 20px;
+  height: 20px;
+  padding: 4px;
 }
 
 /* 휴게시간 입력 필드 스타일 */
