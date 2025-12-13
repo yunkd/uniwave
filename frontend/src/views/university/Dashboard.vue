@@ -97,46 +97,47 @@
         </div>
       </Card>
 
-      <!-- 제본 신청 현황 -->
+      <!-- 최근 매칭 승인 요청 -->
       <Card class="p-3 sm:p-4 lg:p-6">
         <div class="flex items-center justify-between mb-3 sm:mb-4">
-          <h3 class="text-sm sm:text-base lg:text-lg font-semibold text-gray-900">최근 제본 신청</h3>
+          <h3 class="text-sm sm:text-base lg:text-lg font-semibold text-gray-900">최근 매칭 승인 요청</h3>
           <Button
             variant="ghost"
             size="sm"
-            @click="router.push('/university/students?tab=binding')"
+            @click="router.push('/university/matching-approval')"
             class="text-xs sm:text-sm"
           >
             전체 보기
           </Button>
         </div>
 
-        <div v-if="recentBindings.length === 0" class="text-center py-6 sm:py-8 text-gray-500">
-          <ArchiveBoxIcon class="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 text-gray-400" />
-          <p class="text-xs sm:text-sm">제본 신청이 없습니다</p>
+        <div v-if="recentMatchingRequests.length === 0" class="text-center py-6 sm:py-8 text-gray-500">
+          <BuildingOfficeIcon class="w-8 h-8 sm:w-10 sm:h-10 mx-auto mb-2 text-gray-400" />
+          <p class="text-xs sm:text-sm">매칭 승인 요청이 없습니다</p>
         </div>
 
         <div v-else class="space-y-3">
           <div
-            v-for="binding in recentBindings"
-            :key="binding.id"
+            v-for="request in recentMatchingRequests"
+            :key="request.id"
             class="flex items-center justify-between p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer"
+            @click="router.push('/university/matching-approval')"
           >
             <div class="flex-1 min-w-0">
-              <p class="text-sm font-medium text-gray-900">{{ binding.studentName }}</p>
-              <p class="text-xs text-gray-600 mt-0.5">{{ binding.bindingType }} · {{ binding.copies }}부</p>
-              <p class="text-xs text-gray-500 mt-0.5">{{ binding.requestDate }}</p>
+              <p class="text-sm font-medium text-gray-900">{{ request.studentName }}</p>
+              <p class="text-xs text-gray-600 mt-0.5">{{ request.institutionName }}</p>
+              <p class="text-xs text-gray-500 mt-0.5">{{ request.requestDate }}</p>
             </div>
             <div class="flex items-center gap-2">
               <span
                 :class="[
                   'px-2 py-1 text-xs font-medium rounded',
-                  binding.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
-                  binding.status === 'PROCESSING' ? 'bg-blue-100 text-blue-800' :
-                  'bg-green-100 text-green-800'
+                  request.status === 'PENDING' ? 'bg-yellow-100 text-yellow-800' :
+                  request.status === 'APPROVED' ? 'bg-green-100 text-green-800' :
+                  'bg-red-100 text-red-800'
                 ]"
               >
-                {{ getBindingStatusLabel(binding.status) }}
+                {{ getMatchingStatusLabel(request.status) }}
               </span>
               <ChevronRightIcon class="w-4 h-4 text-gray-400" />
             </div>
@@ -201,8 +202,7 @@ import {
   CheckCircleIcon,
   BuildingOfficeIcon,
   BellAlertIcon,
-  ChevronRightIcon,
-  ArchiveBoxIcon
+  ChevronRightIcon
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
@@ -237,31 +237,28 @@ const pendingStudents = ref([
   }
 ])
 
-// 최근 제본 신청 (Mock)
-const recentBindings = ref([
+// 최근 매칭 승인 요청 (Mock)
+const recentMatchingRequests = ref([
   {
     id: '1',
     studentName: '박민수',
-    bindingType: '무선제본',
-    copies: 3,
+    institutionName: '서울사회복지관',
     requestDate: '2024-12-13',
     status: 'PENDING'
   },
   {
     id: '2',
     studentName: '정수진',
-    bindingType: '스프링제본',
-    copies: 2,
+    institutionName: '강남노인복지센터',
     requestDate: '2024-12-12',
-    status: 'PROCESSING'
+    status: 'PENDING'
   },
   {
     id: '3',
     studentName: '최영수',
-    bindingType: '무선제본',
-    copies: 3,
+    institutionName: '서초종합사회복지관',
     requestDate: '2024-12-11',
-    status: 'COMPLETED'
+    status: 'APPROVED'
   }
 ])
 
@@ -290,12 +287,12 @@ const recentNotices = ref([
   }
 ])
 
-// 제본 상태 라벨
-const getBindingStatusLabel = (status: string) => {
+// 매칭 상태 라벨
+const getMatchingStatusLabel = (status: string) => {
   const labels: Record<string, string> = {
-    PENDING: '접수',
-    PROCESSING: '제작중',
-    COMPLETED: '완료'
+    PENDING: '승인대기',
+    APPROVED: '승인완료',
+    REJECTED: '반려'
   }
   return labels[status] || status
 }

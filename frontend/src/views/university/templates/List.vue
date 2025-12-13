@@ -32,10 +32,10 @@
           <Button
             variant="primary"
             class="w-full text-xs sm:text-sm"
-            @click="handleEditTemplate('evaluation')"
+            @click="handleUploadTemplate('evaluation')"
           >
-            <PencilIcon class="w-4 h-4 mr-1" />
-            양식 수정
+            <ArrowUpTrayIcon class="w-4 h-4 mr-1" />
+            양식 업로드
           </Button>
         </div>
       </Card>
@@ -64,10 +64,10 @@
           <Button
             variant="primary"
             class="w-full text-xs sm:text-sm"
-            @click="handleEditTemplate('certificate')"
+            @click="handleUploadTemplate('certificate')"
           >
-            <PencilIcon class="w-4 h-4 mr-1" />
-            양식 수정
+            <ArrowUpTrayIcon class="w-4 h-4 mr-1" />
+            양식 업로드
           </Button>
         </div>
       </Card>
@@ -96,10 +96,10 @@
           <Button
             variant="primary"
             class="w-full text-xs sm:text-sm"
-            @click="handleEditTemplate('journal')"
+            @click="handleUploadTemplate('journal')"
           >
-            <PencilIcon class="w-4 h-4 mr-1" />
-            양식 수정
+            <ArrowUpTrayIcon class="w-4 h-4 mr-1" />
+            양식 업로드
           </Button>
         </div>
       </Card>
@@ -128,10 +128,10 @@
           <Button
             variant="primary"
             class="w-full text-xs sm:text-sm"
-            @click="handleEditTemplate('attendance')"
+            @click="handleUploadTemplate('attendance')"
           >
-            <PencilIcon class="w-4 h-4 mr-1" />
-            양식 수정
+            <ArrowUpTrayIcon class="w-4 h-4 mr-1" />
+            양식 업로드
           </Button>
         </div>
       </Card>
@@ -160,10 +160,10 @@
           <Button
             variant="primary"
             class="w-full text-xs sm:text-sm"
-            @click="handleEditTemplate('finalReport')"
+            @click="handleUploadTemplate('finalReport')"
           >
-            <PencilIcon class="w-4 h-4 mr-1" />
-            양식 수정
+            <ArrowUpTrayIcon class="w-4 h-4 mr-1" />
+            양식 업로드
           </Button>
         </div>
       </Card>
@@ -195,7 +195,7 @@ import {
   DocumentCheckIcon,
   BookOpenIcon,
   DocumentTextIcon,
-  PencilIcon
+  ArrowUpTrayIcon
 } from '@heroicons/vue/24/outline'
 
 // 양식 데이터 (Mock)
@@ -229,13 +229,17 @@ const templates = ref({
 
 // 양식 보기
 const handleViewTemplate = (type: string) => {
+  const typeName = templates.value[type as keyof typeof templates.value].name
   console.log('양식 보기:', type)
   // TODO: 모달 또는 새 페이지로 양식 표시
+  alert(`${typeName} 보기 기능은 백엔드 연동 후 구현됩니다.`)
 }
 
-// 양식 수정
-const handleEditTemplate = (type: string) => {
-  console.log('양식 수정:', type)
-  // TODO: 양식 편집기 페이지로 이동
+// 양식 업로드
+const handleUploadTemplate = (type: string) => {
+  const typeName = templates.value[type as keyof typeof templates.value].name
+  console.log('양식 업로드:', type)
+  // TODO: 파일 업로드 다이얼로그 표시
+  alert(`${typeName} 업로드 기능은 백엔드 연동 후 구현됩니다.`)
 }
 </script>
