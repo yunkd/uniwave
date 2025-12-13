@@ -186,7 +186,7 @@
           <BuildingOfficeIcon class="w-10 h-10 text-gray-400 flex-shrink-0" />
         </div>
 
-        <div class="space-y-2 mb-4">
+        <div class="space-y-2">
           <div class="flex items-start gap-2">
             <MapPinIcon class="w-4 h-4 text-gray-400 flex-shrink-0 mt-0.5" />
             <p class="text-sm text-gray-600">{{ institution.address }}</p>
@@ -199,36 +199,6 @@
             <PhoneIcon class="w-4 h-4 text-gray-400 flex-shrink-0" />
             <p class="text-sm text-gray-600">{{ institution.contactPhone }}</p>
           </div>
-          <div class="flex items-center gap-2">
-            <span :class="[
-              'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium',
-              institution.status === 'RECRUITING' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
-            ]">
-              {{ institution.status === 'RECRUITING' ? '모집중' : '마감' }}
-            </span>
-            <span v-if="institution.capacity" class="text-xs text-gray-500">
-              ({{ institution.currentStudents || 0 }}/{{ institution.capacity }}명)
-            </span>
-          </div>
-        </div>
-
-        <div class="flex gap-2">
-          <Button
-            @click="viewDetail(institution)"
-            variant="outline"
-            full-width
-          >
-            <InformationCircleIcon class="w-5 h-5 mr-1" />
-            상세 정보
-          </Button>
-          <Button
-            @click="copyContact(institution)"
-            variant="outline"
-            full-width
-          >
-            <PhoneIcon class="w-5 h-5 mr-1" />
-            연락처 복사
-          </Button>
         </div>
       </Card>
     </div>
