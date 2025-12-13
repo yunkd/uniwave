@@ -328,7 +328,8 @@ const menuItems = computed(() => {
         icon: ClipboardDocumentCheckIcon,
         children: [
           { label: '학생 가입 승인', path: '/university/student-approval', icon: UserGroupIcon },
-          { label: '매칭 승인', path: '/university/matching-approval', icon: BuildingOfficeIcon }
+          { label: '매칭 승인', path: '/university/matching-approval', icon: BuildingOfficeIcon },
+          { label: '기관 승인', path: '/university/institution-approval', icon: BuildingOfficeIcon }
         ]
       },
       {

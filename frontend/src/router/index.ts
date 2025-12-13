@@ -302,6 +302,11 @@ const router = createRouter({
           path: 'matching-approval',
           name: 'UniversityMatchingApproval',
           component: () => import('@/views/university/approvals/MatchingApproval.vue')
+        },
+        {
+          path: 'institution-approval',
+          name: 'UniversityInstitutionApproval',
+          component: () => import('@/views/university/approvals/InstitutionApproval.vue')
         }
       ]
     },
