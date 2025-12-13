@@ -9,78 +9,37 @@
           </div>
         </div>
         <h1 class="text-3xl font-bold text-gray-900 mb-2">
-          회원가입
+          학생 회원가입
         </h1>
         <p class="text-gray-600">
-          Uniwave Pro에 오신 것을 환영합니다
+          실습생 계정을 생성하세요
         </p>
       </div>
 
       <Card>
         <form @submit.prevent="handleRegister" class="space-y-6">
-          <!-- 1단계: 역할 선택 -->
-          <div v-if="step === 1">
+          <div class="space-y-5">
             <h3 class="text-lg font-semibold text-gray-900 mb-4">
-              가입 유형 선택
+              학생 정보 입력
             </h3>
-            
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-              <button
-                type="button"
-                v-for="roleOption in roles"
-                :key="roleOption.value"
-                @click="selectRole(roleOption.value)"
-                :class="[
-                  'p-6 border-2 rounded-lg text-left transition-all duration-200',
-                  form.role === roleOption.value
-                    ? 'border-primary-600 bg-primary-50'
-                    : 'border-gray-200 hover:border-gray-300'
-                ]"
+
+            <!-- 대학 선택 -->
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-1.5">
+                소속 대학 <span class="text-red-500">*</span>
+              </label>
+              <select
+                v-model="form.universityId"
+                class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                required
               >
-                <component
-                  :is="roleOption.icon"
-                  :class="[
-                    'w-8 h-8 mb-3',
-                    form.role === roleOption.value ? 'text-primary-600' : 'text-gray-400'
-                  ]"
-                />
-                <h4 class="font-semibold text-gray-900 mb-1">
-                  {{ roleOption.label }}
-                </h4>
-                <p class="text-sm text-gray-600">
-                  {{ roleOption.description }}
-                </p>
-              </button>
+                <option value="" disabled>대학을 선택하세요</option>
+                <option value="1">한국사이버대학교</option>
+                <option value="2">서울디지털대학교</option>
+                <option value="3">학점은행제 A기관</option>
+                <option value="4">학점은행제 B기관</option>
+              </select>
             </div>
-
-            <Button
-              type="button"
-              variant="primary"
-              size="lg"
-              full-width
-              class="mt-6"
-              :disabled="!form.role"
-              @click="step = 2"
-            >
-              다음
-            </Button>
-          </div>
-
-          <!-- 2단계: 정보 입력 -->
-          <div v-else class="space-y-5">
-            <Button
-              type="button"
-              variant="ghost"
-              size="sm"
-              @click="step = 1"
-              :icon-left="ArrowLeftIcon"
-            >
-              이전
-            </Button>
-
-            <h3 class="text-lg font-semibold text-gray-900 mb-4">
-              {{ getRoleLabel(form.role) }} 정보 입력
-            </h3>
 
             <!-- 공통 필드: 이메일, 비밀번호 -->
             <Input
@@ -116,8 +75,7 @@
               :icon-left="LockClosedIcon"
             />
 
-            <!-- 학생 전용 필드 -->
-            <template v-if="form.role === 'STUDENT'">
+            <!-- 학생 필드 -->
               <Input
                 id="name"
                 v-model="form.name"
@@ -187,7 +145,6 @@
                 required
                 :error="errors.learnerNumber"
               />
-            </template>
 
             <!-- 에러 메시지 -->
             <div
@@ -261,23 +218,12 @@ const roles = [
     label: '학생',
     description: '실습을 진행하는 학생',
     icon: UserIcon
-  },
-  {
-    value: 'INSTITUTION' as Role,
-    label: '기관',
-    description: '실습 기관 담당자',
-    icon: BuildingOfficeIcon
-  },
-  {
-    value: 'UNIVERSITY' as Role,
-    label: '대학',
-    description: '대학 관리자',
-    icon: BuildingLibraryIcon
   }
 ]
 
 const form = reactive({
-  role: '' as Role,
+  role: 'STUDENT' as Role,
+  universityId: '',
   email: '',
   password: '',
   passwordConfirm: '',

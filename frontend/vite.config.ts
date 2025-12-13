@@ -12,6 +12,13 @@ export default defineConfig({
   server: {
     host: '0.0.0.0',
     port: 5173,
+    strictPort: true,
+    cors: true,
+    hmr: {
+      protocol: 'wss',
+      host: '5173-i6r6jliglgzdb351giv75-2b54fc91.sandbox.novita.ai',
+      clientPort: 443
+    },
     proxy: {
       '/api': {
         target: 'http://localhost:3000',
