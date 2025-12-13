@@ -153,9 +153,11 @@ router.afterEach(() => {
 const toggleGroup = (key: string) => {
   const index = expandedGroups.value.indexOf(key)
   if (index > -1) {
+    // 이미 열려있는 메뉴 클릭 시 닫기
     expandedGroups.value.splice(index, 1)
   } else {
-    expandedGroups.value.push(key)
+    // 다른 메뉴 클릭 시 기존 메뉴 전부 닫고 새 메뉴만 열기
+    expandedGroups.value = [key]
   }
 }
 
