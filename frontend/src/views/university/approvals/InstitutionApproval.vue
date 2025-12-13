@@ -146,28 +146,12 @@
                 </span>
               </td>
               <td class="px-6 py-4">
-                <div class="flex items-center gap-2">
-                  <button
-                    @click="openDetailModal(application)"
-                    class="text-sm font-medium text-primary-600 hover:text-primary-700"
-                  >
-                    상세보기
-                  </button>
-                  <button
-                    v-if="application.status === 'PENDING'"
-                    @click="approveInstitution(application)"
-                    class="text-sm font-medium text-green-600 hover:text-green-700"
-                  >
-                    승인
-                  </button>
-                  <button
-                    v-if="application.status === 'PENDING'"
-                    @click="openRejectModal(application)"
-                    class="text-sm font-medium text-red-600 hover:text-red-700"
-                  >
-                    반려
-                  </button>
-                </div>
+                <button
+                  @click="openDetailModal(application)"
+                  class="text-sm font-medium text-primary-600 hover:text-primary-700"
+                >
+                  상세보기
+                </button>
               </td>
             </tr>
           </tbody>
@@ -213,28 +197,12 @@
           </div>
         </div>
 
-        <div class="flex gap-2">
-          <button
-            @click="openDetailModal(application)"
-            class="flex-1 px-4 py-2 bg-gray-100 text-gray-700 rounded-lg hover:bg-gray-200 text-sm font-medium"
-          >
-            상세보기
-          </button>
-          <button
-            v-if="application.status === 'PENDING'"
-            @click="approveInstitution(application)"
-            class="flex-1 px-4 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 text-sm font-medium"
-          >
-            승인
-          </button>
-          <button
-            v-if="application.status === 'PENDING'"
-            @click="openRejectModal(application)"
-            class="flex-1 px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 text-sm font-medium"
-          >
-            반려
-          </button>
-        </div>
+        <button
+          @click="openDetailModal(application)"
+          class="w-full px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 text-sm font-medium"
+        >
+          상세보기
+        </button>
       </div>
 
       <!-- 데이터 없음 -->
