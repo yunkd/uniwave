@@ -206,6 +206,41 @@ const router = createRouter({
           path: 'notices/:id/edit',
           name: 'UniversityNoticeEdit',
           component: () => import('@/views/university/notices/Edit.vue')
+        },
+        {
+          path: 'statistics',
+          name: 'UniversityStatistics',
+          component: () => import('@/views/university/Statistics.vue')
+        },
+        {
+          path: 'institutions',
+          name: 'UniversityInstitutions',
+          component: () => import('@/views/university/institutions/List.vue')
+        },
+        {
+          path: 'institutions/:id',
+          name: 'UniversityInstitutionDetail',
+          component: () => import('@/views/university/institutions/Detail.vue')
+        },
+        {
+          path: 'students',
+          name: 'UniversityStudents',
+          component: () => import('@/views/university/students/List.vue')
+        },
+        {
+          path: 'students/:id',
+          name: 'UniversityStudentDetail',
+          component: () => import('@/views/university/students/Detail.vue')
+        },
+        {
+          path: 'templates',
+          name: 'UniversityTemplates',
+          component: () => import('@/views/university/templates/List.vue')
+        },
+        {
+          path: 'settings',
+          name: 'UniversitySettings',
+          component: () => import('@/views/university/Settings.vue')
         }
       ]
     },
