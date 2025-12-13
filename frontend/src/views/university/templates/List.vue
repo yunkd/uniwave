@@ -17,7 +17,6 @@
           <h2 class="text-sm sm:text-base font-bold text-gray-900 text-center">평가서 양식</h2>
           <p class="text-xs text-gray-500 mt-1">{{ templates.evaluation.count }}개</p>
         </div>
-        <p class="text-xs text-gray-600 mb-4 min-h-[2.5rem] text-center">실습생 평가 양식</p>
         <div class="space-y-2 mt-auto">
           <Button
             variant="outline"
@@ -47,7 +46,6 @@
           <h2 class="text-sm sm:text-base font-bold text-gray-900 text-center">확인서 양식</h2>
           <p class="text-xs text-gray-500 mt-1">{{ templates.certificate.count }}개</p>
         </div>
-        <p class="text-xs text-gray-600 mb-4 min-h-[2.5rem] text-center">실습 확인서 양식</p>
         <div class="space-y-2 mt-auto">
           <Button
             variant="outline"
@@ -77,7 +75,6 @@
           <h2 class="text-sm sm:text-base font-bold text-gray-900 text-center">일지 양식</h2>
           <p class="text-xs text-gray-500 mt-1">{{ templates.journal.count }}개</p>
         </div>
-        <p class="text-xs text-gray-600 mb-4 min-h-[2.5rem] text-center">매일 작성하는 실습 일지</p>
         <div class="space-y-2 mt-auto">
           <Button
             variant="outline"
@@ -107,7 +104,6 @@
           <h2 class="text-sm sm:text-base font-bold text-gray-900 text-center">출석부 양식</h2>
           <p class="text-xs text-gray-500 mt-1">{{ templates.attendance.count }}개</p>
         </div>
-        <p class="text-xs text-gray-600 mb-4 min-h-[2.5rem] text-center">출석 기록 관리 양식</p>
         <div class="space-y-2 mt-auto">
           <Button
             variant="outline"
@@ -137,7 +133,6 @@
           <h2 class="text-sm sm:text-base font-bold text-gray-900 text-center">최종보고서 양식</h2>
           <p class="text-xs text-gray-500 mt-1">{{ templates.finalReport.count }}개</p>
         </div>
-        <p class="text-xs text-gray-600 mb-4 min-h-[2.5rem] text-center">실습 최종 보고서</p>
         <div class="space-y-2 mt-auto">
           <Button
             variant="outline"
