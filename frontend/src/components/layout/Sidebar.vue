@@ -25,7 +25,7 @@
     </router-link>
 
     <!-- 사용자 정보 -->
-    <div class="p-4 border-b border-gray-200">
+    <div class="px-4 py-3 border-b border-gray-200">
       <div class="flex items-center gap-3">
         <div class="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
           <UserCircleIcon class="w-6 h-6 text-primary-600" />
