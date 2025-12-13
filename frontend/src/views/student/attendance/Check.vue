@@ -18,7 +18,7 @@
           <input
             v-model="form.date"
             type="date"
-            class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
+            class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base text-center"
             required
           />
         </div>
@@ -32,7 +32,7 @@
             <input
               v-model="form.checkIn"
               type="time"
-              class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
+              class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base text-center"
               required
             />
           </div>
@@ -44,7 +44,7 @@
             <input
               v-model="form.checkOut"
               type="time"
-              class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
+              class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base text-center"
               required
             />
           </div>
@@ -285,21 +285,25 @@ const getStatusLabel = (status: string) => {
 </script>
 
 <style scoped>
-/* 날짜/시간 선택기 위치 조정 */
+/* 날짜/시간 선택기: 숫자는 중앙, 캘린더는 오른쪽 */
 input[type="date"],
 input[type="time"] {
   position: relative;
+  text-align: center;
 }
 
-/* 캘린더 아이콘 크기 및 클릭 영역 확대 */
+/* 캘린더/시계 아이콘: 오른쪽 고정 */
 input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
   position: absolute;
-  right: 12px;
-  width: 20px;
-  height: 20px;
-  padding: 4px;
+  right: 8px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 24px;
+  height: 24px;
+  padding: 0;
+  margin: 0;
 }
 
 /* 휴게시간 입력 필드 스타일 */

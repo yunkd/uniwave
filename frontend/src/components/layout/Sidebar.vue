@@ -15,7 +15,7 @@
     ]"
   >
     <!-- 로고 영역 -->
-    <router-link :to="dashboardPath" class="flex items-center justify-between px-4 border-b border-gray-200 hover:bg-gray-50 transition-colors" style="height: 56px;">
+    <router-link :to="dashboardPath" class="flex items-center justify-between px-4 border-b border-gray-200 hover:bg-gray-50 transition-colors" style="height: 56px; box-sizing: border-box;">
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
           <AcademicCapIcon class="w-5 h-5 text-white" />
