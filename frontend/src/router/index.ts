@@ -45,6 +45,11 @@ const router = createRouter({
           path: 'attendance/history',
           name: 'StudentAttendanceHistory',
           component: () => import('@/views/student/attendance/History.vue')
+        },
+        {
+          path: 'institution-search',
+          name: 'StudentInstitutionSearch',
+          component: () => import('@/views/student/InstitutionSearch.vue')
         }
       ]
     },

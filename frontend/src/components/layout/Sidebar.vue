@@ -197,6 +197,11 @@ const menuItems = computed(() => {
         icon: HomeIcon
       },
       {
+        label: '기관 찾기',
+        path: '/student/institution-search',
+        icon: UserGroupIcon
+      },
+      {
         label: '출석 관리',
         key: 'attendance',
         icon: ClipboardDocumentCheckIcon,
