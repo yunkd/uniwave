@@ -26,6 +26,9 @@
         <router-view />
       </main>
     </div>
+
+    <!-- AI 챗봇 -->
+    <AIChatbot :config="chatbotConfig" />
   </div>
 </template>
 
@@ -33,7 +36,22 @@
 import { ref } from 'vue'
 import Sidebar from '@/components/layout/Sidebar.vue'
 import HeaderMenu from '@/components/layout/HeaderMenu.vue'
+import AIChatbot from '@/components/chatbot/AIChatbot.vue'
 import { Bars3Icon } from '@heroicons/vue/24/outline'
+
+// 학생용 챗봇 설정
+const chatbotConfig = {
+  name: '실습 도우미',
+  description: '실습 관련 질문을 도와드립니다',
+  welcomeMessage: '안녕하세요! 실습 도우미입니다 👋\n\n실습 기관 찾기, 출석 체크, 일지 작성 등 실습 과정에서 궁금한 점이 있으면 언제든 물어보세요!',
+  quickQuestions: [
+    '실습 기관은 어떻게 찾나요?',
+    '출석은 어떻게 체크하나요?',
+    '실습 일지 작성 방법이 궁금해요',
+    '서류는 어디서 업로드하나요?'
+  ],
+  role: 'student' as const
+}
 
 const sidebarRef = ref()
 

@@ -26,6 +26,9 @@
         <router-view />
       </main>
     </div>
+
+    <!-- AI 챗봇 -->
+    <AIChatbot :config="chatbotConfig" />
   </div>
 </template>
 
@@ -33,7 +36,22 @@
 import { ref } from 'vue'
 import Sidebar from '@/components/layout/Sidebar.vue'
 import HeaderMenu from '@/components/layout/HeaderMenu.vue'
+import AIChatbot from '@/components/chatbot/AIChatbot.vue'
 import { Bars3Icon } from '@heroicons/vue/24/outline'
+
+// 대학용 챗봇 설정
+const chatbotConfig = {
+  name: '시스템 가이드',
+  description: '시스템 사용법을 안내합니다',
+  welcomeMessage: '안녕하세요! 실습 관리 시스템 가이드입니다 👋\n\n양식 관리, 학생/기관 관리, 승인 처리 등 시스템 사용법에 대해 안내해드립니다. 궁금한 점을 물어보세요!',
+  quickQuestions: [
+    '양식은 어떻게 업로드하나요?',
+    '기관은 어떻게 등록하나요?',
+    '매칭 승인은 어떻게 하나요?',
+    '학생에게 알림은 어떻게 보내나요?'
+  ],
+  role: 'university' as const
+}
 
 const sidebarRef = ref()
 

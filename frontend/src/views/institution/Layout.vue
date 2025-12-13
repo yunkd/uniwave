@@ -26,6 +26,9 @@
         <router-view />
       </main>
     </div>
+
+    <!-- AI 챗봇 -->
+    <AIChatbot :config="chatbotConfig" />
   </div>
 </template>
 
@@ -33,7 +36,22 @@
 import { ref } from 'vue'
 import Sidebar from '@/components/layout/Sidebar.vue'
 import HeaderMenu from '@/components/layout/HeaderMenu.vue'
+import AIChatbot from '@/components/chatbot/AIChatbot.vue'
 import { Bars3Icon } from '@heroicons/vue/24/outline'
+
+// 기관용 챗봇 설정
+const chatbotConfig = {
+  name: '기관 관리 도우미',
+  description: '학생 관리 및 평가를 도와드립니다',
+  welcomeMessage: '안녕하세요! 기관 관리 도우미입니다 👋\n\n실습생 관리, 출석 확인, 평가서 작성 등 기관 운영에 필요한 도움을 드리겠습니다!',
+  quickQuestions: [
+    '학생 관리는 어떻게 하나요?',
+    '출석 체크는 어떻게 확인하나요?',
+    '평가서는 언제 작성하나요?',
+    '일지 피드백은 어떻게 하나요?'
+  ],
+  role: 'institution' as const
+}
 
 const sidebarRef = ref()
 
