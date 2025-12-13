@@ -55,6 +55,16 @@ const router = createRouter({
           path: 'institution-status',
           name: 'StudentInstitutionStatus',
           component: () => import('@/views/student/InstitutionStatus.vue')
+        },
+        {
+          path: 'notices',
+          name: 'StudentNotices',
+          component: () => import('@/views/student/notices/List.vue')
+        },
+        {
+          path: 'notices/:id',
+          name: 'StudentNoticeDetail',
+          component: () => import('@/views/student/notices/Detail.vue')
         }
       ]
     },
@@ -73,6 +83,16 @@ const router = createRouter({
           path: 'dashboard',
           name: 'InstitutionDashboard',
           component: () => import('@/views/institution/Dashboard.vue')
+        },
+        {
+          path: 'notices',
+          name: 'InstitutionNotices',
+          component: () => import('@/views/institution/notices/List.vue')
+        },
+        {
+          path: 'notices/:id',
+          name: 'InstitutionNoticeDetail',
+          component: () => import('@/views/institution/notices/Detail.vue')
         }
       ]
     },
@@ -91,6 +111,26 @@ const router = createRouter({
           path: 'dashboard',
           name: 'UniversityDashboard',
           component: () => import('@/views/university/Dashboard.vue')
+        },
+        {
+          path: 'notices',
+          name: 'UniversityNotices',
+          component: () => import('@/views/university/notices/List.vue')
+        },
+        {
+          path: 'notices/create',
+          name: 'UniversityNoticeCreate',
+          component: () => import('@/views/university/notices/Create.vue')
+        },
+        {
+          path: 'notices/:id',
+          name: 'UniversityNoticeDetail',
+          component: () => import('@/views/university/notices/Detail.vue')
+        },
+        {
+          path: 'notices/:id/edit',
+          name: 'UniversityNoticeEdit',
+          component: () => import('@/views/university/notices/Edit.vue')
         }
       ]
     },
