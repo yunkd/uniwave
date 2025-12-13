@@ -6,8 +6,33 @@
       <p class="text-sm sm:text-base text-gray-600">원하는 기관을 검색하고 매칭을 신청하세요</p>
     </div>
 
+    <!-- 이미 승인된 매칭이 있는 경우 안내 -->
+    <Card v-if="hasApprovedMatching" class="mb-6 bg-gradient-to-br from-amber-50 to-orange-50 border-2 border-amber-300">
+      <div class="flex items-start gap-3">
+        <InformationCircleIcon class="w-6 h-6 text-amber-600 flex-shrink-0 mt-0.5" />
+        <div class="flex-1">
+          <h3 class="text-base font-bold text-amber-900 mb-2">⚠️ 매칭 신청 불가</h3>
+          <p class="text-sm text-amber-800 mb-3">
+            이미 <strong>{{ approvedMatchingInstitution }}</strong> 기관과 승인된 매칭이 있습니다.
+          </p>
+          <p class="text-sm text-amber-800">
+            한 명의 학생은 <strong>한 곳의 기관</strong>하고만 매칭할 수 있습니다.
+          </p>
+          <div class="mt-4">
+            <Button
+              variant="outline"
+              size="sm"
+              @click="router.push('/student/matching/status')"
+            >
+              내 매칭 현황 보기
+            </Button>
+          </div>
+        </div>
+      </div>
+    </Card>
+
     <!-- 안내 카드 -->
-    <Card class="mb-6 bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200">
+    <Card v-else class="mb-6 bg-gradient-to-br from-blue-50 to-indigo-50 border-2 border-blue-200">
       <div class="flex items-start gap-3">
         <InformationCircleIcon class="w-6 h-6 text-blue-600 flex-shrink-0 mt-0.5" />
         <div class="flex-1">
@@ -30,12 +55,17 @@
               <span>대학 담당자 승인 대기 (2-3일 소요)</span>
             </li>
           </ol>
+          <div class="mt-3 pt-3 border-t border-blue-300">
+            <p class="text-xs text-blue-700 font-medium">
+              ℹ️ 한 명의 학생은 한 곳의 기관하고만 매칭할 수 있습니다.
+            </p>
+          </div>
         </div>
       </div>
     </Card>
 
     <!-- 매칭 신청 폼 -->
-    <Card>
+    <Card v-if="!hasApprovedMatching">
       <form @submit.prevent="submitMatching">
         <div class="space-y-6">
           <!-- 기관 검색 및 선택 -->
@@ -222,7 +252,7 @@
     </Card>
 
     <!-- 도움말 -->
-    <Card class="mt-6 bg-gray-50">
+    <Card v-if="!hasApprovedMatching" class="mt-6 bg-gray-50">
       <h3 class="text-sm font-bold text-gray-900 mb-3">자주 묻는 질문</h3>
       <div class="space-y-3 text-sm text-gray-600">
         <div>
@@ -271,6 +301,10 @@ const form = ref({
 })
 
 const isSubmitting = ref(false)
+
+// 승인된 매칭 여부 확인 (Mock - 실제로는 API에서 가져옴)
+const hasApprovedMatching = ref(false) // true로 설정하면 신청 불가 상태 확인 가능
+const approvedMatchingInstitution = ref('서울사회복지관') // 승인된 기관명
 
 // Mock 기관 데이터 (실제로는 API에서 가져옴)
 const institutions = ref([
@@ -399,6 +433,12 @@ const clearSelection = () => {
 
 // 매칭 신청 제출
 const submitMatching = async () => {
+  // 승인된 매칭이 있는지 다시 확인
+  if (hasApprovedMatching.value) {
+    alert('이미 승인된 매칭이 있어 추가 신청이 불가능합니다.')
+    return
+  }
+
   if (!selectedInstitution.value) {
     alert('기관을 선택해주세요.')
     return

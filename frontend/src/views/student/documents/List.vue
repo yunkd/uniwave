@@ -251,14 +251,6 @@ const documents = ref([
     fileName: '실습확인서_김학생_2024.pdf',
     fileUrl: '/documents/certificate_1.pdf',
     createdAt: '2024-12-10'
-  },
-  {
-    id: '3',
-    type: 'INSTITUTION_EVAL',
-    institutionName: '서울시립복지관',
-    fileName: '실습평가서_김학생_2024_2.pdf',
-    fileUrl: '/documents/evaluation_2.pdf',
-    createdAt: '2024-12-11'
   }
 ])
 
