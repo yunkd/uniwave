@@ -23,12 +23,15 @@
         </div>
         <span class="font-bold text-gray-900">Uniwave</span>
       </div>
+      <div v-else class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center mx-auto">
+        <AcademicCapIcon class="w-5 h-5 text-white" />
+      </div>
       <button
+        v-if="!isCollapsed"
         @click="toggleSidebar"
-        class="p-1.5 hover:bg-gray-100 rounded-lg transition-colors"
+        class="p-1.5 hover:bg-gray-100 rounded-lg transition-colors hidden lg:block"
       >
-        <Bars3Icon v-if="isCollapsed" class="w-5 h-5 text-gray-600" />
-        <ChevronLeftIcon v-else class="w-5 h-5 text-gray-600" />
+        <ChevronLeftIcon class="w-5 h-5 text-gray-600" />
       </button>
     </div>
 
@@ -64,7 +67,21 @@
 
         <!-- 그룹 메뉴 -->
         <div v-else>
+          <!-- 접힌 상태: 첫 번째 하위 메뉴로 이동 -->
+          <router-link
+            v-if="isCollapsed"
+            :to="item.children[0].path"
+            :class="[
+              'flex items-center justify-center gap-3 px-3 py-2 text-sm font-medium rounded-lg transition-colors',
+              isActiveRoute(item.children[0].path) ? 'bg-primary-600 text-white' : 'text-gray-700 hover:bg-gray-50'
+            ]"
+          >
+            <component :is="item.icon" class="w-5 h-5 flex-shrink-0" />
+          </router-link>
+          
+          <!-- 펼친 상태: 그룹 토글 -->
           <button
+            v-else
             @click="toggleGroup(item.key)"
             :class="[
               'w-full flex items-center gap-3 px-3 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 rounded-lg transition-colors',
@@ -72,9 +89,8 @@
             ]"
           >
             <component :is="item.icon" class="w-5 h-5 flex-shrink-0" />
-            <span v-if="!isCollapsed" class="flex-1 text-left">{{ item.label }}</span>
+            <span class="flex-1 text-left">{{ item.label }}</span>
             <ChevronDownIcon
-              v-if="!isCollapsed"
               :class="[
                 'w-4 h-4 transition-transform',
                 expandedGroups.includes(item.key) ? 'rotate-180' : ''
@@ -151,6 +167,8 @@ const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
 
+const emit = defineEmits(['collapsed-change'])
+
 const isCollapsed = ref(false)
 const isMobileMenuOpen = ref(false)
 const expandedGroups = ref<string[]>(['institution', 'attendance', 'journal'])
@@ -159,6 +177,7 @@ const user = computed(() => authStore.user)
 
 const toggleSidebar = () => {
   isCollapsed.value = !isCollapsed.value
+  emit('collapsed-change', isCollapsed.value)
 }
 
 const closeMobileMenu = () => {
