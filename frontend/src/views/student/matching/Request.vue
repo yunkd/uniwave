@@ -156,6 +156,33 @@
             </p>
           </div>
 
+          <!-- 희망 실습 기간 -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              희망 실습 기간 <span class="text-red-500">*</span>
+            </label>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div>
+                <label class="block text-xs text-gray-600 mb-1">시작일</label>
+                <input
+                  v-model="form.startDate"
+                  type="date"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 text-sm"
+                  required
+                />
+              </div>
+              <div>
+                <label class="block text-xs text-gray-600 mb-1">종료일</label>
+                <input
+                  v-model="form.endDate"
+                  type="date"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 text-sm"
+                  required
+                />
+              </div>
+            </div>
+          </div>
+
           <!-- 신청 메시지 -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-2">
@@ -167,35 +194,6 @@
               placeholder="기관 담당자나 대학 담당자에게 전달할 메시지를 작성하세요..."
               class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-sm"
             ></textarea>
-          </div>
-
-          <!-- 희망 실습 기간 -->
-          <div class="relative pb-80">
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              희망 실습 기간 <span class="text-red-500">*</span>
-            </label>
-            <div class="grid grid-cols-2 gap-4">
-              <div class="relative">
-                <label class="block text-xs text-gray-600 mb-1">시작일</label>
-                <input
-                  v-model="form.startDate"
-                  type="date"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm appearance-none"
-                  style="color-scheme: light;"
-                  required
-                />
-              </div>
-              <div class="relative">
-                <label class="block text-xs text-gray-600 mb-1">종료일</label>
-                <input
-                  v-model="form.endDate"
-                  type="date"
-                  class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-sm appearance-none"
-                  style="color-scheme: light;"
-                  required
-                />
-              </div>
-            </div>
           </div>
 
           <!-- 제출 버튼 -->
