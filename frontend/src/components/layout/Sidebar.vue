@@ -301,6 +301,15 @@ const menuItems = computed(() => {
         icon: UserGroupIcon
       },
       {
+        label: '승인 관리',
+        key: 'approval',
+        icon: ClipboardDocumentCheckIcon,
+        children: [
+          { label: '학생 가입 승인', path: '/university/student-approval', icon: UserGroupIcon },
+          { label: '매칭 승인', path: '/university/matching-approval', icon: BuildingOfficeIcon }
+        ]
+      },
+      {
         label: '양식 관리',
         path: '/university/templates',
         icon: DocumentDuplicateIcon

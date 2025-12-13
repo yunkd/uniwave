@@ -241,6 +241,16 @@ const router = createRouter({
           path: 'settings',
           name: 'UniversitySettings',
           component: () => import('@/views/university/Settings.vue')
+        },
+        {
+          path: 'student-approval',
+          name: 'UniversityStudentApproval',
+          component: () => import('@/views/university/approvals/StudentApproval.vue')
+        },
+        {
+          path: 'matching-approval',
+          name: 'UniversityMatchingApproval',
+          component: () => import('@/views/university/approvals/MatchingApproval.vue')
         }
       ]
     },
