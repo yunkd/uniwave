@@ -225,19 +225,23 @@ const menuItems = computed(() => {
         icon: UserGroupIcon
       },
       {
-        label: '출석 현황',
-        path: '/institution/attendance',
-        icon: ClipboardDocumentCheckIcon
+        label: '승인 관리',
+        key: 'approval',
+        icon: ClipboardDocumentCheckIcon,
+        children: [
+          { label: '출석 승인', path: '/institution/attendance', icon: CheckCircleIcon },
+          { label: '일지 승인', path: '/institution/journal-approval', icon: DocumentTextIcon }
+        ]
       },
       {
-        label: '일지 승인',
-        path: '/institution/journal-approval',
-        icon: DocumentTextIcon
-      },
-      {
-        label: '양식 관리',
-        path: '/institution/forms',
-        icon: DocumentDuplicateIcon
+        label: '서류 관리',
+        key: 'documents',
+        icon: DocumentDuplicateIcon,
+        children: [
+          { label: '평가서 작성', path: '/institution/evaluation/create', icon: ClipboardDocumentListIcon },
+          { label: '확인서 작성', path: '/institution/certificate/create', icon: ClipboardDocumentListIcon },
+          { label: '작성 서류 목록', path: '/institution/documents', icon: DocumentDuplicateIcon }
+        ]
       },
       {
         label: '공지사항',

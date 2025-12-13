@@ -85,6 +85,21 @@ const router = createRouter({
           component: () => import('@/views/institution/Dashboard.vue')
         },
         {
+          path: 'evaluation/create',
+          name: 'InstitutionEvaluationCreate',
+          component: () => import('@/views/institution/evaluation/Create.vue')
+        },
+        {
+          path: 'certificate/create',
+          name: 'InstitutionCertificateCreate',
+          component: () => import('@/views/institution/certificate/Create.vue')
+        },
+        {
+          path: 'documents',
+          name: 'InstitutionDocuments',
+          component: () => import('@/views/institution/documents/List.vue')
+        },
+        {
           path: 'notices',
           name: 'InstitutionNotices',
           component: () => import('@/views/institution/notices/List.vue')
