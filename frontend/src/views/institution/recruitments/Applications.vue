@@ -112,11 +112,11 @@
             <div class="flex-1 min-w-0">
               <div class="flex items-center gap-3 mb-2">
                 <div class="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
-                  <span class="text-primary-700 font-bold text-sm">{{ app.studentName.charAt(0) }}</span>
+                  <span class="text-primary-700 font-bold text-sm">{{ app.name.charAt(0) }}</span>
                 </div>
                 <div class="flex-1 min-w-0">
                   <div class="flex items-center gap-2 flex-wrap">
-                    <h3 class="text-lg font-bold text-gray-900">{{ app.studentName }}</h3>
+                    <h3 class="text-lg font-bold text-gray-900">{{ app.name }}</h3>
                     <span
                       :class="[
                         'inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium',
@@ -126,14 +126,10 @@
                       {{ getStatusLabel(app.status) }}
                     </span>
                   </div>
-                  <p class="text-sm text-gray-600">{{ app.university }}</p>
+                  <p class="text-sm text-gray-600">{{ app.recruitmentTitle }}</p>
                 </div>
               </div>
               <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm ml-13">
-                <div class="flex items-center gap-1 text-gray-600">
-                  <BriefcaseIcon class="w-4 h-4" />
-                  <span>{{ app.recruitmentTitle }}</span>
-                </div>
                 <div class="flex items-center gap-1 text-gray-600">
                   <CalendarIcon class="w-4 h-4" />
                   <span>{{ app.appliedAt }}</span>
@@ -141,6 +137,10 @@
                 <div class="flex items-center gap-1 text-gray-600">
                   <EnvelopeIcon class="w-4 h-4" />
                   <span>{{ app.email }}</span>
+                </div>
+                <div class="flex items-center gap-1 text-gray-600">
+                  <PhoneIcon class="w-4 h-4" />
+                  <span>{{ app.phone }}</span>
                 </div>
               </div>
             </div>
@@ -161,81 +161,81 @@
           class="border-t border-gray-200 bg-gray-50 p-6"
         >
           <div class="space-y-6">
-            <!-- 학생 상세 정보 -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
-              <div class="p-4 bg-white rounded-lg border border-gray-200">
-                <h4 class="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
-                  <UserIcon class="w-4 h-4" />
-                  학생 정보
-                </h4>
-                <div class="space-y-2 text-sm">
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">이름</span>
-                    <span class="font-medium text-gray-900">{{ app.studentName }}</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">학교</span>
-                    <span class="font-medium text-gray-900">{{ app.university }}</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">이메일</span>
-                    <span class="font-medium text-gray-900">{{ app.email }}</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">전화번호</span>
-                    <span class="font-medium text-gray-900">{{ app.phone }}</span>
-                  </div>
-                </div>
-              </div>
+            <!-- 지원 공고 정보 -->
+            <div class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <h4 class="text-sm font-bold text-blue-900 mb-2">지원 공고</h4>
+              <p class="text-sm font-medium text-blue-800">{{ app.institutionName }}</p>
+              <p class="text-sm text-blue-700">{{ app.recruitmentTitle }}</p>
+              <p class="text-xs text-blue-600 mt-1">{{ app.field }}</p>
+            </div>
 
-              <div class="p-4 bg-white rounded-lg border border-gray-200">
-                <h4 class="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
-                  <BriefcaseIcon class="w-4 h-4" />
-                  지원 정보
-                </h4>
-                <div class="space-y-2 text-sm">
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">모집공고</span>
-                    <span class="font-medium text-gray-900 text-right">{{ app.recruitmentTitle }}</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">분야</span>
-                    <span class="font-medium text-gray-900">{{ app.field }}</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">지원일</span>
-                    <span class="font-medium text-gray-900">{{ app.appliedAt }}</span>
-                  </div>
-                  <div class="flex justify-between">
-                    <span class="text-gray-600">희망 기간</span>
-                    <span class="font-medium text-gray-900 text-right">{{ app.desiredPeriod }}</span>
-                  </div>
+            <!-- 지원자 정보 -->
+            <div class="p-4 bg-white rounded-lg border border-gray-200">
+              <h4 class="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
+                <UserIcon class="w-4 h-4" />
+                지원자 정보
+              </h4>
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-sm">
+                <div class="flex justify-between p-2 bg-gray-50 rounded">
+                  <span class="text-gray-600">이름</span>
+                  <span class="font-medium text-gray-900">{{ app.name }}</span>
+                </div>
+                <div class="flex justify-between p-2 bg-gray-50 rounded">
+                  <span class="text-gray-600">연락처</span>
+                  <span class="font-medium text-gray-900">{{ app.phone }}</span>
+                </div>
+                <div class="flex justify-between p-2 bg-gray-50 rounded col-span-1 sm:col-span-2">
+                  <span class="text-gray-600">이메일</span>
+                  <span class="font-medium text-gray-900">{{ app.email }}</span>
+                </div>
+                <div class="flex justify-between p-2 bg-gray-50 rounded">
+                  <span class="text-gray-600">지원일</span>
+                  <span class="font-medium text-gray-900">{{ app.appliedAt }}</span>
                 </div>
               </div>
             </div>
 
-            <!-- 지원 메시지 -->
-            <div v-if="app.message" class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <h4 class="text-sm font-bold text-blue-900 mb-2 flex items-center gap-2">
+            <!-- 자기소개 -->
+            <div v-if="app.introduction" class="p-4 bg-white border border-gray-200 rounded-lg">
+              <h4 class="text-sm font-bold text-gray-900 mb-2 flex items-center gap-2">
                 <ChatBubbleLeftIcon class="w-4 h-4" />
-                지원 메시지
+                자기소개
               </h4>
-              <p class="text-sm text-blue-800 whitespace-pre-wrap">{{ app.message }}</p>
+              <p class="text-sm text-gray-700 whitespace-pre-wrap leading-relaxed">{{ app.introduction }}</p>
             </div>
 
             <!-- 이력서 다운로드 -->
-            <div v-if="app.resumeUrl" class="p-4 bg-white border border-gray-200 rounded-lg">
+            <div class="p-4 bg-white border-2 border-primary-200 rounded-lg">
               <h4 class="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
-                <DocumentTextIcon class="w-4 h-4" />
-                첨부 서류
+                <DocumentTextIcon class="w-4 h-4 text-primary-600" />
+                첨부 이력서
               </h4>
-              <button
-                @click="downloadResume(app)"
-                class="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-              >
-                <DocumentArrowDownIcon class="w-5 h-5" />
-                <span class="font-medium">이력서 다운로드</span>
-              </button>
+              <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div class="flex items-center gap-3">
+                  <div class="w-10 h-10 bg-primary-100 rounded-lg flex items-center justify-center">
+                    <DocumentTextIcon class="w-5 h-5 text-primary-600" />
+                  </div>
+                  <div>
+                    <p class="text-sm font-medium text-gray-900">{{ app.resumeFileName }}</p>
+                    <p class="text-xs text-gray-500">{{ app.resumeFileSize }}</p>
+                  </div>
+                </div>
+                <button
+                  @click="downloadResume(app)"
+                  class="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                >
+                  <DocumentArrowDownIcon class="w-5 h-5" />
+                  <span class="font-medium">다운로드</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- 개인정보 동의 확인 -->
+            <div class="p-3 bg-green-50 border border-green-200 rounded-lg">
+              <div class="flex items-center gap-2 text-sm text-green-800">
+                <CheckCircleIcon class="w-4 h-4" />
+                <span class="font-medium">개인정보 수집 및 이용에 동의함</span>
+              </div>
             </div>
 
             <!-- 상태 변경 버튼 -->
@@ -289,10 +289,10 @@ import {
   DocumentArrowDownIcon,
   ChevronDownIcon,
   UserIcon,
-  BriefcaseIcon,
   CalendarIcon,
   EnvelopeIcon,
-  ChatBubbleLeftIcon
+  ChatBubbleLeftIcon,
+  PhoneIcon
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
@@ -308,66 +308,79 @@ const recruitments = ref([
   { id: 2, title: '노인복지관 실습생 모집' }
 ])
 
-// Mock 지원서 데이터
+// Mock 지원서 데이터 (학생이 실제로 작성한 양식)
 const applications = ref([
   {
     id: 1,
-    studentName: '김학생',
-    university: '성균관대학교',
-    email: 'student1@skku.edu',
+    // 지원자 정보
+    name: '김학생',
     phone: '010-1234-5678',
+    email: 'student1@skku.edu',
+    // 이력서
+    resumeFileName: '김학생_이력서.pdf',
+    resumeFileSize: '1.2 MB',
+    resumeUrl: '/files/resume1.pdf',
+    // 자기소개
+    introduction: '안녕하세요. 사회복지를 전공하고 있는 김학생입니다.\n\n귀 기관에서 실습 기회를 얻고자 지원하게 되었습니다. 노인복지에 대한 깊은 관심을 가지고 있으며, 이론으로 배운 지식을 실무에 적용하고 싶습니다.\n\n성실하게 임하겠습니다. 감사합니다.',
+    // 개인정보 동의
+    agreedToPrivacy: true,
+    // 지원 정보
+    institutionName: '사회복지법인 희망나눔',
     recruitmentId: 1,
     recruitmentTitle: '사회복지법인 희망나눔 실습생 모집',
     field: '노인복지',
     appliedAt: '2025.01.10',
-    desiredPeriod: '2025.03.01 ~ 2025.03.28',
-    message: '안녕하세요. 사회복지를 전공하고 있는 김학생입니다. 귀 기관에서 실습 기회를 얻고자 지원하게 되었습니다.',
-    resumeUrl: '/files/resume1.pdf',
     status: 'PENDING'
   },
   {
     id: 2,
-    studentName: '이학생',
-    university: '서울대학교',
-    email: 'student2@snu.ac.kr',
+    name: '이학생',
     phone: '010-2345-6789',
+    email: 'student2@snu.ac.kr',
+    resumeFileName: '이학생_이력서.hwp',
+    resumeFileSize: '856 KB',
+    resumeUrl: '/files/resume2.hwp',
+    introduction: '노인복지에 관심이 많은 학생입니다.\n\n사회복지사 자격증 취득을 위해 열심히 실습에 임하겠습니다.',
+    agreedToPrivacy: true,
+    institutionName: '사회복지법인 희망나눔',
     recruitmentId: 1,
     recruitmentTitle: '사회복지법인 희망나눔 실습생 모집',
     field: '노인복지',
     appliedAt: '2025.01.12',
-    desiredPeriod: '2025.03.01 ~ 2025.03.28',
-    message: '노인복지에 관심이 많은 학생입니다. 열심히 하겠습니다.',
-    resumeUrl: '/files/resume2.pdf',
     status: 'ACCEPTED'
   },
   {
     id: 3,
-    studentName: '박학생',
-    university: '연세대학교',
-    email: 'student3@yonsei.ac.kr',
+    name: '박학생',
     phone: '010-3456-7890',
+    email: 'student3@yonsei.ac.kr',
+    resumeFileName: '박학생_Resume.pdf',
+    resumeFileSize: '2.1 MB',
+    resumeUrl: '/files/resume3.pdf',
+    introduction: '', // 자기소개 작성 안 함
+    agreedToPrivacy: true,
+    institutionName: '노인복지관',
     recruitmentId: 2,
     recruitmentTitle: '노인복지관 실습생 모집',
     field: '노인복지',
     appliedAt: '2025.01.08',
-    desiredPeriod: '2025.02.15 ~ 2025.03.14',
-    message: '',
-    resumeUrl: null,
     status: 'REJECTED'
   },
   {
     id: 4,
-    studentName: '최학생',
-    university: '고려대학교',
-    email: 'student4@korea.ac.kr',
+    name: '최학생',
     phone: '010-4567-8901',
+    email: 'student4@korea.ac.kr',
+    resumeFileName: '최학생_이력서_2025.pdf',
+    resumeFileSize: '1.5 MB',
+    resumeUrl: '/files/resume4.pdf',
+    introduction: '실습을 통해 많이 배우고 싶습니다.\n\n사회복지 현장에서 일하는 것이 꿈이며, 이번 실습을 통해 실무 경험을 쌓고 싶습니다.',
+    agreedToPrivacy: true,
+    institutionName: '사회복지법인 희망나눔',
     recruitmentId: 1,
     recruitmentTitle: '사회복지법인 희망나눔 실습생 모집',
     field: '노인복지',
     appliedAt: '2025.01.15',
-    desiredPeriod: '2025.03.01 ~ 2025.03.28',
-    message: '실습을 통해 많이 배우고 싶습니다.',
-    resumeUrl: '/files/resume4.pdf',
     status: 'PENDING'
   }
 ])
@@ -386,8 +399,8 @@ const filteredApplications = computed(() => {
     const matchesStatus = selectedStatus.value === 'ALL' || app.status === selectedStatus.value
     const matchesRecruitment = selectedRecruitment.value === 'ALL' || app.recruitmentId === selectedRecruitment.value
     const matchesSearch = !searchQuery.value || 
-      app.studentName.includes(searchQuery.value) ||
-      app.university.includes(searchQuery.value)
+      app.name.includes(searchQuery.value) ||
+      app.email.includes(searchQuery.value)
     return matchesStatus && matchesRecruitment && matchesSearch
   })
 })
@@ -420,11 +433,11 @@ const toggleApplication = (id: number) => {
 }
 
 const downloadResume = (app: any) => {
-  alert(`이력서 다운로드 (추후 구현)\n파일: ${app.resumeUrl}`)
+  alert(`이력서 다운로드 (추후 구현)\n파일명: ${app.resumeFileName}\n파일 경로: ${app.resumeUrl}`)
   // 실제 구현 시:
   // const link = document.createElement('a')
   // link.href = app.resumeUrl
-  // link.download = `${app.studentName}_이력서.pdf`
+  // link.download = app.resumeFileName
   // link.click()
 }
 
