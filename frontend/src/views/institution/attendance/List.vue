@@ -156,7 +156,7 @@
                 <button
                   @click="handleStatusClick(attendance)"
                   :class="getStatusClass(attendance.status)"
-                  class="px-3 py-1.5 text-xs font-semibold rounded-full cursor-pointer hover:opacity-80 transition"
+                  class="px-4 py-1.5 text-xs font-semibold rounded-full cursor-pointer hover:opacity-80 transition min-w-[80px]"
                 >
                   {{ getStatusLabel(attendance.status) }}
                 </button>
@@ -200,7 +200,7 @@
           <button
             @click="handleStatusClick(attendance)"
             :class="getStatusClass(attendance.status)"
-            class="w-full px-3 py-2 text-sm font-semibold rounded-lg hover:opacity-80 transition"
+            class="w-full px-4 py-2 text-sm font-semibold rounded-lg hover:opacity-80 transition"
             style="min-height: 44px;"
           >
             {{ getStatusLabel(attendance.status) }} - 클릭하여 {{ attendance.status === 'PENDING' ? '검토' : '상세보기' }}
