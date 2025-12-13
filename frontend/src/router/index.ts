@@ -125,6 +125,26 @@ const router = createRouter({
           component: () => import('@/views/institution/Dashboard.vue')
         },
         {
+          path: 'students',
+          name: 'InstitutionStudents',
+          component: () => import('@/views/institution/students/List.vue')
+        },
+        {
+          path: 'students/:id',
+          name: 'InstitutionStudentDetail',
+          component: () => import('@/views/institution/students/Detail.vue')
+        },
+        {
+          path: 'attendance',
+          name: 'InstitutionAttendance',
+          component: () => import('@/views/institution/attendance/List.vue')
+        },
+        {
+          path: 'journal-approval',
+          name: 'InstitutionJournalApproval',
+          component: () => import('@/views/institution/journal/Approval.vue')
+        },
+        {
           path: 'evaluation/create',
           name: 'InstitutionEvaluationCreate',
           component: () => import('@/views/institution/evaluation/Create.vue')
