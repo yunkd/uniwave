@@ -52,6 +52,11 @@ const router = createRouter({
           component: () => import('@/views/student/InstitutionSearch.vue')
         },
         {
+          path: 'matching/request',
+          name: 'StudentMatchingRequest',
+          component: () => import('@/views/student/matching/Request.vue')
+        },
+        {
           path: 'institution-status',
           name: 'StudentInstitutionStatus',
           component: () => import('@/views/student/InstitutionStatus.vue')

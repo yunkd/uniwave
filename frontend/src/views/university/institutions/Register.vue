@@ -13,25 +13,35 @@
 
     <!-- 페이지 헤더 -->
     <div class="mb-4 sm:mb-6">
-      <h1 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">기관 등록</h1>
-      <p class="text-xs sm:text-sm text-gray-600">새로운 협력 기관을 등록하세요</p>
+      <h1 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">협력 기관 등록</h1>
+      <p class="text-xs sm:text-sm text-gray-600">전국 기관 DB에서 검색하여 협력 관계를 맺으세요</p>
     </div>
 
     <!-- 안내 메시지 -->
-    <Card class="p-3 sm:p-4 mb-4 sm:mb-6 bg-blue-50 border-blue-200">
-      <div class="flex gap-3">
-        <div class="flex-shrink-0">
-          <InformationCircleIcon class="w-5 h-5 text-blue-600" />
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      <Card class="p-3 sm:p-4 bg-blue-50 border-blue-200">
+        <div class="flex gap-3">
+          <InformationCircleIcon class="w-5 h-5 text-blue-600 flex-shrink-0" />
+          <div class="flex-1">
+            <h3 class="text-sm font-semibold text-blue-900 mb-1">전국 기관 DB 공유</h3>
+            <p class="text-xs text-blue-800 leading-relaxed">
+              전국 모든 실습 기관 정보가 공유됩니다. 원하는 기관을 검색하여 협력 관계를 맺으세요.
+            </p>
+          </div>
         </div>
-        <div class="flex-1">
-          <h3 class="text-sm font-semibold text-blue-900 mb-1">학생 기관 검색 자동 노출</h3>
-          <p class="text-xs text-blue-800 leading-relaxed">
-            등록한 기관은 <strong>학생 기관 검색 페이지에 자동으로 노출</strong>됩니다. 
-            학생들이 실습 기관을 검색할 때 바로 확인할 수 있습니다.
-          </p>
+      </Card>
+      <Card class="p-3 sm:p-4 bg-amber-50 border-amber-200">
+        <div class="flex gap-3">
+          <InformationCircleIcon class="w-5 h-5 text-amber-600 flex-shrink-0" />
+          <div class="flex-1">
+            <h3 class="text-sm font-semibold text-amber-900 mb-1">매칭 코드 발급</h3>
+            <p class="text-xs text-amber-800 leading-relaxed">
+              협력 등록 시 고유 매칭 코드가 생성됩니다. 이 코드를 기관에 전달하면 학생이 매칭 신청할 수 있습니다.
+            </p>
+          </div>
         </div>
-      </div>
-    </Card>
+      </Card>
+    </div>
 
     <!-- 등록 폼 -->
     <Card class="p-4 sm:p-6">

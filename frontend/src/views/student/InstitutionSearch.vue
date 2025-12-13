@@ -2,13 +2,29 @@
   <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
     <!-- 페이지 헤더 -->
     <div class="mb-6 sm:mb-8">
-      <h1 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">실습 기관 찾기</h1>
-      <p class="text-sm sm:text-base text-gray-600">실습을 진행할 기관을 검색하고 매칭 요청하세요</p>
-      <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
-        <p class="text-xs text-blue-800">
-          💡 <strong>대학에서 등록한 협력 기관</strong>들이 자동으로 표시됩니다. 
-          원하는 기관을 선택하여 매칭을 요청하세요.
-        </p>
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-4">
+        <div>
+          <h1 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">실습 기관 검색</h1>
+          <p class="text-sm sm:text-base text-gray-600">대학 협력 기관 정보를 조회하세요</p>
+        </div>
+        <Button @click="router.push('/student/matching/request')" variant="primary">
+          <CheckCircleIcon class="w-5 h-5 mr-2" />
+          매칭 신청하기
+        </Button>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+        <div class="p-3 bg-blue-50 border border-blue-200 rounded-lg">
+          <p class="text-xs text-blue-800">
+            💡 <strong>기관 정보 확인</strong><br>
+            협력 기관의 위치, 분야, 연락처 등을 미리 확인할 수 있습니다.
+          </p>
+        </div>
+        <div class="p-3 bg-amber-50 border border-amber-200 rounded-lg">
+          <p class="text-xs text-amber-800">
+            ⚠️ <strong>매칭 신청 방법</strong><br>
+            기관과 사전 협의 후 발급받은 <strong>기관 코드</strong>로 매칭을 신청하세요.
+          </p>
+        </div>
       </div>
     </div>
 
@@ -196,15 +212,24 @@
           </div>
         </div>
 
-        <Button
-          @click="requestMatching(institution)"
-          variant="primary"
-          full-width
-          :disabled="!!matchingStatus || institution.status === 'CLOSED'"
-        >
-          <CheckCircleIcon class="w-5 h-5 mr-2" />
-          {{ institution.status === 'CLOSED' ? '마감' : '매칭 요청' }}
-        </Button>
+        <div class="flex gap-2">
+          <Button
+            @click="viewDetail(institution)"
+            variant="outline"
+            full-width
+          >
+            <InformationCircleIcon class="w-5 h-5 mr-1" />
+            상세 정보
+          </Button>
+          <Button
+            @click="copyContact(institution)"
+            variant="outline"
+            full-width
+          >
+            <PhoneIcon class="w-5 h-5 mr-1" />
+            연락처 복사
+          </Button>
+        </div>
       </Card>
     </div>
 
@@ -230,8 +255,12 @@ import {
   PhoneIcon,
   CheckCircleIcon,
   ClockIcon,
-  XCircleIcon
+  XCircleIcon,
+  InformationCircleIcon
 } from '@heroicons/vue/24/outline'
+import { useRouter } from 'vue-router'
+
+const router = useRouter()
 
 const searchQuery = ref('')
 const filterField = ref('')
@@ -418,15 +447,14 @@ const handleSearch = () => {
   })
 }
 
-const requestMatching = (institution: any) => {
-  if (confirm(`${institution.name}에 매칭을 요청하시겠습니까?`)) {
-    matchingStatus.value = {
-      status: 'PENDING',
-      institution: institution,
-      requestedAt: new Date().toISOString()
-    }
-    alert('매칭 요청이 완료되었습니다. 대학 담당자의 승인을 기다려주세요.')
-  }
+const viewDetail = (institution: any) => {
+  // TODO: 기관 상세 정보 모달 또는 페이지로 이동
+  alert(`${institution.name}\n\n주소: ${institution.address}\n분야: ${institution.field}\n담당자: ${institution.contactName}\n연락처: ${institution.contactPhone}\n\n💡 기관과 사전 협의 후 "매칭 신청하기"에서 기관 코드를 입력하여 신청하세요.`)
+}
+
+const copyContact = (institution: any) => {
+  navigator.clipboard.writeText(institution.contactPhone)
+  alert(`연락처가 복사되었습니다.\n${institution.contactPhone}`)
 }
 
 const cancelRequest = () => {
