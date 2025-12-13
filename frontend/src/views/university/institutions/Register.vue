@@ -17,6 +17,22 @@
       <p class="text-xs sm:text-sm text-gray-600">새로운 협력 기관을 등록하세요</p>
     </div>
 
+    <!-- 안내 메시지 -->
+    <Card class="p-3 sm:p-4 mb-4 sm:mb-6 bg-blue-50 border-blue-200">
+      <div class="flex gap-3">
+        <div class="flex-shrink-0">
+          <InformationCircleIcon class="w-5 h-5 text-blue-600" />
+        </div>
+        <div class="flex-1">
+          <h3 class="text-sm font-semibold text-blue-900 mb-1">학생 기관 검색 자동 노출</h3>
+          <p class="text-xs text-blue-800 leading-relaxed">
+            등록한 기관은 <strong>학생 기관 검색 페이지에 자동으로 노출</strong>됩니다. 
+            학생들이 실습 기관을 검색할 때 바로 확인할 수 있습니다.
+          </p>
+        </div>
+      </div>
+    </Card>
+
     <!-- 등록 폼 -->
     <Card class="p-4 sm:p-6">
       <form @submit.prevent="handleSubmit">
@@ -163,7 +179,7 @@ import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import Button from '@/components/common/Button.vue'
 import Card from '@/components/common/Card.vue'
-import { ChevronLeftIcon } from '@heroicons/vue/24/outline'
+import { ChevronLeftIcon, InformationCircleIcon } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
 
@@ -181,7 +197,10 @@ const form = ref({
 const handleSubmit = () => {
   console.log('기관 등록:', form.value)
   // TODO: API 호출
-  alert('기관이 등록되었습니다.')
+  // - 대학 기관 목록에 추가
+  // - 학생 기관 검색 목록에 자동 노출 (status: ACTIVE)
+  // - 기관 초대 이메일 발송 옵션 (선택)
+  alert('기관이 등록되었습니다.\n학생 기관 검색에 자동으로 노출됩니다.')
   router.push('/university/institutions')
 }
 </script>

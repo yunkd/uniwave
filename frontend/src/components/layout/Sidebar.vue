@@ -235,6 +235,11 @@ const menuItems = computed(() => {
         label: '공지사항',
         path: '/student/notices',
         icon: BellAlertIcon
+      },
+      {
+        label: '설정',
+        path: '/student/settings',
+        icon: Cog6ToothIcon
       }
     ]
   }
@@ -274,6 +279,11 @@ const menuItems = computed(() => {
         label: '공지사항',
         path: '/institution/notices',
         icon: BellAlertIcon
+      },
+      {
+        label: '설정',
+        path: '/institution/settings',
+        icon: Cog6ToothIcon
       }
     ]
   }

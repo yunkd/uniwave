@@ -4,6 +4,12 @@
     <div class="mb-6 sm:mb-8">
       <h1 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">실습 기관 찾기</h1>
       <p class="text-sm sm:text-base text-gray-600">실습을 진행할 기관을 검색하고 매칭 요청하세요</p>
+      <div class="mt-3 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+        <p class="text-xs text-blue-800">
+          💡 <strong>대학에서 등록한 협력 기관</strong>들이 자동으로 표시됩니다. 
+          원하는 기관을 선택하여 매칭을 요청하세요.
+        </p>
+      </div>
     </div>
 
     <!-- 현재 매칭 상태 -->

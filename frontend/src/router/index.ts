@@ -105,6 +105,11 @@ const router = createRouter({
           path: 'notices/:id',
           name: 'StudentNoticeDetail',
           component: () => import('@/views/student/notices/Detail.vue')
+        },
+        {
+          path: 'settings',
+          name: 'StudentSettings',
+          component: () => import('@/views/student/Settings.vue')
         }
       ]
     },
@@ -168,6 +173,11 @@ const router = createRouter({
           path: 'notices/:id',
           name: 'InstitutionNoticeDetail',
           component: () => import('@/views/institution/notices/Detail.vue')
+        },
+        {
+          path: 'settings',
+          name: 'InstitutionSettings',
+          component: () => import('@/views/institution/Settings.vue')
         }
       ]
     },
