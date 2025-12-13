@@ -126,7 +126,7 @@ const route = useRoute()
 const authStore = useAuthStore()
 
 const isMobileMenuOpen = ref(false)
-const expandedGroups = ref<string[]>(['institution', 'attendance', 'journal'])
+const expandedGroups = ref<string[]>([])
 
 const user = computed(() => authStore.user)
 

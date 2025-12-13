@@ -24,6 +24,24 @@
     @apply text-xl;
   }
 
+  /* 모든 input, select, textarea 기본 스타일 강제 (다크모드 방지) */
+  input,
+  select,
+  textarea {
+    @apply bg-white text-gray-900;
+    color-scheme: light;
+  }
+
+  input::placeholder,
+  textarea::placeholder {
+    @apply text-gray-400;
+  }
+
+  input[type="date"]::-webkit-calendar-picker-indicator,
+  input[type="time"]::-webkit-calendar-picker-indicator {
+    filter: invert(0);
+  }
+
   /* 스크롤바 스타일 (미니멀) */
   ::-webkit-scrollbar {
     @apply w-2 h-2;
