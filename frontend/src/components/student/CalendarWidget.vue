@@ -1,76 +1,76 @@
 <template>
-  <Card>
-    <div class="flex items-center justify-between mb-4">
-      <h3 class="text-base sm:text-lg font-semibold text-gray-900">일정</h3>
-      <div class="flex items-center gap-2">
+  <Card class="p-3 sm:p-4 lg:p-6">
+    <div class="flex items-center justify-between mb-3 sm:mb-4">
+      <h3 class="text-sm sm:text-base lg:text-lg font-semibold text-gray-900">일정</h3>
+      <div class="flex items-center gap-1 sm:gap-2">
         <button
           @click="previousMonth"
-          class="p-1 hover:bg-gray-100 rounded"
+          class="p-0.5 sm:p-1 hover:bg-gray-100 rounded"
         >
-          <ChevronLeftIcon class="w-5 h-5 text-gray-600" />
+          <ChevronLeftIcon class="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
         </button>
-        <span class="text-sm font-medium text-gray-700 min-w-[100px] text-center">
+        <span class="text-xs sm:text-sm font-medium text-gray-700 min-w-[80px] sm:min-w-[100px] text-center">
           {{ currentMonthLabel }}
         </span>
         <button
           @click="nextMonth"
-          class="p-1 hover:bg-gray-100 rounded"
+          class="p-0.5 sm:p-1 hover:bg-gray-100 rounded"
         >
-          <ChevronRightIcon class="w-5 h-5 text-gray-600" />
+          <ChevronRightIcon class="w-4 h-4 sm:w-5 sm:h-5 text-gray-600" />
         </button>
       </div>
     </div>
 
     <!-- 요일 헤더 -->
-    <div class="grid grid-cols-7 gap-1 mb-2">
+    <div class="grid grid-cols-7 gap-0.5 sm:gap-1 mb-1 sm:mb-2">
       <div
         v-for="day in weekDays"
         :key="day"
-        class="text-center text-xs font-medium text-gray-600 py-2"
+        class="text-center text-xs font-medium text-gray-600 py-1 sm:py-2"
       >
         {{ day }}
       </div>
     </div>
 
     <!-- 날짜 그리드 -->
-    <div class="grid grid-cols-7 gap-1">
+    <div class="grid grid-cols-7 gap-0.5 sm:gap-1">
       <button
         v-for="(date, index) in calendarDates"
         :key="index"
         @click="selectDate(date)"
         :class="[
-          'aspect-square flex flex-col items-center justify-center rounded-lg text-sm transition-colors',
+          'aspect-square flex flex-col items-center justify-center rounded-lg text-xs sm:text-sm transition-colors',
           date.isCurrentMonth ? 'text-gray-900' : 'text-gray-400',
           date.isToday ? 'bg-primary-600 text-white font-bold' : 'hover:bg-gray-100',
-          date.hasEvent ? 'ring-2 ring-primary-300' : ''
+          date.hasEvent ? 'ring-1 sm:ring-2 ring-primary-300' : ''
         ]"
         :disabled="!date.isCurrentMonth"
       >
         <span>{{ date.day }}</span>
-        <span v-if="date.hasEvent" class="w-1 h-1 bg-primary-600 rounded-full mt-0.5"></span>
+        <span v-if="date.hasEvent" class="w-0.5 h-0.5 sm:w-1 sm:h-1 bg-primary-600 rounded-full mt-0.5"></span>
       </button>
     </div>
 
     <!-- 오늘의 일정 -->
-    <div v-if="todayEvents.length > 0" class="mt-4 pt-4 border-t border-gray-200">
-      <h4 class="text-sm font-medium text-gray-900 mb-2">오늘의 일정</h4>
-      <div class="space-y-2">
+    <div v-if="todayEvents.length > 0" class="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-200">
+      <h4 class="text-xs sm:text-sm font-medium text-gray-900 mb-1.5 sm:mb-2">오늘의 일정</h4>
+      <div class="space-y-1.5 sm:space-y-2">
         <div
           v-for="event in todayEvents"
           :key="event.id"
-          class="flex items-start gap-2 p-2 bg-primary-50 rounded-lg"
+          class="flex items-start gap-1.5 sm:gap-2 p-1.5 sm:p-2 bg-primary-50 rounded-lg"
         >
-          <div :class="['w-2 h-2 rounded-full mt-1.5 flex-shrink-0', getEventColor(event.type)]"></div>
+          <div :class="['w-1.5 h-1.5 sm:w-2 sm:h-2 rounded-full mt-1 sm:mt-1.5 flex-shrink-0', getEventColor(event.type)]"></div>
           <div class="flex-1 min-w-0">
-            <p class="text-sm font-medium text-gray-900">{{ event.title }}</p>
+            <p class="text-xs sm:text-sm font-medium text-gray-900 truncate">{{ event.title }}</p>
             <p class="text-xs text-gray-600">{{ event.time }}</p>
           </div>
         </div>
       </div>
     </div>
 
-    <div v-else class="mt-4 pt-4 border-t border-gray-200 text-center py-4">
-      <p class="text-sm text-gray-500">오늘 일정이 없습니다</p>
+    <div v-else class="mt-3 sm:mt-4 pt-3 sm:pt-4 border-t border-gray-200 text-center py-3 sm:py-4">
+      <p class="text-xs sm:text-sm text-gray-500">오늘 일정이 없습니다</p>
     </div>
   </Card>
 </template>

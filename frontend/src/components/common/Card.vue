@@ -1,9 +1,9 @@
 <template>
   <div :class="cardClasses">
     <!-- 헤더 -->
-    <div v-if="$slots.header || title" class="px-6 py-4 border-b border-gray-200">
+    <div v-if="$slots.header || title" class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 border-b border-gray-200">
       <slot name="header">
-        <h3 class="text-lg font-semibold text-gray-900">{{ title }}</h3>
+        <h3 class="text-sm sm:text-base lg:text-lg font-semibold text-gray-900">{{ title }}</h3>
       </slot>
     </div>
 
@@ -13,7 +13,7 @@
     </div>
 
     <!-- 푸터 -->
-    <div v-if="$slots.footer" class="px-6 py-4 border-t border-gray-200 bg-gray-50">
+    <div v-if="$slots.footer" class="px-3 sm:px-4 lg:px-6 py-3 sm:py-4 border-t border-gray-200 bg-gray-50">
       <slot name="footer" />
     </div>
   </div>
@@ -44,6 +44,6 @@ const cardClasses = computed(() => {
 })
 
 const bodyClasses = computed(() => {
-  return props.padding ? 'px-6 py-4' : ''
+  return props.padding ? 'px-3 sm:px-4 lg:px-6 py-3 sm:py-4' : ''
 })
 </script>

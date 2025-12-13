@@ -1,29 +1,29 @@
 <template>
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+  <div class="max-w-4xl mx-auto px-3 sm:px-4 lg:px-6">
     <!-- 페이지 헤더 -->
-    <div class="mb-6 sm:mb-8">
-      <h1 class="text-xl sm:text-2xl font-bold text-gray-900 mb-2">출석 체크</h1>
-      <p class="text-sm sm:text-base text-gray-600">출퇴근 시간을 입력하고 기관 승인을 요청하세요</p>
+    <div class="mb-4 sm:mb-6">
+      <h1 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">출석 체크</h1>
+      <p class="text-xs sm:text-sm lg:text-base text-gray-600">출퇴근 시간을 입력하고 기관 승인을 요청하세요</p>
     </div>
 
     <!-- 출석 입력 폼 -->
-    <Card class="mb-6">
-      <h3 class="text-lg font-semibold text-gray-900 mb-4">출석 정보 입력</h3>
-      <form @submit.prevent="handleSubmitAttendance" class="space-y-4">
+    <Card class="mb-4 sm:mb-6 p-3 sm:p-4 lg:p-6">
+      <h3 class="text-sm sm:text-base lg:text-lg font-semibold text-gray-900 mb-3 sm:mb-4">출석 정보 입력</h3>
+      <form @submit.prevent="handleSubmitAttendance" class="space-y-3 sm:space-y-4">
         <!-- 날짜 -->
-        <div class="flex items-center justify-between gap-4">
-          <label class="text-sm font-medium text-gray-700 flex-shrink-0">
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">
             실습 날짜 <span class="text-red-500">*</span>
           </label>
           <input
             v-model="form.date"
             type="date"
-            class="flex-1 max-w-xs px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+            class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
             required
           />
         </div>
 
-        <!-- 출근 시간 -->
+        <!-- 출근/퇴근 시간 -->
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1.5">
@@ -32,12 +32,11 @@
             <input
               v-model="form.checkIn"
               type="time"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
               required
             />
           </div>
 
-          <!-- 퇴근 시간 -->
           <div>
             <label class="block text-sm font-medium text-gray-700 mb-1.5">
               퇴근 시간 <span class="text-red-500">*</span>
@@ -45,48 +44,48 @@
             <input
               v-model="form.checkOut"
               type="time"
-              class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+              class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
               required
             />
           </div>
         </div>
 
         <!-- 총 실습 시간 (자동 계산) -->
-        <div class="p-4 bg-gray-50 rounded-lg">
+        <div class="p-3 sm:p-4 bg-gray-50 rounded-lg">
           <div class="flex items-center justify-between">
-            <span class="text-sm font-medium text-gray-700">총 실습 시간</span>
-            <span class="text-lg font-bold text-primary-600">{{ calculatedHours }}시간</span>
+            <span class="text-xs sm:text-sm font-medium text-gray-700">총 실습 시간</span>
+            <span class="text-base sm:text-lg font-bold text-primary-600">{{ calculatedHours }}시간</span>
           </div>
         </div>
 
         <!-- 메모 (선택사항) -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+          <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-1.5">
             메모 (선택사항)
           </label>
           <textarea
             v-model="form.notes"
             rows="3"
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none"
+            class="w-full px-2.5 sm:px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-xs sm:text-sm"
             placeholder="특이사항이 있다면 입력하세요"
           ></textarea>
         </div>
 
         <!-- 제출 버튼 -->
-        <Button type="submit" variant="primary" :loading="isLoading" full-width size="lg">
+        <Button type="submit" variant="primary" :loading="isLoading" full-width size="lg" class="text-sm sm:text-base">
           출석 승인 요청
         </Button>
       </form>
     </Card>
 
     <!-- 오늘의 출석 현황 -->
-    <Card>
-      <div class="flex items-center justify-between mb-4">
-        <h3 class="text-lg font-semibold text-gray-900">오늘의 출석</h3>
-        <span class="text-xs sm:text-sm text-gray-500">{{ today }}</span>
+    <Card class="p-3 sm:p-4 lg:p-6">
+      <div class="flex items-center justify-between mb-3 sm:mb-4 gap-2">
+        <h3 class="text-sm sm:text-base lg:text-lg font-semibold text-gray-900">오늘의 출석</h3>
+        <span class="text-xs sm:text-sm text-gray-500 flex-shrink-0">{{ today }}</span>
       </div>
 
-      <div v-if="todayAttendance" class="space-y-4">
+      <div v-if="todayAttendance" class="space-y-3 sm:space-y-4">
         <!-- 승인 상태 -->
         <div 
           :class="[
@@ -114,21 +113,21 @@
         </div>
 
         <!-- 기관 정보 -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4">
-          <div class="p-3 sm:p-4 bg-gray-50 rounded-lg">
-            <p class="text-xs sm:text-sm text-gray-600 mb-1">실습 기관</p>
-            <p class="text-sm sm:text-base font-medium text-gray-900 break-words">{{ todayAttendance.institution }}</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 sm:gap-3">
+          <div class="p-2.5 sm:p-3 lg:p-4 bg-gray-50 rounded-lg">
+            <p class="text-xs sm:text-sm text-gray-600 mb-0.5 sm:mb-1">실습 기관</p>
+            <p class="text-xs sm:text-sm lg:text-base font-medium text-gray-900 break-words">{{ todayAttendance.institution }}</p>
           </div>
-          <div class="p-3 sm:p-4 bg-gray-50 rounded-lg">
-            <p class="text-xs sm:text-sm text-gray-600 mb-1">실습 지도자</p>
-            <p class="text-sm sm:text-base font-medium text-gray-900 break-words">{{ todayAttendance.supervisor }}</p>
+          <div class="p-2.5 sm:p-3 lg:p-4 bg-gray-50 rounded-lg">
+            <p class="text-xs sm:text-sm text-gray-600 mb-0.5 sm:mb-1">실습 지도자</p>
+            <p class="text-xs sm:text-sm lg:text-base font-medium text-gray-900 break-words">{{ todayAttendance.supervisor }}</p>
           </div>
         </div>
       </div>
 
-      <div v-else class="text-center py-8 sm:py-12">
-        <ClockIcon class="w-10 h-10 sm:w-12 sm:h-12 text-gray-400 mx-auto mb-3" />
-        <p class="text-sm text-gray-600">아직 출석을 입력하지 않았습니다</p>
+      <div v-else class="text-center py-6 sm:py-8 lg:py-12">
+        <ClockIcon class="w-8 h-8 sm:w-10 sm:h-10 lg:w-12 lg:h-12 text-gray-400 mx-auto mb-2 sm:mb-3" />
+        <p class="text-xs sm:text-sm text-gray-600">아직 출석을 입력하지 않았습니다</p>
       </div>
     </Card>
   </div>
@@ -148,8 +147,8 @@ const isLoading = ref(false)
 
 const form = ref({
   date: new Date().toISOString().split('T')[0],
-  checkIn: '',
-  checkOut: '',
+  checkIn: '09:00',
+  checkOut: '18:00',
   notes: ''
 })
 
@@ -200,8 +199,8 @@ const handleSubmitAttendance = () => {
     isLoading.value = false
     
     // 폼 초기화
-    form.value.checkIn = ''
-    form.value.checkOut = ''
+    form.value.checkIn = '09:00'
+    form.value.checkOut = '18:00'
     form.value.notes = ''
     
     alert('출석 승인 요청이 제출되었습니다. 기관 담당자의 승인을 기다려주세요.')
