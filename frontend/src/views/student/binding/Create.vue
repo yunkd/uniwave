@@ -16,25 +16,38 @@
         />
         <div class="flex-1">
           <p :class="canApply ? 'text-green-900' : 'text-yellow-900'" class="text-sm font-medium mb-2">
-            {{ canApply ? '제본 신청이 가능합니다' : '일부 서류가 준비되지 않았습니다' }}
+            {{ canApply ? '제본 신청이 가능합니다' : '일부 서류가 업로드되지 않았습니다' }}
           </p>
           <div class="space-y-1 text-xs" :class="canApply ? 'text-green-700' : 'text-yellow-700'">
             <div class="flex items-center gap-2">
+              <component :is="documents.journal ? CheckCircleIcon : XCircleIcon" class="w-4 h-4" />
+              <span>실습일지 (압축파일): {{ documents.journal ? '업로드 완료' : '미업로드' }}</span>
+            </div>
+            <div class="flex items-center gap-2">
               <component :is="documents.attendance ? CheckCircleIcon : XCircleIcon" class="w-4 h-4" />
-              <span>출석부: {{ documents.attendance ? '준비완료' : '미완료' }}</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <component :is="documents.journals > 0 ? CheckCircleIcon : XCircleIcon" class="w-4 h-4" />
-              <span>실습 일지: {{ documents.journals }}개</span>
-            </div>
-            <div class="flex items-center gap-2">
-              <component :is="documents.certificate ? CheckCircleIcon : XCircleIcon" class="w-4 h-4" />
-              <span>확인서: {{ documents.certificate ? '발급완료' : '미발급' }}</span>
+              <span>출석부: {{ documents.attendance ? '업로드 완료' : '미업로드' }}</span>
             </div>
             <div class="flex items-center gap-2">
               <component :is="documents.evaluation ? CheckCircleIcon : XCircleIcon" class="w-4 h-4" />
-              <span>평가서: {{ documents.evaluation ? '발급완료' : '미발급' }}</span>
+              <span>평가서: {{ documents.evaluation ? '업로드 완료' : '미업로드' }}</span>
             </div>
+            <div class="flex items-center gap-2">
+              <component :is="documents.certificate ? CheckCircleIcon : XCircleIcon" class="w-4 h-4" />
+              <span>확인서: {{ documents.certificate ? '업로드 완료' : '미업로드' }}</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <component :is="documents.finalReport ? CheckCircleIcon : XCircleIcon" class="w-4 h-4" />
+              <span>최종보고서: {{ documents.finalReport ? '업로드 완료' : '미업로드' }}</span>
+            </div>
+          </div>
+          <div v-if="!canApply" class="mt-3 pt-3 border-t border-yellow-300">
+            <Button
+              variant="outline"
+              @click="router.push('/student/documents/upload')"
+              class="text-xs w-full"
+            >
+              서류 업로드 페이지로 이동
+            </Button>
           </div>
         </div>
       </div>
@@ -42,47 +55,54 @@
 
     <!-- PDF 미리보기 (준비 완료 시) -->
     <Card v-if="canApply" class="mb-4 sm:mb-6 p-3 sm:p-4 lg:p-6">
-      <h3 class="text-sm sm:text-base font-semibold text-gray-900 mb-3 sm:mb-4">제본 PDF 미리보기</h3>
+      <h3 class="text-sm sm:text-base font-semibold text-gray-900 mb-3 sm:mb-4">제본 PDF 구성</h3>
       <div class="space-y-2">
         <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
           <div class="flex items-center gap-2">
             <DocumentTextIcon class="w-5 h-5 text-gray-600" />
             <span class="text-sm text-gray-900">표지</span>
           </div>
-          <span class="text-xs text-gray-500">1페이지</span>
+          <span class="text-xs text-gray-500">자동 생성</span>
+        </div>
+        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+          <div class="flex items-center gap-2">
+            <BookOpenIcon class="w-5 h-5 text-gray-600" />
+            <span class="text-sm text-gray-900">실습일지</span>
+          </div>
+          <span class="text-xs text-gray-500">업로드 파일</span>
         </div>
         <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
           <div class="flex items-center gap-2">
             <ClipboardDocumentCheckIcon class="w-5 h-5 text-gray-600" />
             <span class="text-sm text-gray-900">출석부</span>
           </div>
-          <span class="text-xs text-gray-500">{{ documents.attendancePages }}페이지</span>
-        </div>
-        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-          <div class="flex items-center gap-2">
-            <BookOpenIcon class="w-5 h-5 text-gray-600" />
-            <span class="text-sm text-gray-900">실습 일지</span>
-          </div>
-          <span class="text-xs text-gray-500">{{ documents.journals }}건</span>
-        </div>
-        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-          <div class="flex items-center gap-2">
-            <DocumentCheckIcon class="w-5 h-5 text-gray-600" />
-            <span class="text-sm text-gray-900">확인서</span>
-          </div>
-          <span class="text-xs text-gray-500">1페이지</span>
+          <span class="text-xs text-gray-500">업로드 파일</span>
         </div>
         <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
           <div class="flex items-center gap-2">
             <ClipboardDocumentListIcon class="w-5 h-5 text-gray-600" />
             <span class="text-sm text-gray-900">평가서</span>
           </div>
-          <span class="text-xs text-gray-500">1페이지</span>
+          <span class="text-xs text-gray-500">업로드 파일</span>
+        </div>
+        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+          <div class="flex items-center gap-2">
+            <DocumentCheckIcon class="w-5 h-5 text-gray-600" />
+            <span class="text-sm text-gray-900">확인서</span>
+          </div>
+          <span class="text-xs text-gray-500">업로드 파일</span>
+        </div>
+        <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+          <div class="flex items-center gap-2">
+            <DocumentTextIcon class="w-5 h-5 text-gray-600" />
+            <span class="text-sm text-gray-900">최종보고서</span>
+          </div>
+          <span class="text-xs text-gray-500">업로드 파일</span>
         </div>
       </div>
       <div class="mt-4 p-3 bg-blue-50 rounded-lg border border-blue-200">
         <p class="text-xs text-blue-800">
-          <strong>총 {{ totalPages }}페이지</strong>의 PDF가 생성됩니다
+          <strong>업로드된 5가지 서류</strong>가 하나의 PDF로 제본됩니다
         </p>
       </div>
     </Card>
@@ -185,8 +205,15 @@
     <!-- 신청 불가 안내 -->
     <Card v-else class="p-6 sm:p-8 text-center">
       <DocumentTextIcon class="w-12 h-12 sm:w-16 sm:h-16 text-gray-300 mx-auto mb-4" />
-      <p class="text-sm sm:text-base text-gray-600 mb-2">제본 신청을 위해 필요한 서류를 준비해주세요</p>
-      <p class="text-xs text-gray-500">출석부, 실습 일지, 확인서, 평가서가 모두 준비되어야 합니다</p>
+      <p class="text-sm sm:text-base text-gray-600 mb-2">제본 신청을 위해 필요한 서류를 업로드해주세요</p>
+      <p class="text-xs text-gray-500 mb-4">실습일지, 출석부, 평가서, 확인서, 최종보고서가 모두 업로드되어야 합니다</p>
+      <Button
+        variant="primary"
+        @click="router.push('/student/documents/upload')"
+        class="text-sm"
+      >
+        서류 업로드 페이지로 이동
+      </Button>
     </Card>
   </div>
 </template>
@@ -210,28 +237,23 @@ import {
 const router = useRouter()
 const isLoading = ref(false)
 
-// 임시 데이터: 서류 준비 상태 (추후 API 연동)
+// 임시 데이터: 서류 업로드 상태 (추후 API 연동)
+// 실제로는 /student/documents/upload 페이지에서 업로드한 파일 상태를 체크
 const documents = ref({
-  attendance: true,
-  attendancePages: 5,
-  journals: 15,
-  certificate: true,
-  evaluation: true
+  journal: false,        // 실습일지 압축파일
+  attendance: false,     // 출석부
+  evaluation: false,     // 평가서
+  certificate: false,    // 확인서
+  finalReport: false     // 최종보고서
 })
 
+// 제본 신청 가능 여부: 5가지 서류 모두 업로드 완료
 const canApply = computed(() => {
-  return documents.value.attendance &&
-         documents.value.journals > 0 &&
+  return documents.value.journal &&
+         documents.value.attendance &&
+         documents.value.evaluation &&
          documents.value.certificate &&
-         documents.value.evaluation
-})
-
-const totalPages = computed(() => {
-  return 1 + // 표지
-         documents.value.attendancePages +
-         documents.value.journals +
-         1 + // 확인서
-         1   // 평가서
+         documents.value.finalReport
 })
 
 const form = ref({

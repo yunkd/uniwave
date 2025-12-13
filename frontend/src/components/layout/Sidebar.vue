@@ -208,8 +208,17 @@ const menuItems = computed(() => {
       },
       {
         label: '내 서류',
-        path: '/student/documents',
-        icon: DocumentDuplicateIcon
+        key: 'documents',
+        icon: DocumentDuplicateIcon,
+        children: [
+          { label: '서류 목록', path: '/student/documents', icon: DocumentDuplicateIcon },
+          { label: '서류 업로드', path: '/student/documents/upload', icon: DocumentTextIcon }
+        ]
+      },
+      {
+        label: '최종 보고서',
+        path: '/student/report/write',
+        icon: BookOpenIcon
       },
       {
         label: '제본 신청',

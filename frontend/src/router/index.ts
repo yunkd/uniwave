@@ -77,6 +77,16 @@ const router = createRouter({
           component: () => import('@/views/student/documents/List.vue')
         },
         {
+          path: 'documents/upload',
+          name: 'StudentDocumentsUpload',
+          component: () => import('@/views/student/documents/Upload.vue')
+        },
+        {
+          path: 'report/write',
+          name: 'StudentReportWrite',
+          component: () => import('@/views/student/report/Write.vue')
+        },
+        {
           path: 'binding',
           name: 'StudentBinding',
           component: () => import('@/views/student/binding/Create.vue')

@@ -6,14 +6,25 @@
         <h1 class="text-lg sm:text-xl lg:text-2xl font-bold text-gray-900 mb-1 sm:mb-2">실습 일지</h1>
         <p class="text-xs sm:text-sm text-gray-600">작성한 실습 일지를 확인하고 관리하세요</p>
       </div>
-      <Button
-        variant="primary"
-        @click="router.push('/student/journal/write')"
-        class="text-xs sm:text-sm"
-      >
-        <PlusIcon class="w-4 h-4 sm:w-5 sm:h-5 mr-1.5" />
-        일지 작성
-      </Button>
+      <div class="flex flex-col sm:flex-row gap-2">
+        <Button
+          variant="secondary"
+          @click="downloadAllJournals"
+          :disabled="totalCount === 0"
+          class="text-xs sm:text-sm"
+        >
+          <ArrowDownTrayIcon class="w-4 h-4 sm:w-5 sm:h-5 mr-1.5" />
+          전체 다운로드
+        </Button>
+        <Button
+          variant="primary"
+          @click="router.push('/student/journal/write')"
+          class="text-xs sm:text-sm"
+        >
+          <PlusIcon class="w-4 h-4 sm:w-5 sm:h-5 mr-1.5" />
+          일지 작성
+        </Button>
+      </div>
     </div>
 
     <!-- 통계 카드 -->
@@ -201,7 +212,8 @@ import {
   MagnifyingGlassIcon,
   PlusIcon,
   ChevronRightIcon,
-  ChatBubbleLeftIcon
+  ChatBubbleLeftIcon,
+  ArrowDownTrayIcon
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
@@ -288,5 +300,38 @@ const handleView = (journal: any) => {
 const handleEdit = (journal: any) => {
   // 수정 페이지로 이동 (추후 구현: query 파라미터로 ID 전달)
   router.push(`/student/journal/write?id=${journal.id}`)
+}
+
+// 전체 일지 다운로드 (날짜별 압축)
+const downloadAllJournals = () => {
+  if (journals.value.length === 0) {
+    alert('다운로드할 일지가 없습니다.')
+    return
+  }
+
+  // 날짜 범위 계산
+  const dates = journals.value.map(j => j.date).sort()
+  const startDate = dates[0].replace(/-/g, '')
+  const endDate = dates[dates.length - 1].replace(/-/g, '')
+
+  const fileName = `실습일지_홍길동_${startDate}-${endDate}.zip`
+  
+  alert(`실습일지 전체를 날짜별로 압축하여 다운로드합니다.\n\n파일명: ${fileName}\n총 ${journals.value.length}개 일지`)
+  
+  // Mock: 실제로는 백엔드 API 호출
+  console.log('실습일지 다운로드 시작:', {
+    fileName,
+    totalJournals: journals.value.length,
+    dateRange: `${startDate} ~ ${endDate}`
+  })
+  
+  // 실제 구현 시:
+  // const response = await fetch('/api/student/journals/download')
+  // const blob = await response.blob()
+  // const url = window.URL.createObjectURL(blob)
+  // const a = document.createElement('a')
+  // a.href = url
+  // a.download = fileName
+  // a.click()
 }
 </script>
