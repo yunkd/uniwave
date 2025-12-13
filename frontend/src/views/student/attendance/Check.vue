@@ -62,7 +62,7 @@
               min="0"
               max="8"
               step="0.5"
-              class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base"
+              class="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent text-base text-center"
               placeholder="0.5"
               required
             />
@@ -285,10 +285,18 @@ const getStatusLabel = (status: string) => {
 </script>
 
 <style scoped>
-/* 날짜/시간 선택기: 숫자는 중앙, 캘린더는 오른쪽 */
+/* 날짜/시간 선택기: 숫자는 중앙, 팝업은 오른쪽 */
 input[type="date"],
 input[type="time"] {
   position: relative;
+  text-align: center;
+  direction: rtl; /* 팝업을 오른쪽에서 열기 */
+}
+
+/* 입력된 텍스트는 왼쪽에서 오른쪽으로 */
+input[type="date"]::-webkit-datetime-edit,
+input[type="time"]::-webkit-datetime-edit {
+  direction: ltr;
   text-align: center;
 }
 
@@ -296,19 +304,14 @@ input[type="time"] {
 input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
-  position: absolute;
-  right: 8px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 24px;
-  height: 24px;
-  padding: 0;
-  margin: 0;
+  margin-left: auto;
+  margin-right: 0;
 }
 
-/* 휴게시간 입력 필드 스타일 */
+/* 휴게시간 입력 필드 스타일 - 중앙 정렬 */
 input[type="number"] {
   -moz-appearance: textfield;
+  text-align: center;
 }
 
 input[type="number"]::-webkit-inner-spin-button,
