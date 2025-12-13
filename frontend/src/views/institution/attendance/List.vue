@@ -51,7 +51,21 @@
 
     <!-- 필터 및 검색 -->
     <div class="bg-white rounded-lg shadow p-4 mb-6">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- 대학 필터 -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">대학</label>
+          <select 
+            v-model="filters.university" 
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="">전체</option>
+            <option value="서울대학교">서울대학교</option>
+            <option value="연세대학교">연세대학교</option>
+            <option value="고려대학교">고려대학교</option>
+          </select>
+        </div>
+
         <!-- 상태 필터 -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2">상태</label>
@@ -66,32 +80,13 @@
           </select>
         </div>
 
-        <!-- 실습생 검색 -->
+        <!-- 실습생 이름 검색 -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">실습생</label>
+          <label class="block text-sm font-medium text-gray-700 mb-2">실습생 이름</label>
           <input
             v-model="filters.studentName"
             type="text"
-            placeholder="이름 검색"
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-        </div>
-
-        <!-- 날짜 범위 -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">시작일</label>
-          <input
-            v-model="filters.startDate"
-            type="date"
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">종료일</label>
-          <input
-            v-model="filters.endDate"
-            type="date"
+            placeholder="이름으로 검색"
             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
@@ -133,9 +128,6 @@
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 상태
               </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                작업
-              </th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
@@ -161,23 +153,12 @@
                 {{ attendance.hours }}시간
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
-                <span :class="getStatusClass(attendance.status)" class="px-2 py-1 text-xs font-semibold rounded-full">
+                <button
+                  @click="handleStatusClick(attendance)"
+                  :class="getStatusClass(attendance.status)"
+                  class="px-3 py-1.5 text-xs font-semibold rounded-full cursor-pointer hover:opacity-80 transition"
+                >
                   {{ getStatusLabel(attendance.status) }}
-                </span>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm">
-                <button
-                  v-if="attendance.status === 'PENDING'"
-                  @click="openApprovalModal(attendance)"
-                  class="text-blue-600 hover:text-blue-800 font-medium mr-3"
-                >
-                  검토
-                </button>
-                <button
-                  @click="viewAttendance(attendance)"
-                  class="text-gray-600 hover:text-gray-800"
-                >
-                  상세보기
                 </button>
               </td>
             </tr>
@@ -216,23 +197,14 @@
               <span class="text-gray-500">실습시간:</span> {{ attendance.hours }}시간
             </div>
           </div>
-          <div class="flex gap-2">
-            <button
-              v-if="attendance.status === 'PENDING'"
-              @click="openApprovalModal(attendance)"
-              class="flex-1 px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700"
-              style="min-height: 44px;"
-            >
-              검토
-            </button>
-            <button
-              @click="viewAttendance(attendance)"
-              class="flex-1 px-3 py-2 bg-gray-200 text-gray-700 text-sm rounded-lg hover:bg-gray-300"
-              style="min-height: 44px;"
-            >
-              상세보기
-            </button>
-          </div>
+          <button
+            @click="handleStatusClick(attendance)"
+            :class="getStatusClass(attendance.status)"
+            class="w-full px-3 py-2 text-sm font-semibold rounded-lg hover:opacity-80 transition"
+            style="min-height: 44px;"
+          >
+            {{ getStatusLabel(attendance.status) }} - 클릭하여 {{ attendance.status === 'PENDING' ? '검토' : '상세보기' }}
+          </button>
         </div>
 
         <!-- 빈 상태 -->
@@ -401,6 +373,7 @@ interface Attendance {
   id: number
   studentName: string
   studentId: string
+  university: string
   date: string
   checkIn: string
   checkOut: string
@@ -411,10 +384,9 @@ interface Attendance {
 
 // 상태
 const filters = ref({
+  university: '',
   status: '',
-  studentName: '',
-  startDate: '',
-  endDate: ''
+  studentName: ''
 })
 
 const showApprovalModal = ref(false)
@@ -428,6 +400,7 @@ const attendances = ref<Attendance[]>([
     id: 1,
     studentName: '김민준',
     studentId: '2021001',
+    university: '서울대학교',
     date: '2024-01-15',
     checkIn: '09:00',
     checkOut: '17:00',
@@ -438,6 +411,7 @@ const attendances = ref<Attendance[]>([
     id: 2,
     studentName: '이서연',
     studentId: '2021002',
+    university: '연세대학교',
     date: '2024-01-15',
     checkIn: '09:30',
     checkOut: '17:30',
@@ -448,6 +422,7 @@ const attendances = ref<Attendance[]>([
     id: 3,
     studentName: '박지우',
     studentId: '2021003',
+    university: '고려대학교',
     date: '2024-01-14',
     checkIn: '09:00',
     checkOut: '18:00',
@@ -459,6 +434,7 @@ const attendances = ref<Attendance[]>([
     id: 4,
     studentName: '최서준',
     studentId: '2021004',
+    university: '서울대학교',
     date: '2024-01-14',
     checkIn: '10:30',
     checkOut: '15:00',
@@ -477,10 +453,9 @@ const rejectedAttendances = computed(() => attendances.value.filter(a => a.statu
 // 필터링된 출석
 const filteredAttendances = computed(() => {
   return attendances.value.filter(attendance => {
+    if (filters.value.university && attendance.university !== filters.value.university) return false
     if (filters.value.status && attendance.status !== filters.value.status) return false
     if (filters.value.studentName && !attendance.studentName.includes(filters.value.studentName)) return false
-    if (filters.value.startDate && attendance.date < filters.value.startDate) return false
-    if (filters.value.endDate && attendance.date > filters.value.endDate) return false
     return true
   })
 })
@@ -515,10 +490,9 @@ const getStatusClass = (status: string) => {
 
 const resetFilters = () => {
   filters.value = {
+    university: '',
     status: '',
-    studentName: '',
-    startDate: '',
-    endDate: ''
+    studentName: ''
   }
 }
 
@@ -560,6 +534,16 @@ const rejectAttendance = () => {
     }
     alert('출석이 반려되었습니다.')
     closeApprovalModal()
+  }
+}
+
+const handleStatusClick = (attendance: Attendance) => {
+  if (attendance.status === 'PENDING') {
+    // 승인 대기 → 검토 모달
+    openApprovalModal(attendance)
+  } else {
+    // 승인 완료/반려 → 상세보기 모달
+    viewAttendance(attendance)
   }
 }
 

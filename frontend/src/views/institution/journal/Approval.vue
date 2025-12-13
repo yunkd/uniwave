@@ -51,7 +51,21 @@
 
     <!-- 필터 및 검색 -->
     <div class="bg-white rounded-lg shadow p-4 mb-6">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <!-- 대학 필터 -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-2">대학</label>
+          <select 
+            v-model="filters.university" 
+            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          >
+            <option value="">전체</option>
+            <option value="서울대학교">서울대학교</option>
+            <option value="연세대학교">연세대학교</option>
+            <option value="고려대학교">고려대학교</option>
+          </select>
+        </div>
+
         <!-- 상태 필터 -->
         <div>
           <label class="block text-sm font-medium text-gray-700 mb-2">상태</label>
@@ -66,32 +80,13 @@
           </select>
         </div>
 
-        <!-- 실습생 검색 -->
+        <!-- 실습생 이름 검색 -->
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">실습생</label>
+          <label class="block text-sm font-medium text-gray-700 mb-2">실습생 이름</label>
           <input
             v-model="filters.studentName"
             type="text"
-            placeholder="이름 검색"
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-        </div>
-
-        <!-- 날짜 범위 -->
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">시작일</label>
-          <input
-            v-model="filters.startDate"
-            type="date"
-            class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-          />
-        </div>
-
-        <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">종료일</label>
-          <input
-            v-model="filters.endDate"
-            type="date"
+            placeholder="이름으로 검색"
             class="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
           />
         </div>
@@ -127,9 +122,6 @@
               <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                 상태
               </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                작업
-              </th>
             </tr>
           </thead>
           <tbody class="bg-white divide-y divide-gray-200">
@@ -149,23 +141,12 @@
                 <div class="text-sm text-gray-900 line-clamp-2">{{ journal.content }}</div>
               </td>
               <td class="px-6 py-4 whitespace-nowrap">
-                <span :class="getStatusClass(journal.status)" class="px-2 py-1 text-xs font-semibold rounded-full">
+                <button
+                  @click="handleStatusClick(journal)"
+                  :class="getStatusClass(journal.status)"
+                  class="px-3 py-1.5 text-xs font-semibold rounded-full cursor-pointer hover:opacity-80 transition"
+                >
                   {{ getStatusLabel(journal.status) }}
-                </span>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm">
-                <button
-                  v-if="journal.status === 'PENDING'"
-                  @click="openApprovalModal(journal)"
-                  class="text-blue-600 hover:text-blue-800 font-medium mr-3"
-                >
-                  검토
-                </button>
-                <button
-                  @click="viewJournal(journal)"
-                  class="text-gray-600 hover:text-gray-800"
-                >
-                  상세보기
                 </button>
               </td>
             </tr>
@@ -194,23 +175,14 @@
           </div>
           <div class="text-sm text-gray-600 mb-2">{{ formatDate(journal.date) }}</div>
           <div class="text-sm text-gray-700 mb-3 line-clamp-2">{{ journal.content }}</div>
-          <div class="flex gap-2">
-            <button
-              v-if="journal.status === 'PENDING'"
-              @click="openApprovalModal(journal)"
-              class="flex-1 px-3 py-2 bg-blue-600 text-white text-sm rounded-lg hover:bg-blue-700"
-              style="min-height: 44px;"
-            >
-              검토
-            </button>
-            <button
-              @click="viewJournal(journal)"
-              class="flex-1 px-3 py-2 bg-gray-200 text-gray-700 text-sm rounded-lg hover:bg-gray-300"
-              style="min-height: 44px;"
-            >
-              상세보기
-            </button>
-          </div>
+          <button
+            @click="handleStatusClick(journal)"
+            :class="getStatusClass(journal.status)"
+            class="w-full px-3 py-2 text-sm font-semibold rounded-lg hover:opacity-80 transition"
+            style="min-height: 44px;"
+          >
+            {{ getStatusLabel(journal.status) }} - 클릭하여 {{ journal.status === 'PENDING' ? '검토' : '상세보기' }}
+          </button>
         </div>
 
         <!-- 빈 상태 -->
@@ -366,6 +338,7 @@ interface Journal {
   id: number
   studentName: string
   studentId: string
+  university: string
   date: string
   content: string
   status: 'PENDING' | 'APPROVED' | 'REJECTED'
@@ -374,10 +347,9 @@ interface Journal {
 
 // 상태
 const filters = ref({
+  university: '',
   status: '',
-  studentName: '',
-  startDate: '',
-  endDate: ''
+  studentName: ''
 })
 
 const showApprovalModal = ref(false)
@@ -391,6 +363,7 @@ const journals = ref<Journal[]>([
     id: 1,
     studentName: '김민준',
     studentId: '2021001',
+    university: '서울대학교',
     date: '2024-01-15',
     content: '오늘은 환자 차트 작성 방법을 배웠습니다. 선배 사회복지사님께서 상세하게 설명해주셔서 많은 도움이 되었습니다.',
     status: 'PENDING'
@@ -399,6 +372,7 @@ const journals = ref<Journal[]>([
     id: 2,
     studentName: '이서연',
     studentId: '2021002',
+    university: '연세대학교',
     date: '2024-01-15',
     content: '가족 상담 세션에 참관했습니다. 상담 기법과 공감 표현 방법을 직접 볼 수 있어서 유익했습니다.',
     status: 'PENDING'
@@ -407,6 +381,7 @@ const journals = ref<Journal[]>([
     id: 3,
     studentName: '박지우',
     studentId: '2021003',
+    university: '고려대학교',
     date: '2024-01-14',
     content: '복지 프로그램 기획 회의에 참석했습니다. 클라이언트 니즈 파악의 중요성을 깨달았습니다.',
     status: 'APPROVED',
@@ -416,6 +391,7 @@ const journals = ref<Journal[]>([
     id: 4,
     studentName: '최서준',
     studentId: '2021004',
+    university: '서울대학교',
     date: '2024-01-14',
     content: '오늘 실습 내용입니다.',
     status: 'REJECTED',
@@ -432,10 +408,9 @@ const rejectedJournals = computed(() => journals.value.filter(j => j.status === 
 // 필터링된 일지
 const filteredJournals = computed(() => {
   return journals.value.filter(journal => {
+    if (filters.value.university && journal.university !== filters.value.university) return false
     if (filters.value.status && journal.status !== filters.value.status) return false
     if (filters.value.studentName && !journal.studentName.includes(filters.value.studentName)) return false
-    if (filters.value.startDate && journal.date < filters.value.startDate) return false
-    if (filters.value.endDate && journal.date > filters.value.endDate) return false
     return true
   })
 })
@@ -470,10 +445,9 @@ const getStatusClass = (status: string) => {
 
 const resetFilters = () => {
   filters.value = {
+    university: '',
     status: '',
-    studentName: '',
-    startDate: '',
-    endDate: ''
+    studentName: ''
   }
 }
 
@@ -515,6 +489,16 @@ const rejectJournal = () => {
     }
     alert('일지가 반려되었습니다.')
     closeApprovalModal()
+  }
+}
+
+const handleStatusClick = (journal: Journal) => {
+  if (journal.status === 'PENDING') {
+    // 승인 대기 → 검토 모달
+    openApprovalModal(journal)
+  } else {
+    // 승인 완료/반려 → 상세보기 모달
+    viewJournal(journal)
   }
 }
 
