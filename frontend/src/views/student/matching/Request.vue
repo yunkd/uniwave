@@ -39,7 +39,7 @@
       <form @submit.prevent="submitMatching">
         <div class="space-y-6">
           <!-- 기관 검색 및 선택 -->
-          <div>
+          <div class="relative">
             <label class="block text-sm font-medium text-gray-700 mb-2">
               실습 기관 선택 <span class="text-red-500">*</span>
             </label>
@@ -60,7 +60,7 @@
             <!-- 검색 결과 드롭다운 -->
             <div
               v-if="showDropdown && filteredInstitutions.length > 0"
-              class="absolute z-10 mt-1 w-full max-w-3xl bg-white border border-gray-300 rounded-lg shadow-lg max-h-80 overflow-y-auto"
+              class="absolute z-10 mt-1 left-0 right-0 bg-white border border-gray-300 rounded-lg shadow-lg max-h-80 overflow-y-auto"
             >
               <div
                 v-for="institution in filteredInstitutions"
@@ -105,7 +105,7 @@
             <!-- 검색 결과 없음 -->
             <div
               v-if="showDropdown && searchQuery && filteredInstitutions.length === 0"
-              class="absolute z-10 mt-1 w-full max-w-3xl bg-white border border-gray-300 rounded-lg shadow-lg p-4 text-center text-sm text-gray-500"
+              class="absolute z-10 mt-1 left-0 right-0 bg-white border border-gray-300 rounded-lg shadow-lg p-4 text-center text-sm text-gray-500"
             >
               <p>검색 결과가 없습니다.</p>
               <p class="mt-1 text-xs">다른 키워드로 검색해보세요.</p>
