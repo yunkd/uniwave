@@ -9,13 +9,13 @@
   <!-- 사이드바 -->
   <aside
     :class="[
-      'fixed top-0 left-0 h-full w-64 bg-white transition-transform duration-300 z-50',
+      'fixed top-0 left-0 h-full w-64 bg-white border-r border-gray-200 transition-transform duration-300 z-50',
       'lg:translate-x-0',
       isMobileMenuOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'
     ]"
   >
     <!-- 로고 영역 -->
-    <router-link :to="dashboardPath" class="h-14 flex items-center justify-between px-4 border-b border-gray-200 hover:bg-gray-50 transition-colors">
+    <router-link :to="dashboardPath" class="flex items-center justify-between px-4 border-b border-gray-200 hover:bg-gray-50 transition-colors" style="height: 56px;">
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
           <AcademicCapIcon class="w-5 h-5 text-white" />
