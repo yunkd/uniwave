@@ -255,6 +255,11 @@ const menuItems = computed(() => {
         icon: HomeIcon
       },
       {
+        label: '모집공고 관리',
+        path: '/institution/recruitments',
+        icon: BellAlertIcon
+      },
+      {
         label: '실습생 관리',
         path: '/institution/students',
         icon: UserGroupIcon

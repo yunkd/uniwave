@@ -186,6 +186,16 @@ const router = createRouter({
           component: () => import('@/views/institution/documents/List.vue')
         },
         {
+          path: 'recruitments',
+          name: 'InstitutionRecruitments',
+          component: () => import('@/views/institution/recruitments/List.vue')
+        },
+        {
+          path: 'recruitments/create',
+          name: 'InstitutionRecruitmentCreate',
+          component: () => import('@/views/institution/recruitments/Create.vue')
+        },
+        {
           path: 'notices',
           name: 'InstitutionNotices',
           component: () => import('@/views/institution/notices/List.vue')
