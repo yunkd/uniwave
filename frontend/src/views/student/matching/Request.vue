@@ -156,8 +156,21 @@
             </p>
           </div>
 
+          <!-- 신청 메시지 -->
+          <div>
+            <label class="block text-sm font-medium text-gray-700 mb-2">
+              신청 메시지 (선택)
+            </label>
+            <textarea
+              v-model="form.message"
+              rows="4"
+              placeholder="기관 담당자나 대학 담당자에게 전달할 메시지를 작성하세요..."
+              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-sm"
+            ></textarea>
+          </div>
+
           <!-- 희망 실습 기간 -->
-          <div class="relative">
+          <div class="relative pb-80">
             <label class="block text-sm font-medium text-gray-700 mb-2">
               희망 실습 기간 <span class="text-red-500">*</span>
             </label>
@@ -183,19 +196,6 @@
                 />
               </div>
             </div>
-          </div>
-
-          <!-- 신청 메시지 -->
-          <div>
-            <label class="block text-sm font-medium text-gray-700 mb-2">
-              신청 메시지 (선택)
-            </label>
-            <textarea
-              v-model="form.message"
-              rows="4"
-              placeholder="기관 담당자나 대학 담당자에게 전달할 메시지를 작성하세요..."
-              class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent resize-none text-sm"
-            ></textarea>
           </div>
 
           <!-- 제출 버튼 -->
