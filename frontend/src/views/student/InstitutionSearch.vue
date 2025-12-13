@@ -60,17 +60,59 @@
 
     <!-- 검색 필터 -->
     <Card class="mb-6">
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <!-- 검색어 -->
-        <div class="sm:col-span-2">
-          <Input
-            v-model="searchQuery"
-            placeholder="기관명, 주소, 분야로 검색"
-            :icon-left="MagnifyingGlassIcon"
-          />
-        </div>
+      <!-- 첫 번째 행: 검색어 -->
+      <div class="mb-4">
+        <Input
+          v-model="searchQuery"
+          placeholder="기관명, 주소, 분야로 검색"
+          :icon-left="MagnifyingGlassIcon"
+        />
+      </div>
 
-        <!-- 분야 필터 -->
+      <!-- 두 번째 행: 지역 필터 (시/구/동) -->
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-4">
+        <select
+          v-model="filterCity"
+          @change="onCityChange"
+          class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
+        >
+          <option value="">전체 시</option>
+          <option value="서울시">서울시</option>
+          <option value="경기도">경기도</option>
+          <option value="인천시">인천시</option>
+          <option value="부산시">부산시</option>
+          <option value="대구시">대구시</option>
+          <option value="광주시">광주시</option>
+          <option value="대전시">대전시</option>
+          <option value="울산시">울산시</option>
+        </select>
+
+        <select
+          v-model="filterDistrict"
+          @change="onDistrictChange"
+          :disabled="!filterCity"
+          class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+        >
+          <option value="">전체 구</option>
+          <option v-for="district in availableDistricts" :key="district" :value="district">
+            {{ district }}
+          </option>
+        </select>
+
+        <select
+          v-model="filterDong"
+          :disabled="!filterDistrict"
+          class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500 disabled:bg-gray-100 disabled:cursor-not-allowed"
+        >
+          <option value="">전체 동</option>
+          <option v-for="dong in availableDongs" :key="dong" :value="dong">
+            {{ dong }}
+          </option>
+        </select>
+      </div>
+
+      <!-- 세 번째 행: 분야 및 상태 필터 -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <select
           v-model="filterField"
           class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
@@ -83,15 +125,29 @@
           <option value="지역복지">지역복지</option>
           <option value="의료복지">의료복지</option>
         </select>
+
+        <select
+          v-model="filterStatus"
+          class="px-3 py-2 border border-gray-300 rounded-lg text-sm focus:ring-2 focus:ring-primary-500"
+        >
+          <option value="">전체 상태</option>
+          <option value="RECRUITING">모집중</option>
+          <option value="CLOSED">마감</option>
+        </select>
       </div>
 
       <div class="mt-4 flex items-center justify-between">
         <p class="text-sm text-gray-600">
           총 <span class="font-medium text-primary-600">{{ filteredInstitutions.length }}</span>개의 기관
         </p>
-        <Button @click="handleSearch" size="sm">
-          검색
-        </Button>
+        <div class="flex gap-2">
+          <Button @click="resetFilters" variant="outline" size="sm">
+            초기화
+          </Button>
+          <Button @click="handleSearch" size="sm">
+            검색
+          </Button>
+        </div>
       </div>
     </Card>
 
@@ -127,16 +183,27 @@
             <PhoneIcon class="w-4 h-4 text-gray-400 flex-shrink-0" />
             <p class="text-sm text-gray-600">{{ institution.contactPhone }}</p>
           </div>
+          <div class="flex items-center gap-2">
+            <span :class="[
+              'inline-flex items-center px-2 py-1 rounded-full text-xs font-medium',
+              institution.status === 'RECRUITING' ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'
+            ]">
+              {{ institution.status === 'RECRUITING' ? '모집중' : '마감' }}
+            </span>
+            <span v-if="institution.capacity" class="text-xs text-gray-500">
+              ({{ institution.currentStudents || 0 }}/{{ institution.capacity }}명)
+            </span>
+          </div>
         </div>
 
         <Button
           @click="requestMatching(institution)"
           variant="primary"
           full-width
-          :disabled="!!matchingStatus"
+          :disabled="!!matchingStatus || institution.status === 'CLOSED'"
         >
           <CheckCircleIcon class="w-5 h-5 mr-2" />
-          매칭 요청
+          {{ institution.status === 'CLOSED' ? '마감' : '매칭 요청' }}
         </Button>
       </Card>
     </div>
@@ -168,6 +235,25 @@ import {
 
 const searchQuery = ref('')
 const filterField = ref('')
+const filterCity = ref('')
+const filterDistrict = ref('')
+const filterDong = ref('')
+const filterStatus = ref('')
+
+// 지역 데이터 (시/구/동)
+const regionData: Record<string, Record<string, string[]>> = {
+  '서울시': {
+    '강남구': ['역삼동', '논현동', '삼성동', '대치동', '개포동'],
+    '서초구': ['서초동', '잠원동', '반포동', '방배동', '양재동'],
+    '송파구': ['잠실동', '신천동', '풍납동', '석촌동', '가락동'],
+    '강동구': ['명일동', '고덕동', '상일동', '천호동', '성내동']
+  },
+  '경기도': {
+    '수원시': ['영통구', '장안구', '권선구', '팔달구'],
+    '성남시': ['분당구', '수정구', '중원구'],
+    '고양시': ['일산동구', '일산서구', '덕양구']
+  }
+}
 
 // 임시: 현재 매칭 상태
 const matchingStatus = ref<any>(null)
@@ -178,42 +264,112 @@ const institutions = ref([
     id: '1',
     name: '사회복지법인 희망나눔',
     field: '노인복지',
-    address: '서울시 강남구 테헤란로 123',
+    address: '서울시 강남구 역삼동 123',
+    city: '서울시',
+    district: '강남구',
+    dong: '역삼동',
     contactName: '김지도',
-    contactPhone: '02-1234-5678'
+    contactPhone: '02-1234-5678',
+    status: 'RECRUITING',
+    capacity: 5,
+    currentStudents: 2
   },
   {
     id: '2',
     name: '행복한우리요양원',
     field: '노인복지',
-    address: '서울시 서초구 서초대로 456',
+    address: '서울시 서초구 서초동 456',
+    city: '서울시',
+    district: '서초구',
+    dong: '서초동',
     contactName: '이담당',
-    contactPhone: '02-2345-6789'
+    contactPhone: '02-2345-6789',
+    status: 'RECRUITING',
+    capacity: 3,
+    currentStudents: 1
   },
   {
     id: '3',
     name: '꿈나무아동센터',
     field: '아동복지',
-    address: '서울시 송파구 올림픽로 789',
+    address: '서울시 송파구 잠실동 789',
+    city: '서울시',
+    district: '송파구',
+    dong: '잠실동',
     contactName: '박선생',
-    contactPhone: '02-3456-7890'
+    contactPhone: '02-3456-7890',
+    status: 'CLOSED',
+    capacity: 4,
+    currentStudents: 4
   },
   {
     id: '4',
     name: '함께하는장애인복지관',
     field: '장애인복지',
-    address: '서울시 강동구 천호대로 321',
+    address: '서울시 강동구 천호동 321',
+    city: '서울시',
+    district: '강동구',
+    dong: '천호동',
     contactName: '최팀장',
-    contactPhone: '02-4567-8901'
+    contactPhone: '02-4567-8901',
+    status: 'RECRUITING',
+    capacity: 6,
+    currentStudents: 3
+  },
+  {
+    id: '5',
+    name: '경기사회복지센터',
+    field: '지역복지',
+    address: '경기도 수원시 영통구',
+    city: '경기도',
+    district: '수원시',
+    dong: '영통구',
+    contactName: '정관리',
+    contactPhone: '031-1234-5678',
+    status: 'RECRUITING',
+    capacity: 8,
+    currentStudents: 2
   }
 ])
+
+// 선택 가능한 구 목록
+const availableDistricts = computed(() => {
+  if (!filterCity.value) return []
+  return Object.keys(regionData[filterCity.value] || {})
+})
+
+// 선택 가능한 동 목록
+const availableDongs = computed(() => {
+  if (!filterCity.value || !filterDistrict.value) return []
+  return regionData[filterCity.value]?.[filterDistrict.value] || []
+})
 
 const filteredInstitutions = computed(() => {
   let result = institutions.value
 
+  // 지역 필터 (시)
+  if (filterCity.value) {
+    result = result.filter(i => i.city === filterCity.value)
+  }
+
+  // 지역 필터 (구)
+  if (filterDistrict.value) {
+    result = result.filter(i => i.district === filterDistrict.value)
+  }
+
+  // 지역 필터 (동)
+  if (filterDong.value) {
+    result = result.filter(i => i.dong === filterDong.value)
+  }
+
   // 분야 필터
   if (filterField.value) {
     result = result.filter(i => i.field === filterField.value)
+  }
+
+  // 상태 필터
+  if (filterStatus.value) {
+    result = result.filter(i => i.status === filterStatus.value)
   }
 
   // 검색어 필터
@@ -229,9 +385,37 @@ const filteredInstitutions = computed(() => {
   return result
 })
 
+// 시 변경 시 구/동 초기화
+const onCityChange = () => {
+  filterDistrict.value = ''
+  filterDong.value = ''
+}
+
+// 구 변경 시 동 초기화
+const onDistrictChange = () => {
+  filterDong.value = ''
+}
+
+// 필터 초기화
+const resetFilters = () => {
+  searchQuery.value = ''
+  filterCity.value = ''
+  filterDistrict.value = ''
+  filterDong.value = ''
+  filterField.value = ''
+  filterStatus.value = ''
+}
+
 const handleSearch = () => {
   // 검색 로직 (백엔드 연동 시 API 호출)
-  console.log('검색:', searchQuery.value, filterField.value)
+  console.log('검색:', {
+    query: searchQuery.value,
+    city: filterCity.value,
+    district: filterDistrict.value,
+    dong: filterDong.value,
+    field: filterField.value,
+    status: filterStatus.value
+  })
 }
 
 const requestMatching = (institution: any) => {
