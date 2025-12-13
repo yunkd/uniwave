@@ -285,17 +285,19 @@ const getStatusLabel = (status: string) => {
 </script>
 
 <style scoped>
-/* 날짜/시간 선택기가 input 바로 아래에 표시되도록 설정 */
+/* 날짜/시간 input 텍스트 오른쪽 정렬 */
+input[type="date"],
+input[type="time"] {
+  text-align: right;
+  direction: ltr;
+}
+
+/* 날짜/시간 선택기 아이콘 오른쪽 배치 */
 input[type="date"]::-webkit-calendar-picker-indicator,
 input[type="time"]::-webkit-calendar-picker-indicator {
   cursor: pointer;
-  padding: 8px;
-}
-
-/* Chrome/Safari/Edge에서 날짜/시간 선택기 위치 조정 */
-input[type="date"]::-webkit-datetime-edit,
-input[type="time"]::-webkit-datetime-edit {
-  padding: 0;
+  margin-left: auto;
+  margin-right: 8px;
 }
 
 /* 휴게시간 입력 필드 스타일 */
