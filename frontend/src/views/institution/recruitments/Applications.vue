@@ -88,228 +88,190 @@
     </Card>
 
     <!-- 지원서 목록 -->
-    <Card class="overflow-hidden">
+    <div class="space-y-4">
       <!-- 빈 상태 -->
-      <div v-if="filteredApplications.length === 0" class="p-12 text-center">
+      <Card v-if="filteredApplications.length === 0" class="p-12 text-center">
         <DocumentTextIcon class="w-16 h-16 text-gray-300 mx-auto mb-4" />
         <p class="text-gray-600 mb-2">지원서가 없습니다</p>
         <p class="text-sm text-gray-500">학생들이 모집공고에 지원하면 여기에 표시됩니다</p>
-      </div>
+      </Card>
 
-      <!-- 데스크톱 테이블 -->
-      <div v-else class="hidden lg:block overflow-x-auto">
-        <table class="w-full">
-          <thead class="bg-gray-50 border-b border-gray-200">
-            <tr>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                학생 정보
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                모집공고
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                지원일
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                상태
-              </th>
-              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                관리
-              </th>
-            </tr>
-          </thead>
-          <tbody class="bg-white divide-y divide-gray-200">
-            <tr v-for="app in filteredApplications" :key="app.id" class="hover:bg-gray-50">
-              <td class="px-6 py-4">
-                <div>
-                  <p class="font-medium text-gray-900">{{ app.studentName }}</p>
-                  <p class="text-sm text-gray-600">{{ app.university }}</p>
-                  <p class="text-xs text-gray-500">{{ app.email }}</p>
-                </div>
-              </td>
-              <td class="px-6 py-4">
-                <p class="text-sm font-medium text-gray-900">{{ app.recruitmentTitle }}</p>
-                <p class="text-xs text-gray-500">{{ app.field }}</p>
-              </td>
-              <td class="px-6 py-4 text-sm text-gray-600">
-                {{ app.appliedAt }}
-              </td>
-              <td class="px-6 py-4">
-                <span
-                  :class="[
-                    'inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium',
-                    getStatusColor(app.status)
-                  ]"
-                >
-                  {{ getStatusLabel(app.status) }}
-                </span>
-              </td>
-              <td class="px-6 py-4 whitespace-nowrap text-sm">
-                <div class="flex items-center gap-2">
-                  <button
-                    @click="viewApplication(app)"
-                    class="text-primary-600 hover:text-primary-900 font-medium"
-                  >
-                    상세보기
-                  </button>
-                  <button
-                    v-if="app.resumeUrl"
-                    @click="downloadResume(app)"
-                    class="text-gray-600 hover:text-gray-900 font-medium"
-                  >
-                    이력서
-                  </button>
-                </div>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-      <!-- 모바일 카드 -->
-      <div v-if="filteredApplications.length > 0" class="lg:hidden divide-y divide-gray-200">
+      <!-- 아코디언 스타일 지원서 카드 -->
+      <Card
+        v-for="app in filteredApplications"
+        :key="app.id"
+        class="overflow-hidden"
+      >
+        <!-- 요약 헤더 (항상 표시) -->
         <div
-          v-for="app in filteredApplications"
-          :key="app.id"
-          class="p-4 hover:bg-gray-50"
+          @click="toggleApplication(app.id)"
+          class="p-4 cursor-pointer hover:bg-gray-50 transition-colors"
         >
-          <div class="flex items-start justify-between mb-3">
-            <div class="flex-1">
-              <p class="font-medium text-gray-900">{{ app.studentName }}</p>
-              <p class="text-sm text-gray-600">{{ app.university }}</p>
-              <p class="text-xs text-gray-500 mt-1">{{ app.email }}</p>
+          <div class="flex items-center justify-between">
+            <!-- 좌측: 학생 정보 -->
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center gap-3 mb-2">
+                <div class="w-10 h-10 bg-primary-100 rounded-full flex items-center justify-center flex-shrink-0">
+                  <span class="text-primary-700 font-bold text-sm">{{ app.studentName.charAt(0) }}</span>
+                </div>
+                <div class="flex-1 min-w-0">
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <h3 class="text-lg font-bold text-gray-900">{{ app.studentName }}</h3>
+                    <span
+                      :class="[
+                        'inline-flex px-2.5 py-0.5 rounded-full text-xs font-medium',
+                        getStatusColor(app.status)
+                      ]"
+                    >
+                      {{ getStatusLabel(app.status) }}
+                    </span>
+                  </div>
+                  <p class="text-sm text-gray-600">{{ app.university }}</p>
+                </div>
+              </div>
+              <div class="grid grid-cols-1 sm:grid-cols-3 gap-2 text-sm ml-13">
+                <div class="flex items-center gap-1 text-gray-600">
+                  <BriefcaseIcon class="w-4 h-4" />
+                  <span>{{ app.recruitmentTitle }}</span>
+                </div>
+                <div class="flex items-center gap-1 text-gray-600">
+                  <CalendarIcon class="w-4 h-4" />
+                  <span>{{ app.appliedAt }}</span>
+                </div>
+                <div class="flex items-center gap-1 text-gray-600">
+                  <EnvelopeIcon class="w-4 h-4" />
+                  <span>{{ app.email }}</span>
+                </div>
+              </div>
             </div>
-            <span
+
+            <!-- 우측: 펼침 아이콘 -->
+            <ChevronDownIcon
               :class="[
-                'inline-flex px-2 py-0.5 rounded-full text-xs font-medium whitespace-nowrap',
-                getStatusColor(app.status)
+                'w-6 h-6 text-gray-400 transition-transform flex-shrink-0 ml-4',
+                expandedIds.includes(app.id) ? 'transform rotate-180' : ''
               ]"
-            >
-              {{ getStatusLabel(app.status) }}
-            </span>
+            />
           </div>
-          <div class="mb-3 p-3 bg-gray-50 rounded-lg">
-            <p class="text-sm font-medium text-gray-900">{{ app.recruitmentTitle }}</p>
-            <p class="text-xs text-gray-500 mt-1">{{ app.field }}</p>
-          </div>
-          <div class="flex items-center justify-between text-xs">
-            <span class="text-gray-500">{{ app.appliedAt }}</span>
-            <div class="flex items-center gap-2">
+        </div>
+
+        <!-- 상세 내용 (펼쳤을 때만 표시) -->
+        <div
+          v-if="expandedIds.includes(app.id)"
+          class="border-t border-gray-200 bg-gray-50 p-6"
+        >
+          <div class="space-y-6">
+            <!-- 학생 상세 정보 -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div class="p-4 bg-white rounded-lg border border-gray-200">
+                <h4 class="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
+                  <UserIcon class="w-4 h-4" />
+                  학생 정보
+                </h4>
+                <div class="space-y-2 text-sm">
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">이름</span>
+                    <span class="font-medium text-gray-900">{{ app.studentName }}</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">학교</span>
+                    <span class="font-medium text-gray-900">{{ app.university }}</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">이메일</span>
+                    <span class="font-medium text-gray-900">{{ app.email }}</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">전화번호</span>
+                    <span class="font-medium text-gray-900">{{ app.phone }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-4 bg-white rounded-lg border border-gray-200">
+                <h4 class="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
+                  <BriefcaseIcon class="w-4 h-4" />
+                  지원 정보
+                </h4>
+                <div class="space-y-2 text-sm">
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">모집공고</span>
+                    <span class="font-medium text-gray-900 text-right">{{ app.recruitmentTitle }}</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">분야</span>
+                    <span class="font-medium text-gray-900">{{ app.field }}</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">지원일</span>
+                    <span class="font-medium text-gray-900">{{ app.appliedAt }}</span>
+                  </div>
+                  <div class="flex justify-between">
+                    <span class="text-gray-600">희망 기간</span>
+                    <span class="font-medium text-gray-900 text-right">{{ app.desiredPeriod }}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- 지원 메시지 -->
+            <div v-if="app.message" class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <h4 class="text-sm font-bold text-blue-900 mb-2 flex items-center gap-2">
+                <ChatBubbleLeftIcon class="w-4 h-4" />
+                지원 메시지
+              </h4>
+              <p class="text-sm text-blue-800 whitespace-pre-wrap">{{ app.message }}</p>
+            </div>
+
+            <!-- 이력서 다운로드 -->
+            <div v-if="app.resumeUrl" class="p-4 bg-white border border-gray-200 rounded-lg">
+              <h4 class="text-sm font-bold text-gray-900 mb-3 flex items-center gap-2">
+                <DocumentTextIcon class="w-4 h-4" />
+                첨부 서류
+              </h4>
               <button
-                @click="viewApplication(app)"
-                class="text-primary-600 font-medium"
-              >
-                상세보기
-              </button>
-              <button
-                v-if="app.resumeUrl"
                 @click="downloadResume(app)"
-                class="text-gray-600 font-medium"
+                class="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
               >
-                이력서
+                <DocumentArrowDownIcon class="w-5 h-5" />
+                <span class="font-medium">이력서 다운로드</span>
               </button>
             </div>
-          </div>
-        </div>
-      </div>
-    </Card>
 
-    <!-- 상세보기 모달 -->
-    <Modal v-if="selectedApplication" @close="selectedApplication = null">
-      <template #header>
-        <h3 class="text-lg font-bold text-gray-900">지원서 상세</h3>
-      </template>
-      <template #body>
-        <div class="space-y-4">
-          <!-- 학생 정보 -->
-          <div class="p-4 bg-gray-50 rounded-lg">
-            <h4 class="text-sm font-bold text-gray-900 mb-3">학생 정보</h4>
-            <div class="grid grid-cols-2 gap-3 text-sm">
-              <div>
-                <p class="text-gray-600">이름</p>
-                <p class="font-medium text-gray-900">{{ selectedApplication.studentName }}</p>
-              </div>
-              <div>
-                <p class="text-gray-600">학교</p>
-                <p class="font-medium text-gray-900">{{ selectedApplication.university }}</p>
-              </div>
-              <div>
-                <p class="text-gray-600">이메일</p>
-                <p class="font-medium text-gray-900">{{ selectedApplication.email }}</p>
-              </div>
-              <div>
-                <p class="text-gray-600">전화번호</p>
-                <p class="font-medium text-gray-900">{{ selectedApplication.phone }}</p>
+            <!-- 상태 변경 버튼 -->
+            <div class="flex gap-3 pt-4 border-t border-gray-300">
+              <template v-if="app.status === 'PENDING'">
+                <Button
+                  variant="primary"
+                  full-width
+                  @click="acceptApplication(app.id)"
+                >
+                  <CheckCircleIcon class="w-5 h-5 mr-2" />
+                  수락
+                </Button>
+                <Button
+                  variant="outline"
+                  full-width
+                  @click="rejectApplication(app.id)"
+                >
+                  <XCircleIcon class="w-5 h-5 mr-2" />
+                  거절
+                </Button>
+              </template>
+              <div
+                v-else
+                class="w-full text-center p-3 rounded-lg"
+                :class="app.status === 'ACCEPTED' ? 'bg-green-100 border border-green-300' : 'bg-red-100 border border-red-300'"
+              >
+                <p class="text-sm font-bold" :class="app.status === 'ACCEPTED' ? 'text-green-900' : 'text-red-900'">
+                  {{ app.status === 'ACCEPTED' ? '✅ 수락한 지원서입니다' : '❌ 거절한 지원서입니다' }}
+                </p>
               </div>
             </div>
           </div>
-
-          <!-- 지원 정보 -->
-          <div class="p-4 bg-gray-50 rounded-lg">
-            <h4 class="text-sm font-bold text-gray-900 mb-3">지원 정보</h4>
-            <div class="space-y-2 text-sm">
-              <div>
-                <p class="text-gray-600">모집공고</p>
-                <p class="font-medium text-gray-900">{{ selectedApplication.recruitmentTitle }}</p>
-              </div>
-              <div>
-                <p class="text-gray-600">지원일</p>
-                <p class="font-medium text-gray-900">{{ selectedApplication.appliedAt }}</p>
-              </div>
-              <div>
-                <p class="text-gray-600">희망 실습 기간</p>
-                <p class="font-medium text-gray-900">{{ selectedApplication.desiredPeriod }}</p>
-              </div>
-            </div>
-          </div>
-
-          <!-- 지원 메시지 -->
-          <div v-if="selectedApplication.message" class="p-4 bg-blue-50 border border-blue-200 rounded-lg">
-            <h4 class="text-sm font-bold text-gray-900 mb-2">지원 메시지</h4>
-            <p class="text-sm text-gray-700 whitespace-pre-wrap">{{ selectedApplication.message }}</p>
-          </div>
-
-          <!-- 이력서 -->
-          <div v-if="selectedApplication.resumeUrl" class="p-4 bg-gray-50 rounded-lg">
-            <h4 class="text-sm font-bold text-gray-900 mb-2">첨부 서류</h4>
-            <button
-              @click="downloadResume(selectedApplication)"
-              class="flex items-center gap-2 text-primary-600 hover:text-primary-900"
-            >
-              <DocumentArrowDownIcon class="w-5 h-5" />
-              <span class="text-sm font-medium">이력서 다운로드</span>
-            </button>
-          </div>
-
-          <!-- 상태 변경 -->
-          <div v-if="selectedApplication.status === 'PENDING'" class="flex gap-3">
-            <Button
-              variant="primary"
-              full-width
-              @click="acceptApplication(selectedApplication.id)"
-            >
-              <CheckCircleIcon class="w-5 h-5 mr-2" />
-              수락
-            </Button>
-            <Button
-              variant="outline"
-              full-width
-              @click="rejectApplication(selectedApplication.id)"
-            >
-              <XCircleIcon class="w-5 h-5 mr-2" />
-              거절
-            </Button>
-          </div>
-
-          <!-- 상태 표시 -->
-          <div v-else class="text-center p-4 rounded-lg" :class="selectedApplication.status === 'ACCEPTED' ? 'bg-green-50' : 'bg-red-50'">
-            <p class="text-sm font-medium" :class="selectedApplication.status === 'ACCEPTED' ? 'text-green-900' : 'text-red-900'">
-              {{ selectedApplication.status === 'ACCEPTED' ? '✅ 수락한 지원서입니다' : '❌ 거절한 지원서입니다' }}
-            </p>
-          </div>
         </div>
-      </template>
-    </Modal>
+      </Card>
+    </div>
   </div>
 </template>
 
@@ -318,14 +280,19 @@ import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import Card from '@/components/common/Card.vue'
 import Button from '@/components/common/Button.vue'
-import Modal from '@/components/common/Modal.vue'
 import {
   DocumentTextIcon,
   ClockIcon,
   CheckCircleIcon,
   XCircleIcon,
   MagnifyingGlassIcon,
-  DocumentArrowDownIcon
+  DocumentArrowDownIcon,
+  ChevronDownIcon,
+  UserIcon,
+  BriefcaseIcon,
+  CalendarIcon,
+  EnvelopeIcon,
+  ChatBubbleLeftIcon
 } from '@heroicons/vue/24/outline'
 
 const router = useRouter()
@@ -333,7 +300,7 @@ const router = useRouter()
 const selectedStatus = ref('ALL')
 const selectedRecruitment = ref('ALL')
 const searchQuery = ref('')
-const selectedApplication = ref<any>(null)
+const expandedIds = ref<number[]>([])
 
 // Mock 모집공고 목록
 const recruitments = ref([
@@ -443,8 +410,13 @@ const getStatusColor = (status: string) => {
   return colors[status] || 'bg-gray-100 text-gray-800'
 }
 
-const viewApplication = (app: any) => {
-  selectedApplication.value = app
+const toggleApplication = (id: number) => {
+  const index = expandedIds.value.indexOf(id)
+  if (index > -1) {
+    expandedIds.value.splice(index, 1)
+  } else {
+    expandedIds.value.push(id)
+  }
 }
 
 const downloadResume = (app: any) => {
@@ -462,7 +434,6 @@ const acceptApplication = async (id: number) => {
     if (app) {
       app.status = 'ACCEPTED'
       alert('지원서가 수락되었습니다.')
-      selectedApplication.value = null
     }
   }
 }
@@ -473,7 +444,6 @@ const rejectApplication = async (id: number) => {
     if (app) {
       app.status = 'REJECTED'
       alert('지원서가 거절되었습니다.')
-      selectedApplication.value = null
     }
   }
 }
