@@ -15,14 +15,14 @@
     ]"
   >
     <!-- 로고 영역 -->
-    <router-link :to="dashboardPath" class="flex items-center justify-between px-4 border-b border-gray-200 hover:bg-gray-50 transition-colors" style="height: 56px; box-sizing: border-box;">
+    <div @click="goToDashboard" class="flex items-center justify-between px-4 border-b border-gray-200 hover:bg-gray-50 transition-colors cursor-pointer" style="height: 56px; box-sizing: border-box;">
       <div class="flex items-center gap-2">
         <div class="w-8 h-8 bg-primary-600 rounded-lg flex items-center justify-center">
           <AcademicCapIcon class="w-5 h-5 text-white" />
         </div>
         <span class="font-bold text-gray-900">Uniwave</span>
       </div>
-    </router-link>
+    </div>
 
     <!-- 사용자 정보 -->
     <div class="px-4 py-3 border-b border-gray-200">
@@ -143,6 +143,11 @@ const dashboardPath = computed(() => {
 
 const closeMobileMenu = () => {
   isMobileMenuOpen.value = false
+}
+
+const goToDashboard = () => {
+  router.push(dashboardPath.value)
+  closeMobileMenu()
 }
 
 // 라우트 변경 시 모바일 메뉴 닫기
