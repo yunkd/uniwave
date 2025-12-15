@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50 flex">
+  <div class="min-h-screen bg-white flex">
     <!-- 사이드바 -->
     <Sidebar ref="sidebarRef" />
 
@@ -22,7 +22,7 @@
       </header>
 
       <!-- 페이지 컨텐츠 -->
-      <main class="p-6">
+      <main class="p-6 bg-gray-50 min-h-screen">
         <router-view />
       </main>
     </div>

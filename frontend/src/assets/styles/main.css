@@ -5,7 +5,7 @@
 /* 글로벌 스타일 - 전문적이고 세련된 */
 @layer base {
   body {
-    @apply bg-gray-50 text-gray-900 antialiased;
+    @apply bg-white text-gray-900 antialiased;
   }
 
   h1, h2, h3, h4, h5, h6 {
