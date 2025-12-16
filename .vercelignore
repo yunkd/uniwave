@@ -10,3 +10,7 @@ supabase
 docs
 ecosystem.config.cjs
 wrangler.jsonc
+vite.config.ts
+package.json
+package-lock.json
+tsconfig.json
