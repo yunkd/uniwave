@@ -129,7 +129,7 @@ export const useAuthStore = defineStore('auth', () => {
 
       return {
         success: true,
-        message: '회원가입이 완료되었습니다. 이메일 인증 후 로그인해주세요.'
+        message: '회원가입이 완료되었습니다. 로그인해주세요.'
       }
     } catch (err: any) {
       error.value = err.message || '회원가입에 실패했습니다'

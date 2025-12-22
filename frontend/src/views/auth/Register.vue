@@ -1,5 +1,5 @@
 <template>
-  <div class="min-h-screen bg-gray-50 flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
+  <div class="min-h-screen bg-white flex items-center justify-center px-4 sm:px-6 lg:px-8 py-12">
     <div class="max-w-2xl w-full">
       <!-- 헤더 -->
       <div class="text-center mb-8">
