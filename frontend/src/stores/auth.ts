@@ -52,6 +52,18 @@ export const useAuthStore = defineStore('auth', () => {
           throw new Error(`${credentials.role} 권한으로 로그인할 수 없습니다. 계정의 권한을 확인해주세요.`)
         }
 
+        // 대학 승인 대기 상태 확인
+        if (userData.status === 'PENDING') {
+          await supabase.auth.signOut()
+          throw new Error('소속 대학의 승인 대기 중입니다. 대학 승인 후 로그인할 수 있습니다.')
+        }
+
+        // 계정 정지 확인
+        if (userData.status === 'SUSPENDED') {
+          await supabase.auth.signOut()
+          throw new Error('정지된 계정입니다. 관리자에게 문의하세요.')
+        }
+
         // User 객체 구성
         user.value = {
           id: userData.id,
@@ -116,9 +128,14 @@ export const useAuthStore = defineStore('auth', () => {
           id: authData.user.id,
           email: data.email,
           name: data.name,
+          phone: data.phone || null,
           role: data.role,
-          status: 'ACTIVE',
-          email_verified: false
+          status: 'PENDING',  // 대학 승인 대기 상태
+          email_verified: false,
+          university_id: data.universityId || null,
+          university_type: data.universityType || null,
+          student_number: data.studentNumber || null,
+          learner_number: data.learnerNumber || null
         })
 
       if (insertError) {
@@ -129,7 +146,7 @@ export const useAuthStore = defineStore('auth', () => {
 
       return {
         success: true,
-        message: '회원가입이 완료되었습니다. 로그인해주세요.'
+        message: '회원가입이 완료되었습니다. 소속 대학의 승인 후 로그인할 수 있습니다.'
       }
     } catch (err: any) {
       error.value = err.message || '회원가입에 실패했습니다'

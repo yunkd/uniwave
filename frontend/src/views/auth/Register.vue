@@ -14,6 +14,11 @@
         <p class="text-gray-600">
           실습생 계정을 생성하세요
         </p>
+        <div class="mt-4 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+          <p class="text-sm text-blue-800">
+            📌 회원가입 후 소속 대학의 승인을 받아야 서비스를 이용할 수 있습니다.
+          </p>
+        </div>
       </div>
 
       <Card>
