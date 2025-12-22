@@ -178,26 +178,18 @@ const handleLogin = async () => {
   if (!validateForm()) return
 
   try {
-    // 임시: 폼 검증만 통과하면 바로 로그인 성공 처리
-    // 백엔드 연동 시 authStore.login() 사용
-    
-    // 임시 사용자 데이터 설정
-    authStore.user = {
-      id: '1',
+    // 실제 백엔드 API 호출
+    await authStore.login({
       email: form.email,
-      role: form.role,
-      name: '테스트 사용자',
-      createdAt: new Date().toISOString()
-    }
-    authStore.token = 'temp-token-' + Date.now()
-    
-    localStorage.setItem('auth_token', authStore.token)
-    localStorage.setItem('user', JSON.stringify(authStore.user))
+      password: form.password,
+      role: form.role
+    })
 
-    // 역할에 따라 리다이렉트
+    // 로그인 성공 시 역할에 따라 리다이렉트
     const role = form.role.toLowerCase()
     router.push(`/${role}/dashboard`)
-  } catch (error) {
+  } catch (error: any) {
+    // authStore.error에 이미 에러 메시지가 설정됨
     console.error('로그인 실패:', error)
   }
 }

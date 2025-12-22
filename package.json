@@ -24,7 +24,7 @@
   "dependencies": {
     "@cloudflare/workers-types": "^4.20251212.0",
     "@hono/vite-cloudflare-pages": "^0.4.3",
-    "@supabase/supabase-js": "^2.87.1",
+    "@supabase/supabase-js": "^2.89.0",
     "hono": "^4.10.8",
     "typescript": "^5.9.3",
     "vite": "^7.2.7",

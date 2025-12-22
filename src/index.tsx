@@ -4,8 +4,9 @@ import { logger } from 'hono/logger'
 import { serveStatic } from 'hono/cloudflare-workers'
 import type { HonoEnv } from './types/env'
 
-// 라우트 임포트 (나중에 추가)
-// import authRoutes from './routes/auth'
+// 라우트 임포트
+import authRoutes from './routes/auth'
+// TODO: 추후 추가
 // import studentRoutes from './routes/student'
 // import institutionRoutes from './routes/institution'
 // import universityRoutes from './routes/university'
@@ -52,8 +53,10 @@ app.get('/api/version', (c) => {
   })
 })
 
-// TODO: 라우트 연결 (나중에 추가)
-// app.route('/api/auth', authRoutes)
+// 라우트 연결
+app.route('/api/auth', authRoutes)
+
+// TODO: 추후 추가
 // app.route('/api/student', studentRoutes)
 // app.route('/api/institution', institutionRoutes)
 // app.route('/api/university', universityRoutes)
