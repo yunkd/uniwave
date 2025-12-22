@@ -11,6 +11,7 @@
   "license": "MIT",
   "description": "Uniwave Pro - 대학 실습 관리 플랫폼 프론트엔드",
   "dependencies": {
+    "@supabase/supabase-js": "^2.89.0",
     "@vuepic/vue-datepicker": "^12.1.0",
     "@vueuse/core": "^14.1.0",
     "axios": "^1.13.2",
