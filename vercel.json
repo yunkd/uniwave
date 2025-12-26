@@ -6,6 +6,18 @@
   "framework": null,
   "cleanUrls": true,
   "trailingSlash": false,
+  "redirects": [
+    {
+      "source": "http://www.uniwave.co.kr/:path*",
+      "destination": "https://www.uniwave.co.kr/:path*",
+      "permanent": true
+    },
+    {
+      "source": "http://uniwave.co.kr/:path*",
+      "destination": "https://www.uniwave.co.kr/:path*",
+      "permanent": true
+    }
+  ],
   "rewrites": [
     {
       "source": "/(.*)",
