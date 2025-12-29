@@ -4,8 +4,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 5173",
-    "build": "vite build",
-    "preview": "vite preview"
+    "build": "rm -rf dist && vite build",
+    "preview": "vite preview",
+    "vercel-build": "npm run build"
   },
   "author": "윤경대",
   "license": "MIT",

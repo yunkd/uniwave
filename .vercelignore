@@ -1,16 +1,26 @@
+# Dependencies
 node_modules
+
+# Git
 .git
-.wrangler
+
+# Environment variables
 .env
 .env.*
+
+# Logs
 *.log
+
+# OS
 .DS_Store
-src
-supabase
-docs
-ecosystem.config.cjs
+
+# Cloudflare Workers (백엔드는 Vercel에서 제외)
+.wrangler
+src/
 wrangler.jsonc
-vite.config.ts
-package.json
-package-lock.json
-tsconfig.json
+
+# Docs
+docs/
+
+# PM2
+ecosystem.config.cjs

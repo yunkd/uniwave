@@ -16,7 +16,9 @@ export default defineConfig({
       output: {
         manualChunks: undefined
       }
-    }
+    },
+    // 빌드 캐시 무효화를 위한 타임스탬프 추가
+    assetsInlineLimit: 0
   },
   server: {
     host: '0.0.0.0',
