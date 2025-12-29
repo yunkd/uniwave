@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "buildCommand": "cd frontend && npm ci && npm run build",
+  "buildCommand": "cd frontend && rm -rf dist node_modules && npm install && npm run build",
   "outputDirectory": "frontend/dist",
   "installCommand": "echo 'Skipping root install'",
   "framework": null,
