@@ -4,7 +4,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite --port 5173",
-    "build": "rm -rf dist && vite build",
+    "build": "rm -rf dist && vite build && npm run generate-routes",
+    "generate-routes": "echo '{\"version\":3,\"routes\":[{\"handle\":\"filesystem\"},{\"src\":\"/.*\",\"dest\":\"/index.html\"}]}' > dist/_routes.json",
     "preview": "vite preview",
     "vercel-build": "npm run build"
   },
