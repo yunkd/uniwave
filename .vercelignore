@@ -16,8 +16,8 @@ node_modules
 
 # Cloudflare Workers (백엔드는 Vercel에서 제외)
 .wrangler
-src/
 wrangler.jsonc
+# src/ 제외하지 않음 - 프론트엔드 소스 필요
 
 # Docs
 docs/
