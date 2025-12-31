@@ -290,37 +290,50 @@ pm2 restart webapp
 
 ## 🚀 배포
 
-### Cloudflare Pages 배포 (프로덕션)
+### Vercel 배포 (프로덕션)
 
-1. **빌드**
+**현재 배포 상태**: ✅ https://uniwave-tau.vercel.app
+
+#### 배포 설정
+
+**Vercel Dashboard 설정**:
+- **Framework Preset**: Vite
+- **Root Directory**: `frontend`
+- **Build Command**: `npm run build`
+- **Output Directory**: `dist`
+- **Install Command**: `npm ci`
+
+#### 로컬 테스트
 
 ```bash
+# 프론트엔드 디렉토리로 이동
+cd frontend
+
+# 의존성 설치
+npm ci
+
+# 로컬 빌드
 npm run build
+
+# 미리보기
+npm run preview
 ```
 
-2. **Cloudflare API 키 설정 및 배포**
+#### Git Push 배포
 
 ```bash
-# API 키 설정 (첫 배포 시만)
-setup_cloudflare_api_key
+# Git 변경사항 커밋
+git add .
+git commit -m "Update frontend"
+git push origin main
 
-# 프로젝트 생성 (첫 배포 시만)
-npx wrangler pages project create webapp \
-  --production-branch main \
-  --compatibility-date 2024-01-01
-
-# 배포
-npx wrangler pages deploy dist --project-name webapp
+# Vercel이 자동으로 배포 시작 (1-2분 소요)
 ```
-
-3. **환경 변수 설정**
-
-Cloudflare 대시보드에서 환경 변수 설정 (추후 백엔드 API 연동 시)
 
 ### 배포 URL
 
-- **Production**: `https://webapp.pages.dev`
-- **Branch**: `https://main.webapp.pages.dev`
+- **Vercel 프로덕션**: `https://uniwave-tau.vercel.app`
+- **GitHub 저장소**: `https://github.com/yunkd/uniwave`
 
 ---
 
@@ -390,9 +403,9 @@ MIT License
 
 ---
 
-**Last Updated**: 2025-12-13  
+**Last Updated**: 2025-12-31  
 **Version**: 1.0.0-alpha  
-**Status**: 🚧 프론트엔드 완성 / 백엔드 준비 중
+**Status**: ✅ 프론트엔드 Vercel 배포 완료 / 백엔드 준비 중
 
 ## 🎉 프론트엔드 완성 현황
 
