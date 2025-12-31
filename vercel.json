@@ -1,7 +1,8 @@
 {
   "buildCommand": "cd frontend && npm ci && npm run build",
   "outputDirectory": "frontend/dist",
-  "installCommand": "echo skip",
+  "installCommand": "echo 'Skipping root install'",
+  "ignoreCommand": "exit 1",
   "routes": [
     { "handle": "filesystem" },
     { "src": "/(.*)", "dest": "/index.html" }
