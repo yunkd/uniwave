@@ -1,26 +1,5 @@
-# Dependencies
-node_modules
-
-# Git
-.git
-
-# Environment variables
-.env
-.env.*
-
-# Logs
-*.log
-
-# OS
-.DS_Store
-
-# Cloudflare Workers (백엔드는 Vercel에서 제외)
-.wrangler
+src
+dist
 wrangler.jsonc
-# src/ 제외하지 않음 - 프론트엔드 소스 필요
-
-# Docs
-docs/
-
-# PM2
+.wrangler
 ecosystem.config.cjs
